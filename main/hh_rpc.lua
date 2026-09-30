@@ -811,6 +811,12 @@ AddModRPCHandler("hh_rpc", "hh_hoverer_server", function(player, item, hh_target
     ----====>物品客户端文本<====----
     if hh_target_name then
         handleFormatStr(hh_copy_list, "hh_01_name", tostring(hh_target_name))
+        if HH_UTILS:HasComponents(item, "hh_hat_star") then
+            local star = item["components"]["hh_hat_star"]
+            hh_copy_list["hh_01_name"]["star_prefix"] = star:GetPrefixStr()
+            hh_copy_list["hh_01_name"]["upgrade_num"] = star:GetUpgradingNum()
+            hh_copy_list["hh_01_name"]["item_prefab"] = item_prefab
+        end
     end
     --放异常中处理
     local success, result = pcall(getAllItemInfo, hh_copy_list, player, item, item_com, item_prefab)
@@ -1250,6 +1256,8 @@ local function getEquipTable(inst, player)
         ["gem"] = gem_str,
         ["gem_list"] = gem_list,
         ["item_prefab"] = hh_prefab,
+        ["star_prefix"] = HH_UTILS:HasComponents(inst, "hh_hat_star") and inst["components"]["hh_hat_star"]:GetPrefixStr() or nil,
+        ["upgrade_num"] = HH_UTILS:HasComponents(inst, "hh_hat_star") and inst["components"]["hh_hat_star"]:GetUpgradingNum() or nil,
         ["share_kind"] = "equipment",
         ["player"] = tostring(player_name),
         ["equip"] = tostring(inst_name),

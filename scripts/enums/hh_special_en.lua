@@ -69,6 +69,12 @@ local treasure_titles = {
 
 local Special = { titles = titles, descriptions = descriptions, upgrades = upgrades, visual_effects = visual_effects, treasure_titles = treasure_titles }
 
+function Special.StarName(base_name, prefix, upgrade)
+    local translated = prefix == "破损" and "Damaged" or prefix == "无暇" and "Flawless" or nil
+    if not translated then return base_name end
+    return string.format("[%s] %s (+%s)", translated, base_name, tostring(upgrade or 0))
+end
+
 function Special.Translate(title, description, data)
     local original_title = type(title) == "string" and title:gsub(":$", "") or "特殊"
     local translated_title = (titles[original_title] or "Special") .. ":"

@@ -7,6 +7,7 @@ local HH_UTILS = require("utils/hh_utils")
 local HH_I18N = require("utils/hh_i18n")
 local HH_EQUIP_BUFF_LIST = require("enums/hh_enchant")["HH_EQUIP_BUFF_LIST"]
 local HH_HOVER_EN = require("enums/hh_hoverer_en")
+local HH_SPECIAL_EN = require("enums/hh_special_en")
 
 local function localized_affix(buff, row)
     local id = type(buff) == "table" and buff["name"] or nil
@@ -48,6 +49,9 @@ local function localized_details(client_table)
     local prefab = client_table["item_prefab"]
     if type(prefab) == "string" then
         item_name = STRINGS.NAMES[string.upper(prefab)] or item_name
+    end
+    if client_table["star_prefix"] then
+        item_name = HH_SPECIAL_EN.StarName(item_name, client_table["star_prefix"], client_table["upgrade_num"])
     end
     if type(client_table["effect_list"]) == "table" then
         local lines = {}

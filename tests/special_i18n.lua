@@ -28,4 +28,10 @@ t.test("all treasure monster labels have English variants", function()
     assert(special.treasure_titles["★★坦克猪猪★★\n超强的防御"]:find("Tank Pig", 1, true))
 end)
 
+t.test("star crown names keep upgrade values across locales", function()
+    assert(special.StarName("Star Crown", "破损", 7) == "[Damaged] Star Crown (+7)")
+    assert(special.StarName("Star Crown", "无暇", 3) == "[Flawless] Star Crown (+3)")
+    assert(special.StarName("Star Crown", "other", 3) == "Star Crown")
+end)
+
 return t.count

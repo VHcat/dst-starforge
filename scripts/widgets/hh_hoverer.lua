@@ -272,7 +272,11 @@ function HH_HOVERER_UI:UpdateHoverer()
                         child_name = localized
                     end
                 end
-                if v:match("^hh_99_special_0[1-4]$") then
+                if v == "hh_01_name" and target_infos[v]["star_prefix"] then
+                    local prefab = target_infos[v]["item_prefab"]
+                    local base_name = type(prefab) == "string" and STRINGS.NAMES[string.upper(prefab)] or self["hh_target_name"]
+                    child_name = hh_special_en.StarName(base_name, target_infos[v]["star_prefix"], target_infos[v]["upgrade_num"])
+                elseif v:match("^hh_99_special_0[1-4]$") then
                     father_name, child_name = hh_special_en.Translate(target_infos[v]["name"], target_infos[v]["str"], target_infos[v])
                 elseif v == "hh_04_edible" then
                     local id = target_infos[v]["food_type_id"]
