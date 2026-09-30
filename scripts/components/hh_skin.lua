@@ -119,10 +119,18 @@ function HH_COM:UpdateClientValue(save_data)
     if not HH_UTILS:IsHHType(save_data, "table") then
         return
     end
-    local copy_table = HH_UTILS:HHCopyTable(save_data)
-    for i, v in pairs(copy_table) do
-        if self["skin_data"][i] then
-            self["skin_data"][i] = v
+    -- Only the preferred index is client-owned; derive all other fields locally.
+    for prefab, skins in pairs(SKIN_CONFIG) do
+        local record = save_data[prefab]
+        if type(skins) == "table" and #skins > 1 and type(record) == "table" then
+            local index = record.index
+            if type(index) == "number" and index >= 1 and index <= #skins and index % 1 == 0 then
+                self.skin_data[prefab] = {
+                    index = index,
+                    max_index = #skins,
+                    target_uid = nil,
+                }
+            end
         end
     end
 end
