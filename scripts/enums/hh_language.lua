@@ -147,7 +147,7 @@ local HH_LANGUAGE = {
         help_title_logs = "世界日志",
         open_forge_hint = "打开强化页面(当前热键:%s)\n右键拖拽位置",
         open_forge_label = "强化空间",
-        launcher_label = "星铸", launcher_hint = "打开星铸菜单\n右键拖拽位置",
+        launcher_label = "星铸",
     },
     ["item"] = {
     },

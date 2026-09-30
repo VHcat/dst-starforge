@@ -803,6 +803,6 @@ return {
         help_title_logs = "World log",
         open_forge_hint = "Open forge (hotkey: %s)\nRight-click and drag to move",
         open_forge_label = "Forge",
-        launcher_label = "Starforge", launcher_hint = "Open Starforge menu\nRight-click and drag to move",
+        launcher_label = "Starforge",
     },
 }
