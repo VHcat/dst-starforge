@@ -1,4 +1,18 @@
 local HH_UTILS = require("utils/hh_utils")
+local HH_I18N = require("utils/hh_i18n")
+
+AddModRPCHandler("hh_rpc", "hh_set_locale", function(player, locale)
+    if player then player["hh_locale"] = locale == "en" and "en" or "zh" end
+end)
+AddClassPostConstruct("widgets/controls", function(self, owner)
+    if owner then
+        owner:DoTaskInTime(0.5, function()
+            if owner == ThePlayer then
+                SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_set_locale"], HH_I18N.GetLocale())
+            end
+        end)
+    end
+end)
 local HH_ITEMS_CONFIG = require("enums/hh_items")
 local hh_component_desc_list = require("enums/hh_hoverer")
 local HH_CONFIG = require("enums/hh_enchant")

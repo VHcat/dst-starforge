@@ -48,9 +48,30 @@ function HH_UTILS:HHCopyTable(orig, copies)
     return copy
 end
 
+local HH_SAY_EN = require("enums/hh_say_en")
+
+function HH_UTILS:LocalizeSay(inst, str)
+    str = tostring(str)
+    local locale = inst and inst["hh_locale"] or HH_I18N.GetLocale()
+    if locale ~= "en" then return str end
+    local exact = HH_SAY_EN[str]
+    if exact then return exact end
+    local a, b = str:match("^消耗(%d+)个附魔石,最终转换个数:(%d+)$")
+    if a then return string.format("Used %s enchantment stones; received %s.", a, b) end
+    a = str:match("^转换金子:(%d+)$")
+    if a then return "Gold received: " .. a end
+    a = str:match("^批量附魔结束,消耗卷轴(%d+)个$")
+    if a then return "Bulk enchanting finished; used " .. a .. " scrolls." end
+    a = str:match("^清除词条成功(%d+)条$")
+    if a then return "Removed " .. a .. " affixes." end
+    a = str:match("^水晶小人数量不足%-数量>=(%d+)$")
+    if a then return "Not enough crystal figures (need at least " .. a .. ")." end
+    return str
+end
+
 function HH_UTILS:HHSay(inst, str)
     if inst and inst["components"] and inst["components"]["talker"] then
-        inst["components"]["talker"]:Say(tostring(str))
+        inst["components"]["talker"]:Say(self:LocalizeSay(inst, str))
     end
 end
 
@@ -1686,7 +1707,7 @@ function HH_UTILS:AddLog(log_type, log_msg)
 end
 
 function HH_UTILS:HHSayV2(inst, say_str)
-    HH_UTILS:HHSayExtraFx(inst, { ["str"] = tostring(say_str) })
+    HH_UTILS:HHSayExtraFx(inst, { ["str"] = HH_UTILS:LocalizeSay(inst, say_str) })
 end
 function HH_UTILS:HHSayExtraFx(inst, data)
     if not (inst and inst["entity"] and HH_UTILS:IsHHType(data, "table")) then
