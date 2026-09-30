@@ -81,6 +81,7 @@ local function handleFormatStr(hh_table, key, ...)
         end
         hh_table[key]["bool"] = true
         hh_table[key]["str"] = string["format"](hh_component_desc_list[key]["format"], ...)
+        hh_table[key]["format_args"] = { ... }
     end
 end
 --获取实体文件路径

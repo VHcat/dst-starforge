@@ -7,6 +7,8 @@ local Image = require("widgets/image")
 local ImageButton = require("widgets/imagebutton")
 local HH_UTILS = require("utils/hh_utils")
 local hh_component_desc_list = require("enums/hh_hoverer")
+local HH_I18N = require("utils/hh_i18n")
+local hh_hoverer_en = require("enums/hh_hoverer_en")
 local main_xml, main_tex = "images/global.xml", "square.tex"
 local big_scale = 30--大
 local medium_scale = 20--中
@@ -250,6 +252,17 @@ function HH_HOVERER_UI:UpdateHoverer()
             local father_color = target_infos[v]["name_color"] or hh_component_desc_list[v]["name_color"] or { 1, 1, 1, 1 }
             local child_name = target_infos[v]["str"] or "后缀未定义"--详细信息
             local child_color = target_infos[v]["str_color"] or hh_component_desc_list[v]["str_color"] or { 1, 1, 1, 1 }--信息信息文本颜色
+            if HH_I18N.GetLocale() == "en" and hh_hoverer_en[v] then
+                local translated = hh_hoverer_en[v]
+                father_name = translated.name
+                local args = target_infos[v]["format_args"]
+                if type(args) == "table" then
+                    local ok, localized = pcall(string.format, translated.format, unpack(args))
+                    if ok then
+                        child_name = localized
+                    end
+                end
+            end
             if not main_ui["hh_body_" .. v] then
                 main_ui["hh_body_" .. v] = HH_UTILS:HHCreateTextUi(main_ui, Vector3(0, 0, 1), "", { 1, 1, 1, 1 }, child_text_scale)
             end
