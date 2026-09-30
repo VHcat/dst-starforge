@@ -2,6 +2,7 @@
 local suites = {
     "affixes_i18n",
     "hoverer_i18n",
+    "special_i18n",
     "buff_i18n",
     "fx_i18n",
     "say_i18n",

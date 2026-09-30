@@ -721,6 +721,10 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
         local hh_desc_list = item:GetHHSpDesc01(player)
         if HH_UTILS:IsHHType(hh_desc_list, "table") then
             handleFormatStr(hh_copy_list, "hh_99_special_01", tostring(hh_desc_list["desc"]))
+            if item["prefab"] == "hh_egg_nest" and HH_UTILS:HasComponents(item, "hh_egg_nest") then
+                hh_copy_list["hh_99_special_01"]["egg_id"] = item["components"]["hh_egg_nest"]["egg_id"]
+                hh_copy_list["hh_99_special_01"]["egg_seconds"] = item["components"]["hh_egg_nest"]["egg_time"]
+            end
             if HH_UTILS:IsHHType(hh_desc_list["title"], "string") then
                 hh_copy_list["hh_99_special_01"]["name"] = hh_desc_list["title"] .. ":"
             end

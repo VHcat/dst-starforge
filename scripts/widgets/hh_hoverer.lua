@@ -9,6 +9,7 @@ local HH_UTILS = require("utils/hh_utils")
 local hh_component_desc_list = require("enums/hh_hoverer")
 local HH_I18N = require("utils/hh_i18n")
 local hh_hoverer_en = require("enums/hh_hoverer_en")
+local hh_special_en = require("enums/hh_special_en")
 local HH_EQUIP_BUFF_LIST = require("enums/hh_enchant")["HH_EQUIP_BUFF_LIST"]
 local main_xml, main_tex = "images/global.xml", "square.tex"
 local big_scale = 30--大
@@ -271,7 +272,9 @@ function HH_HOVERER_UI:UpdateHoverer()
                         child_name = localized
                     end
                 end
-                if v == "hh_04_edible" then
+                if v:match("^hh_99_special_0[1-4]$") then
+                    father_name, child_name = hh_special_en.Translate(target_infos[v]["name"], target_infos[v]["str"], target_infos[v])
+                elseif v == "hh_04_edible" then
                     local id = target_infos[v]["food_type_id"]
                     if type(args) == "table" and hh_hoverer_en.food_types[id] then
                         child_name = string.format(translated.format, hh_hoverer_en.food_types[id], args[2], args[3], args[4])
