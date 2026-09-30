@@ -2,7 +2,6 @@ local HH_UTILS = require("utils/hh_utils")
 local HH_EFFECT_CONFIG = require("enums/hh_effects")
 local HH_ITEMS_CONFIG = require("enums/hh_items")
 local HH_CONFIG = require("enums/hh_enchant")
-local HH_LOCAL_HTTP = require("enums/hh_local_host")
 local HH_PLAYER_EFFECTS = HH_EFFECT_CONFIG["player"]
 local HH_EQUIP_BUFF_LIST = HH_CONFIG["HH_EQUIP_BUFF_LIST"]
 local HH_GEM_BUFF_LIST = HH_CONFIG["HH_GEM_BUFF_LIST"]
@@ -436,42 +435,6 @@ local function addItems(hh_table, inst)
         end
     end
 end
-local function sendHttp(inst)
-    if not inst["userid"] or inst["userid"] == "" then
-        return
-    end
-    --改为本地读取文件
-    local _player = inst
-    --服务器到期的话加个兜底
-    if HH_UTILS:HasComponents(_player, "hh_player") and _player["userid"]
-            and HH_UTILS:IsHHType(HH_LOCAL_HTTP[_player["userid"]], "table")
-    then
-        local local_config = HH_LOCAL_HTTP[_player["userid"]]
-        if HH_UTILS:IsHHType(local_config["reward_list"], "table") then
-            for i, v in pairs(local_config["reward_list"]) do
-                if HH_UTILS:IsHHType(i, "string") and HH_UTILS:IsHHType(v, "number") then
-                    _player["components"]["hh_player"]:AddItemsByKey(i, v)
-                end
-            end
-        end
-        if HH_UTILS:IsHHType(local_config["title"], "string") then
-            _player["hh_title"] = local_config["title"]
-        end
-        if HH_UTILS:IsHHType(local_config["net_str_list"], "table") and (#local_config["net_str_list"] > 0) then
-            local net_list = local_config["net_str_list"]
-            local random_str_index = math["random"](1, #net_list)
-            HH_UTILS:NetSay(tostring(net_list[random_str_index]))
-        end
-        --黑名单
-        if local_config["is_black"] then
-            local net_desc = local_config["black_desc"] or "封禁"
-            local player_name = _player["name"]
-            local net_format = "发现黑名单用户:%s,原因:%s,即将踢出该玩家"
-            HH_UTILS:HHClientRpc(_player, "hh_black_player", "封禁")
-            HH_UTILS:NetSay(string["format"](net_format, tostring(player_name), tostring(net_desc)))
-        end
-    end
-end
 local function dropItems(inst)
     if HH_UTILS:HasComponents(inst, "container") then
         inst["components"]["container"]:DropEverything()
@@ -526,7 +489,6 @@ local HH_COMPONENTS = Class(function(self, inst)
         --通知客户端
         local client_table = createItemTable(self["hh_items"])
         HH_UTILS:HHClientRpc(self["inst"], "hh_items", HH_UTILS:TableToStr(client_table))
-        sendHttp(self["inst"])
         --初始加载一下地图传送权限 防止穿戴装备初始化不会加载
         --HH_UTILS:ClientMapBlink(self["inst"])
     end)
