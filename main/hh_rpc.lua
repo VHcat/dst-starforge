@@ -533,6 +533,9 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
         local hh_gem_str = item_com["hh_equip"]:GetGemDebugString()
         handleFormatStr(hh_copy_list, "hh_32_hh_gem", tostring(hh_gem_str))
         hh_copy_list["hh_32_hh_gem"]["child_ui"] = item_com["hh_equip"]:GetGemDebugList()
+        hh_copy_list["hh_32_hh_gem"]["gem_count"] = #item_com["hh_equip"]["gems_list"]
+        hh_copy_list["hh_32_hh_gem"]["gem_current_limit"] = item_com["hh_equip"]["gem_current_limit"] or 0
+        hh_copy_list["hh_32_hh_gem"]["gem_max_limit"] = item_com["hh_equip"]["gem_max_limit"] or 0
         if item_com["hh_equip"]:CanShowBuffUi() then
             local buff_str = item_com["hh_equip"]:GetBuffDebugString()
             handleFormatStr(hh_copy_list, "hh_32_hh_equip", tostring(buff_str))
@@ -580,6 +583,7 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
             end
         end
         handleFormatStr(hh_copy_list, "hh_32_hh_gem", tostring(hh_gem_str))
+        hh_copy_list["hh_32_hh_gem"]["affix_id"] = effect_id
     end
     if item_com["hh_monster"] then
         local buff_num = item_com["hh_monster"]:GetAllBuffNum()

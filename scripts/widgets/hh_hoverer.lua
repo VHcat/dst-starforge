@@ -9,6 +9,7 @@ local HH_UTILS = require("utils/hh_utils")
 local hh_component_desc_list = require("enums/hh_hoverer")
 local HH_I18N = require("utils/hh_i18n")
 local hh_hoverer_en = require("enums/hh_hoverer_en")
+local HH_EQUIP_BUFF_LIST = require("enums/hh_enchant")["HH_EQUIP_BUFF_LIST"]
 local main_xml, main_tex = "images/global.xml", "square.tex"
 local big_scale = 30--大
 local medium_scale = 20--中
@@ -262,6 +263,35 @@ function HH_HOVERER_UI:UpdateHoverer()
                         child_name = localized
                     end
                 end
+                if v == "hh_32_hh_gem" then
+                    local id = target_infos[v]["affix_id"]
+                    local config = type(id) == "string" and HH_EQUIP_BUFF_LIST[id] or nil
+                    if config then
+                        local desc = HH_I18N.GetAffixText(id, "desc", config["desc"])
+                        if config["value_range"] then
+                            local range = "(" .. tostring(config["value_range"]["min"]) .. "~" .. tostring(config["value_range"]["max"]) .. ")"
+                            local ok, rendered = pcall(string.format, desc, range)
+                            if ok then child_name = rendered end
+                        else
+                            child_name = desc
+                        end
+                    elseif target_infos[v]["gem_count"] then
+                        local used = target_infos[v]["gem_count"]
+                        local current = target_infos[v]["gem_current_limit"] or 0
+                        local maximum = target_infos[v]["gem_max_limit"] or current
+                        child_name = tostring(used) .. "/" .. tostring(current)
+                        if current < maximum then
+                            child_name = child_name .. "; " .. tostring(maximum - current) .. " unopened"
+                        end
+                    end
+                elseif v == "hh_32_hh_gem_check" then
+                    local source = target_infos["hh_32_hh_gem"]
+                    local id = source and source["affix_id"]
+                    local config = type(id) == "string" and HH_EQUIP_BUFF_LIST[id] or nil
+                    if config then
+                        child_name = HH_I18N.GetAffixText(id, "check", config["check_desc"])
+                    end
+                end
             end
             if not main_ui["hh_body_" .. v] then
                 main_ui["hh_body_" .. v] = HH_UTILS:HHCreateTextUi(main_ui, Vector3(0, 0, 1), "", { 1, 1, 1, 1 }, child_text_scale)
@@ -307,7 +337,32 @@ function HH_HOVERER_UI:UpdateHoverer()
                             extra_image_weight, extra_image_height = extra_image_size_x, extra_image_size_y
                         end
                         if cv["desc"] then
-                            extra_child_ui["hh_text_" .. ci] = HH_UTILS:HHCreateTextUi(extra_child_ui, Vector3(0, 0, 1), cv["desc"], cv["desc_color"] or { 1, 1, 1, 1 }, text_scale, true)
+                            local description = cv["desc"]
+                            if HH_I18N.GetLocale() == "en" then
+                                if v == "hh_32_hh_gem" and type(cv["name"]) == "string" then
+                                    description = hh_hoverer_en.gems[cv["name"]] or description
+                                elseif v == "hh_32_hh_equip" and type(cv["name"]) == "table" then
+                                    local buff = cv["name"]
+                                    local id = buff["name"]
+                                    local config = type(id) == "string" and HH_EQUIP_BUFF_LIST[id] or nil
+                                    if config then
+                                        local name = HH_I18N.GetAffixText(id, "name", config["name"])
+                                        local desc = HH_I18N.GetAffixText(id, "desc", config["desc"])
+                                        if buff["value"] then
+                                            local ok, rendered = pcall(string.format, desc, buff["value"])
+                                            if ok then desc = rendered end
+                                            local maximum = config["value_range"] and config["value_range"]["max"]
+                                            if maximum and buff["value"] == maximum then
+                                                desc = desc .. " (maxed)"
+                                            elseif maximum and buff["value"] > maximum then
+                                                desc = desc .. " (beyond limit)"
+                                            end
+                                        end
+                                        description = name .. ":" .. desc
+                                    end
+                                end
+                            end
+                            extra_child_ui["hh_text_" .. ci] = HH_UTILS:HHCreateTextUi(extra_child_ui, Vector3(0, 0, 1), description, cv["desc_color"] or { 1, 1, 1, 1 }, text_scale, true)
                             local extra_text_size_x, extra_text_size_y = extra_child_ui["hh_text_" .. ci]:GetRegionSize()
                             --需要兼容图片部分
                             extra_child_ui["hh_text_" .. ci]:SetPosition(extra_image_weight + extra_text_size_x / 2, child_pos_y - extra_text_size_y / 2, 1)

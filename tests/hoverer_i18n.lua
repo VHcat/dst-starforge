@@ -20,4 +20,14 @@ t.test("every hover row has a matching English format", function()
     assert(count > 45)
 end)
 
+t.test("all socketed gem descriptions are available in English", function()
+    local count = 0
+    for id, description in pairs(english.gems) do
+        assert(type(id) == "string" and type(description) == "string")
+        assert(not description:find("[\128-\255]"))
+        count = count + 1
+    end
+    assert(count == 28)
+end)
+
 return t.count
