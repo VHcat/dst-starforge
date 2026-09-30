@@ -6,6 +6,8 @@ local Text = require("widgets/text")
 local Image = require("widgets/image")
 local HH_UTILS = require("utils/hh_utils")
 local HH_BUFF_CONFIG = require("enums/hh_buff")
+local HH_BUFF_EN = require("enums/hh_buff_en")
+local HH_I18N = require("utils/hh_i18n")
 ----buff图标背景
 local buff_back_xml, buff_back_tex = "images/hh_icon/hh_buff_icon.xml", "hh_buff_icon.tex"
 ----buff背景图片大小
@@ -67,7 +69,7 @@ function hh_buffer_ui:HandleBuffUi()
     local hh_table = self["hh_buff_table"]
     --所有的buff集合
     local all_buffs = GetHasBuff(self["owner"])
-    if all_buffs == nil or not HH_UTILS:IsHHType(all_buffs) == "table" then
+    if not HH_UTILS:IsHHType(all_buffs, "table") then
         return
     end
     for i, v in ipairs(hh_table) do
@@ -111,9 +113,9 @@ function hh_buffer_ui:HandleBuffUi()
                 end
                 --没有图的可以增加文字显示buff图标
                 if HH_BUFF_CONFIG[v]["icon_text"] then
-                    self[v]["icon_text"] = HH_UTILS:HHCreateTextUi(self[v], Vector3(0, 0, 1), tostring(HH_BUFF_CONFIG[v]["icon_text"]), nil, hh_text_size)
+                    self[v]["icon_text"] = HH_UTILS:HHCreateTextUi(self[v], Vector3(0, 0, 1), tostring(HH_I18N.GetLocale() == "en" and HH_BUFF_EN[v] and HH_BUFF_EN[v].icon or HH_BUFF_CONFIG[v]["icon_text"]), nil, hh_text_size)
                 end
-                local hh_str = HH_BUFF_CONFIG[v]["str"] or "描述"
+                local hh_str = HH_I18N.GetLocale() == "en" and HH_BUFF_EN[v] and HH_BUFF_EN[v].desc or HH_BUFF_CONFIG[v]["str"] or "描述"
                 self[v]["OnGainFocus"] = function()
                     self[v]["hh_desc"] = HH_UTILS:HHCreateTextUi(self[v], Vector3(0, 0, 1), tostring(hh_str), { 1, 1, 1, 1 }, hh_text_size)
                     self[v]["hh_desc"]:MoveTo(Vector3(0, buff_back_size / 2, 1), Vector3(0, buff_back_size, 1), 0.5)
@@ -122,7 +124,7 @@ function hh_buffer_ui:HandleBuffUi()
                     HH_UTILS:HHKillChild(self[v], "hh_desc")
                 end
                 self[v]["hh_time"] = HH_UTILS:HHCreateTextUi(self[v], Vector3(0, -buff_back_size / 2 - hh_text_size / 2, 1), tostring(hh_time), { 1, 1, 1, 1 }, hh_text_size)
-                local hh_name = HH_BUFF_CONFIG[v]["name"] or "未命名"
+                local hh_name = HH_I18N.GetLocale() == "en" and HH_BUFF_EN[v] and HH_BUFF_EN[v].name or HH_BUFF_CONFIG[v]["name"] or "未命名"
                 self[v]["hh_text"] = HH_UTILS:HHCreateTextUi(self[v], Vector3(0, buff_back_size / 2 + hh_text_size / 2, 1), tostring(hh_name), { 1, 1, 1, 1 }, hh_text_size)
 
             end
