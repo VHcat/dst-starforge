@@ -266,3 +266,72 @@ configuration_options = {
         default = 40,
     },
 }
+-- modinfo.lua is evaluated with `locale` supplied by DST's ModIndex.
+if locale == "en" then
+    name = "Starforge · Enchantment and Enhancement"
+    description = [[
+Equipment enchantments / enhanced creatures
+
+Starforge is a derivative of "Enchantment and Enhancement" v3.21.
+Original author: 宇宙超级霹雳闪电大煎蛋
+Original mod: https://steamcommunity.com/sharedfiles/filedetails/?id=3096210166
+
+Starforge is incompatible with the original mod. Disable the original mod before enabling Starforge.
+]]
+    local translations = {
+        ["信息面版位置"] = "Info panel position",
+        ["设置信息面版默认位置"] = "Default info panel position",
+        ["跟随鼠标"] = "Follow mouse",
+        ["左上"] = "Top left",
+        ["左下"] = "Bottom left",
+        ["面板显示原版文本"] = "Show base-game text in info panel",
+        ["显示"] = "Show",
+        ["不显示"] = "Hide",
+        ["面板只显示词条信息"] = "Only show affixes in info panel",
+        ["所有信息"] = "All information",
+        ["只显示词条信息"] = "Affixes only",
+        ["快捷键打开强化页面"] = "Hotkey for opening the forge",
+        ["装备掉率"] = "Equipment drop rate",
+        ["普通"] = "Normal",
+        ["高"] = "High",
+        ["开启部分怪物加强"] = "Enhance selected creatures",
+        ["开启"] = "On",
+        ["关闭"] = "Off",
+        ["怪物加强"] = "Creature enhancement",
+        ["怪物强化难度"] = "Creature enhancement difficulty",
+        ["简单"] = "Easy",
+        ["中等"] = "Medium",
+        ["困难"] = "Hard",
+        ["开启所有装备强化(mod武器可能崩溃)"] = "Enhance all equipment (modded weapons may crash)",
+        ["官方装备"] = "Base-game equipment",
+        ["所有装备"] = "All equipment",
+        ["生物每日血量提高不限制天数"] = "No day limit on creature health growth",
+        ["生物是否掉落装备(推荐后期关)"] = "Creatures drop equipment (disable later if needed)",
+        ["攻速修改"] = "Attack speed modification",
+        ["攻速修改(关闭后词条不再生效)"] = "Attack speed modification (affix stops working when off)",
+        ["泰拉/勋章是否可以附魔"] = "Enchant Terra / Medal equipment",
+        ["是否可以公屏展示装备属性"] = "Allow sharing equipment stats in public chat",
+        ["快捷键:shift+alt+鼠标左键"] = "Hotkey: Shift + Alt + left mouse button",
+        ["是否显示文字特效(攻击效果类特效)"] = "Show combat text effects",
+        ["是否可以制作鸭鸭盒子"] = "Enable Duck Box crafting",
+        ["功能:随身的猪王容器"] = "Portable Pig King container",
+        ["蠕虫是否掉落额外战利品"] = "Worms drop extra loot",
+        ["功能:蠕虫是否掉落额外战利品"] = "Worms drop extra loot",
+        ["附魔石显示文字提示"] = "Show text above enchantment stones",
+        ["地面上是否显示文字提示"] = "Show text above stones on the ground",
+        ["每日装备掉落上限"] = "Daily equipment drop limit",
+        ["每日卷轴/洗蕴石掉落上限"] = "Daily scroll / cleansing stone drop limit",
+        ["每日极品附魔石掉落上限"] = "Daily rare enchantment stone drop limit",
+    }
+    for _, option in ipairs(configuration_options) do
+        option.label = translations[option.label] or option.label
+        option.hover = translations[option.hover] or option.hover
+        for _, choice in ipairs(option.options or {}) do
+            choice.description = translations[choice.description] or choice.description
+            choice.hover = translations[choice.hover] or choice.hover
+            if option.name == "key_config" then
+                choice.hover = "Press " .. choice.description .. " to open the forge"
+            end
+        end
+    end
+end

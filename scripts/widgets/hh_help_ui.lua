@@ -39,21 +39,21 @@ local function sendLogRpc(log_type)
 end
 local tab_config = {
     {
-        ["name"] = "mod介绍",
+        ["name"] = HH_UTILS:GetLanguageByKey("ui", "help_tab_intro"),
         ["btn_type"] = "main",
         ["click_fn"] = function(self)
             self:CreateModInfo()
         end,
     },
     {
-        ["name"] = "更新记录",
+        ["name"] = HH_UTILS:GetLanguageByKey("ui", "help_tab_changes"),
         ["btn_type"] = "update",
         ["click_fn"] = function(self)
             self:CreateLogUi()
         end,
     },
     {
-        ["name"] = "词条详情",
+        ["name"] = HH_UTILS:GetLanguageByKey("ui", "help_tab_effects"),
         ["btn_type"] = "effect",
         ["click_fn"] = function(self)
             self:CreateEffectUi()
@@ -67,7 +67,7 @@ local tab_config = {
     --    end,
     --},
     {
-        ["name"] = "日志",
+        ["name"] = HH_UTILS:GetLanguageByKey("ui", "help_tab_logs"),
         ["btn_type"] = "log",
         ["click_fn"] = function(self)
             sendLogRpc("")
@@ -209,8 +209,8 @@ local HH_HELP = Class(Widget, function(self, owner)
 
     self["hh_open_container"] = HH_UTILS:HHCreateImageButton(self["root"], "images/crafting_menu_icons.xml", "filter_summer.tex",
             Vector3(-580, -300, 1), 0.15, 0.15)
-    HH_UTILS:UiAddFocusStr(self["hh_open_container"], string.format("打开强化页面(当前热键:%s)\n右键拖拽位置", tostring(TUNING["HH_KEY_CONFIG"])), 20)
-    self["hh_open_container"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_open_container"], Vector3(0, -20, 0), "强化空间", nil, 15)
+    HH_UTILS:UiAddFocusStr(self["hh_open_container"], string.format(HH_UTILS:GetLanguageByKey("ui", "open_forge_hint"), tostring(TUNING["HH_KEY_CONFIG"])), 20)
+    self["hh_open_container"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_open_container"], Vector3(0, -20, 0), HH_UTILS:GetLanguageByKey("ui", "open_forge_label"), nil, 15)
     self["hh_open_container"]:SetOnClick(function()
         SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_ui_container"])
     end)
@@ -288,7 +288,7 @@ end
 ---创建mod介绍页
 ---
 function HH_HELP:CreateModInfo()
-    self:CreateTitle("传奇武器mod介绍")
+    self:CreateTitle(HH_UTILS:GetLanguageByKey("ui", "help_title_intro"))
     local father_ui = self["hh_main"]["main_ui"]
 
     --左下为起点0-0-0
@@ -339,7 +339,7 @@ end
 ---创建更新日志ui
 ---
 function HH_HELP:CreateLogUi()
-    self:CreateTitle("更新日志")
+    self:CreateTitle(HH_UTILS:GetLanguageByKey("ui", "help_title_changes"))
     local father_ui = self["hh_main"]["main_ui"]
     local log_str_config = _G_HH_UI_TEXT["UPDATE_VISION"]
     local log_list = {}
@@ -371,7 +371,7 @@ function HH_HELP:CreateLogUi()
     HH_UTILS:HookFocusCamera(father_ui["hh_info_ui"])
 end
 function HH_HELP:CreateEffectUi()
-    self:CreateTitle("词条属性")
+    self:CreateTitle(HH_UTILS:GetLanguageByKey("ui", "help_title_effects"))
     local father_ui = self["hh_main"]["main_ui"]
     local all_effect = GetAllEquipBuff()
     ----------------------------------------------------------------------------------------------
@@ -452,7 +452,7 @@ end
 ---宝石道具属性
 ---
 function HH_HELP:CreateGemUi()
-    self:CreateTitle("宝石/道具")
+    self:CreateTitle(HH_UTILS:GetLanguageByKey("ui", "help_title_gems"))
     local father_ui = self["hh_main"]["main_ui"]
     local log_str = _G_HH_UI_TEXT["UI_ITEMS"]
     --左下为起点0-0-0
@@ -584,7 +584,7 @@ local log_tab = {
 ---世界日志
 ---
 function HH_HELP:CreateWorldLogUi()
-    self:CreateTitle("世界日志")
+    self:CreateTitle(HH_UTILS:GetLanguageByKey("ui", "help_title_logs"))
     local father_ui = self["hh_main"]["main_ui"]
     local player = self["owner"]
     local log_str = HH_UTILS:GetClientValue(player, "hh_world_logs")

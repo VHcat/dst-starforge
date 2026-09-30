@@ -2,6 +2,20 @@
 ---多语言文本
 ---
 local HH_LANGUAGE = {
+    ["ui"] = {
+        help_tab_intro = "mod介绍",
+        help_tab_changes = "更新记录",
+        help_tab_effects = "词条详情",
+        help_tab_gems = "宝石/道具",
+        help_tab_logs = "日志",
+        help_title_intro = "传奇武器mod介绍",
+        help_title_changes = "更新日志",
+        help_title_effects = "词条属性",
+        help_title_gems = "宝石/道具",
+        help_title_logs = "世界日志",
+        open_forge_hint = "打开强化页面(当前热键:%s)\n右键拖拽位置",
+        open_forge_label = "强化空间",
+    },
     ["item"] = {
     },
     ["mod_help"] = {

@@ -5,7 +5,7 @@ local ImageButton = require("widgets/imagebutton")
 local TrueScrollArea = require("widgets/truescrollarea")
 local UIAnim = require("widgets/uianim")
 local HH_TEXT = require("enums/hh_text_config")
-local HH_LANGUAGE = require("enums/hh_language")
+local HH_I18N = require("utils/hh_i18n")
 local HH_UTILS = {}
 
 ----
@@ -1650,29 +1650,11 @@ end
 ---所有format处理的改为模板处理Template
 ---
 function HH_UTILS:GetLanguageByKey(type_index, item_key)
-    local base_str = "未定义"
-    if not (HH_UTILS:IsHHType(type_index, "string") and HH_UTILS:IsHHType(item_key, "string")) then
-        return base_str
-    end
-    if not HH_UTILS:IsHHType(HH_LANGUAGE[type_index], "table") then
-        return base_str
-    end
-    return tostring(HH_LANGUAGE[type_index][item_key] or base_str)
+    return HH_I18N.GetText(type_index, item_key)
 end
 
-----
----文本类封装到单独的文件中取-table
----所有format处理的改为模板处理Template
----
 function HH_UTILS:GetLanguageTableByKey(type_index)
-    local base_str = {}
-    if not HH_UTILS:IsHHType(type_index, "string") then
-        return base_str
-    end
-    if not HH_UTILS:IsHHType(HH_LANGUAGE[type_index], "table") then
-        return base_str
-    end
-    return HH_LANGUAGE[type_index]
+    return HH_I18N.GetTable(type_index)
 end
 
 ----
