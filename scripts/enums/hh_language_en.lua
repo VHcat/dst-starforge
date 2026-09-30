@@ -612,6 +612,10 @@ return {
         remove_gem_confirm = "Destroy one random socketed gem?",
         use_item = "Use %s",
         title = "Equipment Forge", put_in = "Add all", dismantle = "Dismantle all",
+        page_enchant = "Forge", page_gems = "Socket", page_storage = "Storage 24",
+        equip_slot = "Gear", enchant_slot = "Enchant item", cleanse_slot = "Cleanse", gem_target = "Target gear",
+        enchant_quick_hint = "Insert items, then choose an action; hover for details",
+        gem_quick_hint = "Choose a gem",
         equip = "↑\nGear", enchant_item = "↑\nEnchant",
         cleansing_item = "↑\nCleanse",
         upgrade = "Upgrade", enchant = "Enchant", clear = "Remove",
@@ -799,5 +803,6 @@ return {
         help_title_logs = "World log",
         open_forge_hint = "Open forge (hotkey: %s)\nRight-click and drag to move",
         open_forge_label = "Forge",
+        launcher_label = "Starforge", launcher_hint = "Open Starforge menu\nRight-click and drag to move",
     },
 }

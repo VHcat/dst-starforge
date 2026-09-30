@@ -168,15 +168,6 @@ local HH_UI = Class(Widget, function(self, owner)
             end
         end
     end, self["owner"])
-    --local sim_w, sim_h = TheSim:GetScreenSize()
-    --self["hh_open_button"] = HH_UTILS:HHCreateImageButton(self["root"], "images/global.xml", "square.tex", Vector3(100 - sim_w / 2, 100 - sim_h / 2, 1), 1, 1)
-    self["hh_open_button"] = HH_UTILS:HHCreateImageButton(self["root"], "images/crafting_menu_icons.xml", "filter_modded.tex", Vector3(-460, -300, 1), 0.15, 0.15)
-    HH_UTILS:UiAddFocusStr(self["hh_open_button"], HH_UTILS:GetLanguageByKey("hover_config", "open_hint"), 20)
-    self["hh_open_button"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_open_button"], Vector3(0, -20, 0), HH_UTILS:GetLanguageByKey("hover_config", "open_label"), nil, 15)
-    self["hh_open_button"]:SetOnClick(function()
-        self:CreateMainUi()
-    end)
-    HH_UTILS:MakeUiCanMove(self["hh_open_button"])
 end)
 local function addTextButton(father, ui_id, str, hh_pos, click_fn)
     if not father then

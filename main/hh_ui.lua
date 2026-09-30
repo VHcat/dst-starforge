@@ -6,8 +6,6 @@ local HH_EQUIP_BUFF_LIST = HH_CONFIG["HH_EQUIP_BUFF_LIST"]
 local HH_SUIT_CONFIG = HH_CONFIG["HH_SUIT_LIST"]
 local containers = require("containers")
 local params = {}
-local offset_y = -17
-local offset_x = 0
 local hh_container_button = {
     ["hh_cat_box"] = {
         ["button_fn"] = function(inst, doer)
@@ -120,51 +118,19 @@ local function slotsSortValidFn(inst)
     return inst["replica"]["container"] ~= nil and not inst["replica"]["container"]:IsEmpty()--容器不为空
 end
 ----强化装备容器
+-- Storage slots occupy a 6 x 4 page; slots 25-28 keep their server roles.
+local hh_equip_slotpos = {}
+for row = 0, 3 do
+    for col = 0, 5 do
+        hh_equip_slotpos[#hh_equip_slotpos + 1] = Vector3(-150 + col * 60, 55 - row * 50, 0)
+    end
+end
+hh_equip_slotpos[25] = Vector3(-130, 20, 0)
+hh_equip_slotpos[26] = Vector3(-30, 20, 0)
+hh_equip_slotpos[27] = Vector3(70, 20, 0)
+hh_equip_slotpos[28] = Vector3(155, 15, 0)
 params["hh_ui_container"] = {
-    ["widget"] = {
-        ["slotpos"] = {
-            Vector3(-247 + 4 * 0 + offset_x, 180 + offset_y, 0),
-            Vector3(-202 + 4 * 2 + offset_x, 180 + offset_y, 0),
-            Vector3(-157 + 4 * 4 + offset_x, 180 + offset_y, 0),
-            Vector3(-112 + 4 * 6 + offset_x, 180 + offset_y, 0),
-
-            Vector3(-247 + 4 * 0 + offset_x, 125 + offset_y, 0),
-            Vector3(-202 + 4 * 2 + offset_x, 125 + offset_y, 0),
-            Vector3(-157 + 4 * 4 + offset_x, 125 + offset_y, 0),
-            Vector3(-112 + 4 * 6 + offset_x, 125 + offset_y, 0),
-
-            Vector3(-247 + 4 * 0 + offset_x, 70 + offset_y, 0),
-            Vector3(-202 + 4 * 2 + offset_x, 70 + offset_y, 0),
-            Vector3(-157 + 4 * 4 + offset_x, 70 + offset_y, 0),
-            Vector3(-112 + 4 * 6 + offset_x, 70 + offset_y, 0),
-
-            Vector3(-247 + 4 * 0 + offset_x, 15 + offset_y, 0),
-            Vector3(-202 + 4 * 2 + offset_x, 15 + offset_y, 0),
-            Vector3(-157 + 4 * 4 + offset_x, 15 + offset_y, 0),
-            Vector3(-112 + 4 * 6 + offset_x, 15 + offset_y, 0),
-
-            Vector3(-247 + 4 * 0 + offset_x, -40 + offset_y, 0),
-            Vector3(-202 + 4 * 2 + offset_x, -40 + offset_y, 0),
-            Vector3(-157 + 4 * 4 + offset_x, -40 + offset_y, 0),
-            Vector3(-112 + 4 * 6 + offset_x, -40 + offset_y, 0),
-
-            Vector3(-247 + 4 * 0 + offset_x, -95 + offset_y, 0),
-            Vector3(-202 + 4 * 2 + offset_x, -95 + offset_y, 0),
-            Vector3(-157 + 4 * 4 + offset_x, -95 + offset_y, 0),
-            Vector3(-112 + 4 * 6 + offset_x, -95 + offset_y, 0),
-
-            Vector3(10 + offset_x, 170 + offset_y, 0),
-            Vector3(60 + offset_x, 170 + offset_y, 0),
-            Vector3(110 + offset_x, 170 + offset_y, 0),
-
-
-            Vector3(250 + offset_x, 10 + offset_y, 0),
-        },
-        ["slotbg"] = { },
-        ["pos"] = Vector3(0, 0, 0),
-    },
-    --acceptsstacks = false,
-    --usespecificslotsforitems = true,
+    ["widget"] = { ["slotpos"] = hh_equip_slotpos, ["slotbg"] = {}, ["pos"] = Vector3(0, 0, 0) },
     ["type"] = "chest",
 }
 --for i = 1, 28 do
@@ -447,6 +413,7 @@ local hh_hoverer = require("widgets/hh_hoverer")
 local HH_BUFF_UI = require("widgets/hh_buff")
 local HH_HOVERER_CONFIG = require("widgets/hh_hoverer_config")
 local HH_HELP_UI = require("widgets/hh_help_ui")
+local HH_LAUNCHER = require("widgets/hh_launcher")
 AddClassPostConstruct("widgets/controls", function(self, owner)
     self["hh_com_buff"] = self:AddChild(HH_BUFF_UI(self["owner"]))
     self["hh_com_buff"]:SetPosition(250, -50)
@@ -468,6 +435,7 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
     --面板配置页面
     self["hh_hoverer_config"] = self:AddChild(HH_HOVERER_CONFIG(self["owner"]))
     self["hh_help_ui"] = self:AddChild(HH_HELP_UI(self["owner"]))
+    self["hh_launcher"] = self:AddChild(HH_LAUNCHER(self["owner"], self["hh_help_ui"], self["hh_hoverer_config"]))
 end)
 local function getInputItem()
     local target = TheInput:GetHUDEntityUnderMouse()
@@ -651,6 +619,9 @@ local function handleContainer(self, owner)
                         end
                     end
                 end
+            end
+            if self[ui_name]["SetContainerWidget"] then
+                self[ui_name]:SetContainerWidget(self)
             end
         end
     end

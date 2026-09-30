@@ -112,6 +112,10 @@ local HH_LANGUAGE = {
         remove_gem_confirm = "是否随机销毁一个宝石",
         use_item = "使用%s",
         title = "装备强化", put_in = "一键放入", dismantle = "一键拆解",
+        page_enchant = "强化", page_gems = "镶嵌", page_storage = "仓库 24",
+        equip_slot = "装备", enchant_slot = "附魔材料", cleanse_slot = "洗蕴石", gem_target = "目标装备",
+        enchant_quick_hint = "放入材料后选择操作；悬停按钮可查看说明",
+        gem_quick_hint = "选择左侧宝石",
         equip = "↑\n装\n备", enchant_item = "↑\n附\n魔\n类",
         cleansing_item = "↑\n洗\n蕴\n石",
         upgrade = "升品", enchant = "附魔", clear = "清除",
@@ -143,6 +147,7 @@ local HH_LANGUAGE = {
         help_title_logs = "世界日志",
         open_forge_hint = "打开强化页面(当前热键:%s)\n右键拖拽位置",
         open_forge_label = "强化空间",
+        launcher_label = "星铸", launcher_hint = "打开星铸菜单\n右键拖拽位置",
     },
     ["item"] = {
     },

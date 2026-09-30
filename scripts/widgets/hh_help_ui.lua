@@ -198,27 +198,6 @@ local HH_HELP = Class(Widget, function(self, owner)
     self["root"]:SetVAnchor(ANCHOR_MIDDLE)
     self["root"]:SetHAnchor(ANCHOR_MIDDLE)
     self["root"]:SetScaleMode(SCALEMODE_PROPORTIONAL)
-    self["hh_open_button"] = HH_UTILS:HHCreateImageButton(self["root"], "images/button_icons.xml", "newsletter.tex",
-            Vector3(-520, -300, 1), 0.15, 0.15)
-    HH_UTILS:UiAddFocusStr(self["hh_open_button"], HH_UTILS:GetLanguageByKey("help_ui", "open_hint"), 20)
-    self["hh_open_button"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_open_button"], Vector3(0, -20, 0), HH_UTILS:GetLanguageByKey("help_ui", "open_label"), nil, 15)
-    self["hh_open_button"]:SetOnClick(function()
-        if self["hh_main"] then
-            HH_UTILS:HHKillChild(self, "hh_main")
-        else
-            self:CreateMainUi()
-        end
-    end)
-    HH_UTILS:MakeUiCanMove(self["hh_open_button"])
-
-    self["hh_open_container"] = HH_UTILS:HHCreateImageButton(self["root"], "images/crafting_menu_icons.xml", "filter_summer.tex",
-            Vector3(-580, -300, 1), 0.15, 0.15)
-    HH_UTILS:UiAddFocusStr(self["hh_open_container"], string.format(HH_UTILS:GetLanguageByKey("ui", "open_forge_hint"), tostring(TUNING["HH_KEY_CONFIG"])), 20)
-    self["hh_open_container"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_open_container"], Vector3(0, -20, 0), HH_UTILS:GetLanguageByKey("ui", "open_forge_label"), nil, 15)
-    self["hh_open_container"]:SetOnClick(function()
-        SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_ui_container"])
-    end)
-    HH_UTILS:MakeUiCanMove(self["hh_open_container"])
     ------------------日志监听回调-------------------------
 
     self["inst"]:ListenForEvent("hh_world_logs", function(inst, data)
