@@ -676,6 +676,9 @@ function HH_UI:CreateOrUpdateEquipInfoUi(server_table)
         return
     end
     local equip_info_ui = father_ui["equip_info_ui"]
+    if require("utils/hh_i18n").GetLocale() == "en" then
+        server_table = require("enums/hh_special_en").ForgeStarInfo(server_table, STRINGS.NAMES.HH_HAT_STAR or "Star Crown")
+    end
     HH_UTILS:HHKillChild(equip_info_ui, "info_ui")
     equip_info_ui["info_ui"] = HH_UTILS:CreateInfoUi(equip_info_ui,
             server_table,

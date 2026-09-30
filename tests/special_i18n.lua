@@ -32,6 +32,18 @@ t.test("star crown names keep upgrade values across locales", function()
     assert(special.StarName("Star Crown", "破损", 7) == "[Damaged] Star Crown (+7)")
     assert(special.StarName("Star Crown", "无暇", 3) == "[Flawless] Star Crown (+3)")
     assert(special.StarName("Star Crown", "other", 3) == "Star Crown")
+    assert(special.StarDisplayName("【破损】彩曜星环(+7)", "Star Crown") == "[Damaged] Star Crown (+7)")
+    assert(special.StarDisplayName("【无暇】彩曜星环(+3)", "Star Crown") == "[Flawless] Star Crown (+3)")
+    assert(special.StarDisplayName("Someone else named it", "Star Crown") == nil)
+end)
+
+t.test("forge star details localize unbound state without changing player names", function()
+    local source = { name = { str = "【无暇】彩曜星环(+3)" }, bind_uid = {}, bind_name = { str = "未绑定" } }
+    local result = special.ForgeStarInfo(source, "Star Crown")
+    assert(result.name.str == "[Flawless] Star Crown (+3)")
+    assert(result.bind_name.str == "Unbound" and source.bind_name.str == "未绑定")
+    source.bind_uid.str = "KU_example"
+    assert(special.ForgeStarInfo(source, "Star Crown").bind_name.str == "未绑定")
 end)
 
 return t.count

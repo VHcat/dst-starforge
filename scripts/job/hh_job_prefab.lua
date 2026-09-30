@@ -1,4 +1,5 @@
 local HH_UTILS = require("utils/hh_utils")
+local HH_I18N = require("utils/hh_i18n")
 local HH_JOB_CONFIG = require("job/hh_job_config")
 ----
 ---职业类道具
@@ -44,6 +45,10 @@ local function updateChildText(inst)
     if inst and inst["hh_client_str"] and inst["hh_child"] and inst["hh_child"]["Label"] then
         local hh_str = inst["hh_client_str"]:value()
         local hh_label = inst["hh_child"]["Label"]
+        if HH_I18N.GetLocale() == "en" then
+            local job_id = inst.hh_client_job and inst.hh_client_job:value()
+            hh_str = "Job Card - " .. (job_id == "smith" and "Blacksmith" or "Unknown job")
+        end
         hh_label:SetText(tostring(hh_str))
         hh_label:Enable(true)
     end
@@ -71,9 +76,10 @@ local HH_LIST = {
             inst["hh_client_str"] = net_string(inst["GUID"], "hh_client_str", "hh_client_str")
             inst["hh_client_job"] = net_string(inst["GUID"], "hh_client_job", "hh_client_job")
 
-            inst["hh_child"] = createChildPrefab({ ["name"] = "职业卡-无效职业", ["color"] = { 1, 1, 0, 1 }, })
+            inst["hh_child"] = createChildPrefab({ ["name"] = HH_I18N.GetLocale() == "en" and "Job Card - Unknown job" or "职业卡-无效职业", ["color"] = { 1, 1, 0, 1 }, })
             inst["hh_child"]["entity"]:SetParent(inst["entity"])
             inst:ListenForEvent("hh_client_str", updateChildText)
+            inst:ListenForEvent("hh_client_job", updateChildText)
         end,
         ["server_fn"] = function(inst, name)
             inst:AddComponent("inspectable")

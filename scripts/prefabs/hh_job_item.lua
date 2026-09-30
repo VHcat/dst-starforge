@@ -1,3 +1,5 @@
+local HH_I18N = require("utils/hh_i18n")
+local HH_PREFAB_STRINGS_EN = require("enums/hh_prefab_strings_en")
 local HH_ALL_PREFABS = require("job/hh_job_prefab")
 local function addComPrefab(name, data)
     local function prefab_fn()
@@ -24,9 +26,10 @@ end
 local all_prefabs = {}
 for i, v in pairs(HH_ALL_PREFABS) do
     table["insert"](all_prefabs, addComPrefab(i, v))
-    STRINGS["NAMES"][string["upper"](i)] = v["name"] or "未定义"
-    STRINGS["RECIPE_DESC"][string["upper"](i)] = v["recipe_str"] or "未定义"
-    STRINGS["CHARACTERS"]["GENERIC"]["DESCRIBE"][string["upper"](i)] = v["desc"] or "未定义"
+    local display = HH_I18N.GetLocale() == "en" and HH_PREFAB_STRINGS_EN[i] or nil
+    STRINGS["NAMES"][string["upper"](i)] = (display and display.name) or v["name"] or "未定义"
+    STRINGS["RECIPE_DESC"][string["upper"](i)] = (display and display.recipe_str) or v["recipe_str"] or "未定义"
+    STRINGS["CHARACTERS"]["GENERIC"]["DESCRIBE"][string["upper"](i)] = (display and display.desc) or v["desc"] or "未定义"
     if v["xml"] then
         local prefab_id = i
         local tex_id = prefab_id .. ".tex"

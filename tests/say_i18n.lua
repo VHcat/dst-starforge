@@ -23,7 +23,7 @@ end)
 t.test("literal player messages all have English translations", function()
     local translations = dofile("scripts/enums/hh_say_en.lua")
     local paths = {
-        "scripts/components/hh_player.lua", "scripts/components/hh_equip.lua",
+        "scripts/components/hh_player.lua", "scripts/components/hh_equip.lua", "scripts/components/hh_hat_star.lua",
         "main/hh_rpc.lua", "main/hh_ui.lua", "scripts/enums/hh_equip.lua",
         "scripts/enums/hh_prefabs.lua", "scripts/enums/hh_treasure_monster.lua",
     }
@@ -32,7 +32,7 @@ t.test("literal player messages all have English translations", function()
         local file = assert(io.open(path, "rb"))
         for line in file:lines() do
             local active = not line:match("^%s*%-%-")
-            local candidate = ((path == "scripts/components/hh_player.lua" or path == "scripts/components/hh_equip.lua") and line:find("return", 1, true)) or line:find("HHSay(", 1, true) or line:find("HHSayV2(", 1, true)
+            local candidate = ((path == "scripts/components/hh_player.lua" or path == "scripts/components/hh_equip.lua" or path == "scripts/components/hh_hat_star.lua") and line:find("return", 1, true) and (path ~= "scripts/components/hh_hat_star.lua" or line:find("return false", 1, true) or line:find("return true", 1, true))) or line:find("HHSay(", 1, true) or line:find("HHSayV2(", 1, true)
             if active and candidate then
                 for phrase in line:gmatch('"([^"]+)"') do
                     if phrase:find("[\128-\255]") and not phrase:find("%", 1, true) then

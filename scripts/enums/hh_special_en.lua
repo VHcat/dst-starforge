@@ -68,11 +68,37 @@ local treasure_titles = {
 }
 
 local Special = { titles = titles, descriptions = descriptions, upgrades = upgrades, visual_effects = visual_effects, treasure_titles = treasure_titles }
+Special.upgraded_names = {
+    ["毫无价值的白板"] = "Plain Equipment",
+    ["★火腿棒"] = "Upgraded Ham Bat",
+    ["★强化的大理石甲"] = "Upgraded Marble Suit",
+}
+
 
 function Special.StarName(base_name, prefix, upgrade)
     local translated = prefix == "破损" and "Damaged" or prefix == "无暇" and "Flawless" or nil
     if not translated then return base_name end
     return string.format("[%s] %s (+%s)", translated, base_name, tostring(upgrade or 0))
+end
+
+-- The server replicates the crown's Chinese named-component text; display it locally.
+function Special.StarDisplayName(server_name, local_name)
+    if type(server_name) ~= "string" then return nil end
+    local prefix, upgrade = server_name:match("^【(.-)】彩曜星环%(%+(%d+)%)$")
+    if not prefix then return nil end
+    return Special.StarName(local_name, prefix, upgrade)
+end
+
+function Special.ForgeStarInfo(data, crown_name)
+    local display = {}
+    for key, value in pairs(data) do display[key] = value end
+    if type(data.name) == "table" then
+        display.name = { str = Special.StarDisplayName(data.name.str, crown_name) or data.name.str }
+    end
+    if type(data.bind_uid) ~= "table" or not data.bind_uid.str then
+        display.bind_name = { str = "Unbound" }
+    end
+    return display
 end
 
 function Special.Translate(title, description, data)

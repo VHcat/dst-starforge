@@ -1188,6 +1188,11 @@ local HH_PREFAB = {
         ["name"] = "毫无价值的白板装备", ["recipe_str"] = "随机获得强化属性", ["desc"] = "随机获得强化属性",
         ["xml"] = "images/inventoryimages.xml", ["tex"] = "armor_marble_rockabs.tex",
         ["client_fn"] = function(inst, name)
+            inst.displaynamefn = function(_inst)
+                if HH_I18N.GetLocale() == "en" then
+                    return HH_SPECIAL_EN.upgraded_names[_inst.name]
+                end
+            end
             inst["AnimState"]:SetBank("armor_marble")
             inst["AnimState"]:SetBuild("armor_marble")
             inst["AnimState"]:PlayAnimation("anim")
@@ -1395,6 +1400,11 @@ local HH_PREFAB = {
         ["name"] = "彩曜星环", ["recipe_str"] = "彩曜星环", ["desc"] = "彩曜星环",
         ["xml"] = "images/hh_icon/hh_hat_star.xml", ["tex"] = "hh_hat_star.tex",
         ["client_fn"] = function(inst, name)
+            inst.displaynamefn = function(_inst)
+                if HH_I18N.GetLocale() == "en" then
+                    return HH_SPECIAL_EN.StarDisplayName(_inst.name, STRINGS.NAMES.HH_HAT_STAR or "Star Crown")
+                end
+            end
             inst["AnimState"]:SetBank("hh_hat_star")
             inst["AnimState"]:SetBuild("hh_hat_star")
             inst["AnimState"]:PlayAnimation("idle", true)

@@ -324,7 +324,7 @@ local function hitfn()
 
     return inst
 end
-STRINGS["NAMES"][string["upper"]("hh_laser_fx")] = "技能-激光"
+STRINGS["NAMES"]["HH_LASER_FX"] = require("utils/hh_i18n").GetLocale() == "en" and "Laser Skill" or "技能-激光"
 return Prefab("hh_deerclops_laser", fn, assets),
 Prefab("hh_deerclops_laserempty", emptyfn, assets),
 Prefab("hh_deerclops_laserscorch", scorchfn, assets_scorch),
