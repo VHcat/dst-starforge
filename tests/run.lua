@@ -13,6 +13,7 @@ local suites = {
     "gems",
     "stars",
     "skins",
+    "skin_names_i18n",
     "logs",
     "log_i18n",
     "bulk_clear",

@@ -1,4 +1,6 @@
 local HH_UTILS = require("utils/hh_utils")
+local HH_I18N = require("utils/hh_i18n")
+local HH_SKIN_EN = require("enums/hh_skin_en")
 local SKIN_CONFIG = require("enums/hh_skin")
 local skin_component = "hh_skin"
 
@@ -12,6 +14,10 @@ for i, v in pairs(SKIN_CONFIG) do
                 save_skin_list[hh_skin_id] = skin_v
                 local skin_name = skin_v["skin_name"] or "未知皮肤"
                 local skin_desc = skin_v["desc"] or "描述为空"
+                if HH_I18N.GetLocale() == "en" then
+                    skin_name = HH_SKIN_EN[skin_name] or skin_name
+                    skin_desc = skin_v["desc_en"] or (skin_v["desc"] and skin_desc or "No description.")
+                end
                 STRINGS["SKIN_NAMES"][hh_skin_id] = tostring(skin_name)
                 STRINGS["SKIN_DESCRIPTIONS"][hh_skin_id] = tostring(skin_desc)
                 if not PREFAB_SKINS[i] then
