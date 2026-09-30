@@ -1,0 +1,28 @@
+# Normalize text in Git and use LF when checking it out.
+* text=auto eol=lf
+
+# Mod scripts, texture atlases, documentation, and configuration
+*.lua text eol=lf
+*.xml text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+
+# Use conventional CRLF endings for Windows command scripts.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# DST .tex files are binary textures, not LaTeX documents.
+# Animation archives and media must not undergo text conversion or merging.
+*.tex binary
+*.zip binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ogg binary
+*.wav binary
+*.fsb binary
+*.fev binary
+/mod.manifest binary

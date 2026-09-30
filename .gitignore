@@ -1,0 +1,32 @@
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local editor settings and backup files
+/.idea/
+/.vscode/
+*.swp
+*.swo
+*~
+*.bak
+
+# Logs, crash dumps, and temporary files
+*.log
+*.dmp
+*.tmp
+*.temp
+/logs/
+/tmp/
+/.cache/
+
+# Compiled Lua output (the mod ships Lua source)
+*.luac
+luac.out
+
+# Local build and release staging directories
+/build/
+/dist/
+
+# anim/*.zip, images/*.tex, and XML atlases are required runtime assets.
+# Keep these files, along with any source artwork, under version control.
