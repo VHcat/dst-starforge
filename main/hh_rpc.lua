@@ -561,8 +561,9 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
     end
     ----====>人物属性<====----
     if item_com["hh_player"] then
-        local player_effect_str = item_com["hh_player"]:GetDebugStr()
+        local player_effect_str, player_effect_data = item_com["hh_player"]:GetDebugStr()
         handleFormatStr(hh_copy_list, "hh_32_hh_player", tostring(player_effect_str))
+        hh_copy_list["hh_32_hh_player"]["effect_data"] = player_effect_data
     end
     ----====>附魔石<====----
     if item_prefab == "hh_effect_stone" and item["hh_effect"] and HH_EQUIP_BUFF_LIST[item["hh_effect"]] then
@@ -588,8 +589,9 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
     if item_com["hh_monster"] then
         local buff_num = item_com["hh_monster"]:GetAllBuffNum()
         if buff_num > 0 then
-            local monster_debug = item_com["hh_monster"]:GetDebugString()
+            local monster_debug, monster_data = item_com["hh_monster"]:GetDebugString()
             handleFormatStr(hh_copy_list, "hh_32_hh_monster", monster_debug)
+            hh_copy_list["hh_32_hh_monster"]["effect_data"] = monster_data
         end
     end
     --if HH_UTILS:HasReplica(item, "inventoryitem") then

@@ -284,6 +284,37 @@ function HH_HOVERER_UI:UpdateHoverer()
                             child_name = child_name .. "; " .. tostring(maximum - current) .. " unopened"
                         end
                     end
+                elseif v == "hh_32_hh_monster" then
+                    local data = target_infos[v]["effect_data"]
+                    if type(data) == "table" and type(data.buffs) == "table" then
+                        local lines = {}
+                        if data.day_bonus then
+                            table.insert(lines, string.format("Health bonus by day: %s (%s x %s)", data.day_bonus, data.day_rate, data.day_count))
+                        else
+                            table.insert(lines, "Daily health bonus unavailable")
+                        end
+                        for _, buff in ipairs(data.buffs) do
+                            local format = hh_hoverer_en.monster_formats[buff.key] or buff.fallback
+                            if format then
+                                local ok, rendered = pcall(string.format, format, tostring(buff.value))
+                                if ok then table.insert(lines, rendered) end
+                            end
+                        end
+                        child_name = table.concat(lines, "\n")
+                    end
+                elseif v == "hh_32_hh_player" then
+                    local data = target_infos[v]["effect_data"]
+                    if type(data) == "table" then
+                        local lines = {}
+                        for _, effect in ipairs(data) do
+                            local format = hh_hoverer_en.player_formats[effect.id]
+                            if format then
+                                local ok, rendered = pcall(string.format, format, tostring(effect.value))
+                                if ok then table.insert(lines, rendered) end
+                            end
+                        end
+                        child_name = table.concat(lines, "\n")
+                    end
                 elseif v == "hh_32_hh_gem_check" then
                     local source = target_infos["hh_32_hh_gem"]
                     local id = source and source["affix_id"]

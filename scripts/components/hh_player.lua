@@ -2065,6 +2065,7 @@ local debug_str_list = {
 }
 function HH_COMPONENTS:GetDebugStr()
     local debug_str = ""
+    local debug_data = {}
     for i, v in ipairs(debug_str_list) do
         if v and v["id"] and v["format_str"] then
             local effect_id = v["id"]
@@ -2073,6 +2074,7 @@ function HH_COMPONENTS:GetDebugStr()
             --GetEffectValueByKey
             local effect_value = self:GetEffectValueByKey(effect_id)
             local effect_str = string["format"](effect_format, tostring(effect_value))
+            table.insert(debug_data, { id = effect_id, value = tostring(effect_value) })
             debug_str = debug_str .. effect_str
             if i < #debug_str_list then
                 debug_str = debug_str .. "\n"
@@ -2080,6 +2082,6 @@ function HH_COMPONENTS:GetDebugStr()
             --end
         end
     end
-    return debug_str
+    return debug_str, debug_data
 end
 return HH_COMPONENTS

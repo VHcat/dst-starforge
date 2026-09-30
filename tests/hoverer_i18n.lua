@@ -30,4 +30,21 @@ t.test("all socketed gem descriptions are available in English", function()
     assert(count == 28)
 end)
 
+t.test("monster and player stats have format-safe English text", function()
+    local monsters, players = 0, 0
+    for id, format in pairs(english.monster_formats) do
+        assert(type(id) == "string" and type(format) == "string")
+        assert(not format:find("[\128-\255]"))
+        assert(pcall(string.format, format, 12), id)
+        monsters = monsters + 1
+    end
+    for id, format in pairs(english.player_formats) do
+        assert(type(id) == "string" and type(format) == "string")
+        assert(not format:find("[\128-\255]"))
+        assert(pcall(string.format, format, 12), id)
+        players = players + 1
+    end
+    assert(monsters == 50 and players == 7)
+end)
+
 return t.count

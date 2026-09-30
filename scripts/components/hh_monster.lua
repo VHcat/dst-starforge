@@ -1176,6 +1176,11 @@ function HH_COMPONENT:OnLoad(data)
 end
 function HH_COMPONENT:GetDebugString()
     local buff_str = ""
+    local debug_data = { buffs = {} }
+    local format_keys = {}
+    for key, format in pairs(TUNING["HH_FORMAT_CONFIG"]["MONSTER_CONFIG"]) do
+        format_keys[format] = key
+    end
     local hh_prefab = self["inst"]["prefab"]
     local hh_monster_type = HH_UTILS:GetMonsterType(self["inst"]) or getMonsterType(hh_prefab)
     local all_buff_list = HH_MONSTER_BUFFS[hh_monster_type]
@@ -1189,6 +1194,9 @@ function HH_COMPONENT:GetDebugString()
         local world_day = TheWorld and TheWorld["state"] and TheWorld["state"]["cycles"] or 0
         world_day = math["min"](TUNING["HH_CHANCE_CONFIG"]["MONSTER_ADD_HEALTH_DAY"], world_day)
         day_str = string.format("血量天数加成:%s(%s*%s)", day_add_max_health * world_day, day_add_max_health, world_day)
+        debug_data.day_bonus = day_add_max_health * world_day
+        debug_data.day_rate = day_add_max_health
+        debug_data.day_count = world_day
     end
     buff_str = buff_str .. day_str
     for i, v in ipairs(self["hh_buffs"]) do
@@ -1197,8 +1205,9 @@ function HH_COMPONENT:GetDebugString()
             local buff_value = tostring(v["value"])
             local buff_format = buff_config["name"]
             buff_str = buff_str .. "\n" .. string["format"](buff_format, buff_value)
+            table.insert(debug_data.buffs, { key = format_keys[buff_format], value = buff_value, fallback = buff_format })
         end
     end
-    return buff_str
+    return buff_str, debug_data
 end
 return HH_COMPONENT
