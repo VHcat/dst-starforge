@@ -650,9 +650,16 @@ function HH_UTILS:SpawnBrambleFx(inst)
     end
 end
 
-function HH_UTILS:NetSay(net_str)
-    if TheNet then
-        TheNet:Announce(tostring(net_str))
+function HH_UTILS:NetSay(net_str, context)
+    if not (type(AllPlayers) == "table" and CLIENT_MOD_RPC and CLIENT_MOD_RPC["hh_rpc"] and CLIENT_MOD_RPC["hh_rpc"]["hh_notice"]) then
+        if TheNet then TheNet:Announce(tostring(net_str)) end
+        return
+    end
+    local context_str = self:TableToStr(type(context) == "table" and context or {})
+    for _, player in ipairs(AllPlayers) do
+        if player and player["userid"] then
+            SendModRPCToClient(CLIENT_MOD_RPC["hh_rpc"]["hh_notice"], player["userid"], tostring(net_str), context_str)
+        end
     end
 end
 function HH_UTILS:UpdateEquipValue(player, effect_name, value, is_add)

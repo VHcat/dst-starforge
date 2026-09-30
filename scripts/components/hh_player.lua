@@ -407,7 +407,7 @@ local function addUiItems(hh_table, inst)
 end
 local function netTalkStr(hh_table, inst)
     if HH_UTILS:IsHHType(hh_table["str"], "string") and TheNet then
-        TheNet:Announce(hh_table["str"])
+        HH_UTILS:NetSay(hh_table["str"])
     end
 end
 local function addItems(hh_table, inst)
@@ -1407,7 +1407,7 @@ function HH_COMPONENTS:AddReplaceStone()
         if spawn_new_stone and spawn_new_stone["hh_effect"] then
             local random_effect = spawn_new_stone["hh_effect"]
             local hh_str = HH_EQUIP_BUFF_LIST[random_effect] and HH_EQUIP_BUFF_LIST[random_effect]["name"] or "???"
-            TheNet:Announce(string["format"]("%s好运当头，合成出:超超超稀有的%s", tostring(inst_name), tostring(hh_str)))
+            HH_UTILS:NetSay(string["format"]("%s好运当头，合成出:超超超稀有的%s", tostring(inst_name), tostring(hh_str)))
             --增加世界日志
             HH_UTILS:AddLocalizedLog("stone", "compound_stone_rare", {
                         ["data_player"] = inst_name,
@@ -1423,7 +1423,7 @@ function HH_COMPONENTS:AddReplaceStone()
         if spawn_new_stone and spawn_new_stone["hh_effect"] then
             local random_effect = spawn_new_stone["hh_effect"]
             local hh_str = HH_EQUIP_BUFF_LIST[random_effect] and HH_EQUIP_BUFF_LIST[random_effect]["name"] or "???"
-            TheNet:Announce(string["format"]("%s运气爆棚，合成出-%s", tostring(inst_name), tostring(hh_str)))
+            HH_UTILS:NetSay(string["format"]("%s运气爆棚，合成出-%s", tostring(inst_name), tostring(hh_str)))
             --增加世界日志
             HH_UTILS:AddLocalizedLog("stone", "compound_stone_best", {
                         ["data_player"] = inst_name,
@@ -1508,7 +1508,7 @@ function HH_COMPONENTS:CompoundEquipEffect(effect_id)
             --增加公告播报
             local inst_name = self["inst"]["name"] or STRINGS["NAMES"][string["upper"](self["inst"]["prefab"])]
             local hh_effect_name = HH_EQUIP_BUFF_LIST[effect_id]["name"]
-            TheNet:Announce(string["format"]("%s合成出-%s", tostring(inst_name), tostring(hh_effect_name)))
+            HH_UTILS:NetSay(string["format"]("%s合成出-%s", tostring(inst_name), tostring(hh_effect_name)))
         end
     end
     return true, "合成成功"
@@ -1747,7 +1747,7 @@ function HH_COMPONENTS:RemoveEquips()
                         --增加公告播报
                         local inst_name = self["inst"]["name"] or STRINGS["NAMES"][string["upper"](self["inst"]["prefab"])]
                         local hh_effect_str = HH_EQUIP_BUFF_LIST[random_effect_name]["name"]
-                        TheNet:Announce(string["format"]("%s拆解出词条-%s", tostring(inst_name), tostring(hh_effect_str)))
+                        HH_UTILS:NetSay(string["format"]("%s拆解出词条-%s", tostring(inst_name), tostring(hh_effect_str)))
                     end
                     --先赋值 防止容器里第一次不显示图标
                     if effect_stone["HH_Update_Server"] then

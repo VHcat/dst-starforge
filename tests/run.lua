@@ -6,6 +6,7 @@ local suites = {
     "buff_i18n",
     "fx_i18n",
     "say_i18n",
+    "notice_i18n",
     "prefab_strings_i18n",
     "items_i18n",
     "i18n",

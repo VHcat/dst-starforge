@@ -1,5 +1,6 @@
 local HH_UTILS = require("utils/hh_utils")
 local HH_I18N = require("utils/hh_i18n")
+local HH_NOTICE_EN = require("enums/hh_notice_en")
 
 AddModRPCHandler("hh_rpc", "hh_set_locale", function(player, locale)
     if player then player["hh_locale"] = locale == "en" and "en" or "zh" end
@@ -17,6 +18,26 @@ local HH_ITEMS_CONFIG = require("enums/hh_items")
 local hh_component_desc_list = require("enums/hh_hoverer")
 local HH_CONFIG = require("enums/hh_enchant")
 local HH_EQUIP_BUFF_LIST = HH_CONFIG["HH_EQUIP_BUFF_LIST"]
+AddClientModRPCHandler("hh_rpc", "hh_notice", function(message, context_str)
+    if not (ChatHistory and type(ChatHistory.OnAnnouncement) == "function") then return end
+    if HH_I18N.GetLocale() == "en" then
+        local function localize_affix(name)
+            for id, config in pairs(HH_EQUIP_BUFF_LIST) do
+                if config["name"] == name then
+                    return HH_I18N.GetAffixText(id, "name", name)
+                end
+            end
+            return name
+        end
+        local context = HH_UTILS:StrToTable(context_str or "{}")
+        local prefab = type(context) == "table" and context["prefab"] or nil
+        local monster_name = type(prefab) == "string" and STRINGS.NAMES[string.upper(prefab)] or nil
+        message = HH_NOTICE_EN.Translate(message, localize_affix, monster_name)
+    end
+    ChatHistory:OnAnnouncement(message, WHITE)
+end)
+
+
 local show_info_config = GetModConfigData("hoverer_effect")
 ----食物入锅标签
 local cooking = require("cooking")

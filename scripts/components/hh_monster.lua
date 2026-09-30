@@ -392,7 +392,7 @@ local function SpawnSpecialStone(inst, monster_type, attacker)
                 --增加公告播报
                 local inst_name = inst["name"] or STRINGS["NAMES"][string["upper"](inst["prefab"])]
                 local hh_gem_str = HH_EQUIP_BUFF_LIST[hh_stone["hh_effect"]]["name"]
-                TheNet:Announce(string["format"]("%s掉落极品附魔石-%s", tostring(inst_name), tostring(hh_gem_str)))
+                HH_UTILS:NetSay(string["format"]("%s掉落极品附魔石-%s", tostring(inst_name), tostring(hh_gem_str)), { prefab = inst["prefab"] })
             end
             local angle = math["random"](1, 360)
             local x, y, z = inst["Transform"]:GetWorldPosition()
@@ -520,7 +520,7 @@ local function SpawnEquipGif(inst, monster_type)
         if TheNet then
             --增加公告播报
             local inst_name = inst["name"] or STRINGS["NAMES"][string["upper"](inst["prefab"])]
-            TheNet:Announce(string["format"]("%s掉落特殊装备包裹", tostring(inst_name)))
+            HH_UTILS:NetSay(string["format"]("%s掉落特殊装备包裹", tostring(inst_name)), { prefab = inst["prefab"] })
         end
     end
 end
