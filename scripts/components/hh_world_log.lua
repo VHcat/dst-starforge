@@ -39,52 +39,42 @@ end
 ---@param limit_count-数量 (每页显示的数量)
 ---@param page_index-页数 (当前第几页)
 ---
+local function isPositiveInteger(value)
+    return type(value) == "number" and value > 0
+        and value < math.huge and value % 1 == 0
+end
+
 function HH_COM:GetLogs(log_type, limit_count, page_index)
-    -- 基础校验：确保 logs 是 table
-    if not HH_UTILS:IsHHType(self["logs"], "table") or #self["logs"] == 0 then
+    if type(self.logs) ~= "table" or #self.logs == 0 then
         return {}
     end
-    -- 设置默认值，防止传入 nil 导致报错
-    limit_count = limit_count or 100
-    page_index = page_index or 1
-    -- 复制原表并倒序（保证最新日志在前面）
-    local logsCopy = HH_UTILS:HHCopyTable(self["logs"])
-    local reversedLogs = {}
-    for i = #logsCopy, 1, -1 do
-        table["insert"](reversedLogs, logsCopy[i])
+    if log_type ~= nil and type(log_type) ~= "string" then
+        return {}
     end
-    -- 传入了 log_type，则过滤数据
-    local filteredLogs = reversedLogs
-    if log_type ~= nil and log_type ~= "" then
-        filteredLogs = {}
-        -- 遍历倒序后的日志
-        for _, log_item in ipairs(reversedLogs) do
-            -- 取出当前日志的 log_type 列表
-            local item_log_types = log_item["log_type"]
-            -- 确保它是个 table，并且里面包含我们要找的 log_type 字符串
-            if HH_UTILS:IsHHType(item_log_types, "table") then
-                if table["contains"](item_log_types, log_type) then
-                    table["insert"](filteredLogs, log_item)
-                end
+    if limit_count == nil then limit_count = 100 end
+    if page_index == nil then page_index = 1 end
+    if not isPositiveInteger(limit_count) or not isPositiveInteger(page_index) then
+        return {}
+    end
+    limit_count = math.min(limit_count, 100)
+    -- Bound the page before multiplying client-supplied numbers.
+    if page_index > math.ceil(#self.logs / limit_count) then
+        return {}
+    end
+    local skip = (page_index - 1) * limit_count
+    local matched, page_data = 0, {}
+    for i = #self.logs, 1, -1 do
+        local entry = self.logs[i]
+        if type(entry) == "table" and (log_type == nil or log_type == ""
+                or (type(entry.log_type) == "table" and table.contains(entry.log_type, log_type))) then
+            matched = matched + 1
+            if matched > skip then
+                table.insert(page_data, HH_UTILS:HHCopyTable(entry))
+                if #page_data == limit_count then break end
             end
         end
     end
-    -- 计算分页的起始和结束索引
-    local start_index = (page_index - 1) * limit_count + 1
-    local end_index = page_index * limit_count
-    -- 边界处理
-    if start_index > #filteredLogs then
-        return {}
-    end
-    if end_index > #filteredLogs then
-        end_index = #filteredLogs
-    end
-    --提取当前页的数据并返回
-    local pageData = {}
-    for i = start_index, end_index do
-        table["insert"](pageData, filteredLogs[i])
-    end
-    return pageData
+    return page_data
 end
 function HH_COM:OnSave()
     local save_data = {}
