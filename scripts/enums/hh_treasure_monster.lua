@@ -254,13 +254,12 @@ local function GivePlayerGem(hh_player, monster_name)
         hh_player["components"]["hh_player"]:AddItemsByKey("treasure_armor", 1, true)
         base_gem_name = getGemLanguage("treasure_armor")
     end
-    HH_UTILS:AddLog({ "treasure", "stone", "gem" }, HH_UTILS:Template(getLogLanguage("kill_treasure_boss"),
-            {
+    HH_UTILS:AddLocalizedLog({ "treasure", "stone", "gem" }, "kill_treasure_boss", {
                 ["data_player"] = player_name,
                 ["data_monster"] = monster_name,
                 ["data_gem"] = base_gem_name,
             }
-    ))
+    )
 end
 ----
 ---hook生物生命赋值函数
@@ -322,7 +321,7 @@ local MONSTER_CONFIG = {
                     hh_player["components"]["hh_player"]:AddItemsByKey("treasure_atk", 1, true)
                     hh_player["components"]["hh_player"]:AddItemsByKey("treasure_bj", 1, true)
                     hh_player["components"]["hh_player"]:AddItemsByKey("treasure_armor", 1, true)
-                    HH_UTILS:AddLog("treasure", HH_UTILS:Template(getLogLanguage("kill_treasure_kps"), { ["data_player"] = player_name, }))
+                    HH_UTILS:AddLocalizedLog("treasure", "kill_treasure_kps", { ["data_player"] = player_name, })
                 end
             end)
         end,
@@ -373,7 +372,7 @@ local MONSTER_CONFIG = {
                     hh_player["components"]["hh_player"]:TestSpawnStone("special_sgsy")
                     hh_player["components"]["hh_player"]:TestSpawnStone("special_true_damage")
                     hh_player["components"]["hh_player"]:TestSpawnStone("special_true_damage")
-                    HH_UTILS:AddLog("treasure", HH_UTILS:Template(getLogLanguage("kill_treasure_cat_you"), { ["data_player"] = player_name, }))
+                    HH_UTILS:AddLocalizedLog("treasure", "kill_treasure_cat_you", { ["data_player"] = player_name, })
                 end
             end)
         end,
@@ -1240,12 +1239,11 @@ local TREASURE_CONFIG = {
         ["start_fn"] = function(chest_inst, player)
             HH_UTILS:NetSay("强化的大猪知非已经出现,请及时击杀(补刀的玩家有特殊奖励)")
             spawnTreasureMonster(chest_inst, player, { { ["prefab_id"] = "hh_beetle_pig", ["treasure_id"] = "hh_beetle_pig_boss", }, })
-            HH_UTILS:AddLog("treasure", HH_UTILS:Template(getLogLanguage("dig_treasure_monster"),
-                    {
+            HH_UTILS:AddLocalizedLog("treasure", "dig_treasure_monster", {
                         ["data_player"] = player and player["name"],
                         ["data_image"] = "pigman",
                         ["data_monster"] = "大猪知非",
-                    }))
+                    })
         end
     },
     {
@@ -1253,12 +1251,11 @@ local TREASURE_CONFIG = {
         ["start_fn"] = function(chest_inst, player)
             HH_UTILS:NetSay("强化的林猪已经出现,请及时击杀(补刀的玩家有特殊奖励)")
             spawnTreasureMonster(chest_inst, player, { { ["prefab_id"] = "hh_dual_wield_pig", ["treasure_id"] = "hh_dual_wield_pig_boss", }, })
-            HH_UTILS:AddLog("treasure", HH_UTILS:Template(getLogLanguage("dig_treasure_monster"),
-                    {
+            HH_UTILS:AddLocalizedLog("treasure", "dig_treasure_monster", {
                         ["data_player"] = player and player["name"],
                         ["data_image"] = "pigman",
                         ["data_monster"] = "双持林猪",
-                    }))
+                    })
         end
     },
     {
@@ -1268,12 +1265,11 @@ local TREASURE_CONFIG = {
             spawnTreasureMonster(chest_inst, player, {
                 { ["prefab_id"] = "catcoon", ["treasure_id"] = "treasure_cat_you", },
             })
-            HH_UTILS:AddLog("treasure", HH_UTILS:Template(getLogLanguage("dig_treasure_monster"),
-                    {
+            HH_UTILS:AddLocalizedLog("treasure", "dig_treasure_monster", {
                         ["data_player"] = player and player["name"],
                         ["data_image"] = "catcoon",
                         ["data_monster"] = "超级猫悠",
-                    }))
+                    })
         end
     },
     -- grassgekko草蜥蜴 pigman
@@ -1286,12 +1282,11 @@ local TREASURE_CONFIG = {
                 { ["prefab_id"] = "pigman", ["treasure_id"] = "pig_tank", },
                 { ["prefab_id"] = "pigman", ["treasure_id"] = "pig_attack", },
             })
-            HH_UTILS:AddLog("treasure", HH_UTILS:Template(getLogLanguage("dig_treasure_monster"),
-                    {
+            HH_UTILS:AddLocalizedLog("treasure", "dig_treasure_monster", {
                         ["data_player"] = player and player["name"],
                         ["data_image"] = "krampus",
                         ["data_monster"] = "坎普斯大王",
-                    }))
+                    })
         end
     },
     --星空蛋
@@ -1301,12 +1296,11 @@ local TREASURE_CONFIG = {
             spawnChest(chest_inst, {
                 { ["type"] = "item", ["prefab_id"] = "hh_egg_starry_sky", ["num"] = 1, },
             })
-            HH_UTILS:AddLog("treasure", HH_UTILS:Template(getLogLanguage("dig_treasure_monster"),
-                    {
+            HH_UTILS:AddLocalizedLog("treasure", "dig_treasure_monster", {
                         ["data_player"] = player and player["name"],
                         ["data_image"] = "egg_starry_sky",
                         ["data_monster"] = "星空蛋",
-                    }))
+                    })
         end
     },
     {
@@ -1314,12 +1308,11 @@ local TREASURE_CONFIG = {
         ["start_fn"] = function(chest_inst, player)
             HH_UTILS:NetSay("强化的巨鹿大王已经出现,请及时击杀(补刀的玩家有特殊奖励)")
             spawnTreasureMonster(chest_inst, player, { { ["prefab_id"] = "mutateddeerclops", ["treasure_id"] = "mutateddeerclops_boss", }, })
-            HH_UTILS:AddLog("treasure", HH_UTILS:Template(getLogLanguage("dig_treasure_monster"),
-                    {
+            HH_UTILS:AddLocalizedLog("treasure", "dig_treasure_monster", {
                         ["data_player"] = player and player["name"],
                         ["data_image"] = "mutateddeerclops",
                         ["data_monster"] = "月后巨鹿",
-                    }))
+                    })
         end
     },
     --TheWorld:HasTag("cave")
@@ -1336,12 +1329,11 @@ local TREASURE_CONFIG = {
             else
                 HH_UTILS:NetSay("强化的附身狼王已经出现,请及时击杀(补刀的玩家有特殊奖励)")
                 spawnTreasureMonster(chest_inst, player, { { ["prefab_id"] = "mutatedwarg", ["treasure_id"] = "mutatedwarg_boss", }, })
-                HH_UTILS:AddLog("treasure", HH_UTILS:Template(getLogLanguage("dig_treasure_monster"),
-                        {
+                HH_UTILS:AddLocalizedLog("treasure", "dig_treasure_monster", {
                             ["data_player"] = player and player["name"],
                             ["data_image"] = "mutatedwarg",
                             ["data_monster"] = "月后座狼",
-                        }))
+                        })
             end
         end
     },
@@ -1350,12 +1342,11 @@ local TREASURE_CONFIG = {
         ["start_fn"] = function(chest_inst, player)
             HH_UTILS:NetSay("强化的超级熊大已经出现,请及时击杀(补刀的玩家有特殊奖励)")
             spawnTreasureMonster(chest_inst, player, { { ["prefab_id"] = "mutatedbearger", ["treasure_id"] = "mutatedbearger_boss", }, })
-            HH_UTILS:AddLog("treasure", HH_UTILS:Template(getLogLanguage("dig_treasure_monster"),
-                    {
+            HH_UTILS:AddLocalizedLog("treasure", "dig_treasure_monster", {
                         ["data_player"] = player and player["name"],
                         ["data_image"] = "mutatedbearger",
                         ["data_monster"] = "装甲熊獾",
-                    }))
+                    })
         end
     },
     {
@@ -1363,12 +1354,11 @@ local TREASURE_CONFIG = {
         ["start_fn"] = function(chest_inst, player)
             HH_UTILS:NetSay("强化的超级鲨鱼已经出现,请及时击杀(补刀的玩家有特殊奖励)")
             spawnTreasureMonster(chest_inst, player, { { ["prefab_id"] = "hh_sharkboi", ["treasure_id"] = "hh_sharkboi_boss", }, })
-            HH_UTILS:AddLog("treasure", HH_UTILS:Template(getLogLanguage("dig_treasure_monster"),
-                    {
+            HH_UTILS:AddLocalizedLog("treasure", "dig_treasure_monster", {
                         ["data_player"] = player and player["name"],
                         ["data_image"] = "sharkboi",
                         ["data_monster"] = "超级鲨鱼",
-                    }))
+                    })
         end
     },
     {

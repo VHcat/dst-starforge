@@ -13,6 +13,7 @@ local suites = {
     "stars",
     "skins",
     "logs",
+    "log_i18n",
     "bulk_clear",
     "permissions",
 }

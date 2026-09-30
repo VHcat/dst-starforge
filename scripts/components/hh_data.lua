@@ -74,7 +74,7 @@ function HH_COM:DoDeltaParamValue(param_key, delta)
         currentValue = 0
         --大黑蛋
         HH_UTILS:SendEggToPlayer(hh_player, "hh_egg_black", 1)
-        HH_UTILS:AddLog("egg", HH_UTILS:Template(getLogLanguage("compound_black_egg"), { ["data_player"] = player_name, }))
+        HH_UTILS:AddLocalizedLog("egg", "compound_black_egg", { ["data_player"] = player_name, })
 
         HH_UTILS:NetSay(string["format"]("%s连续转换%s次未获得稀有附魔石，奖励黑蛋一枚，怎么有人能黑成这样~", tostring(player_name), tostring(maxDrawLotsNumRare)))
     end

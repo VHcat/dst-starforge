@@ -11,7 +11,7 @@ local HH_COM = Class(function(self, inst)
     self["logs"] = {}
 end)
 
-function HH_COM:AddLog(log_type, log_message)
+function HH_COM:AddLog(log_type, log_message, log_key, log_data)
     --加上时间
     local log_date = HH_UTILS:GetCurrentDateTime()
     local log_str = HH_UTILS:Template("#{{data_date}}:white:25{{data_message}}", {
@@ -28,6 +28,8 @@ function HH_COM:AddLog(log_type, log_message)
         ["ui_config"] = log_str,
         ["log_type"] = save_type,
         ["log_time"] = log_date,
+        ["log_key"] = log_key,
+        ["log_data"] = log_data,
     }
     table["insert"](self["logs"], log_table)
     --推实际及时更新 如果打开相关日志页面的话

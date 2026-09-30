@@ -6,6 +6,7 @@ local ImageButton = require("widgets/imagebutton")
 local TextButton = require("widgets/textbutton")
 local HH_UTILS = require("utils/hh_utils")
 local HH_I18N = require("utils/hh_i18n")
+local HH_LOG_I18N = require("utils/hh_log_i18n")
 local main_xml, main_tex = "images/global.xml", "square.tex"
 local TrueScrollArea = require("widgets/truescrollarea")
 local HH_CONFIG = require("enums/hh_enchant")
@@ -513,7 +514,7 @@ local function log_child_fn(father_ui, hh_ui_index)
     if HH_UTILS:IsHHType(log_list[hh_ui_index], "table") then
         local logConfig = log_list[hh_ui_index]
         if HH_UTILS:IsHHType(logConfig["ui_config"], "string") then
-            father_ui["log_ui"] = HH_UTILS:CreateByCustomText(father_ui, logConfig["ui_config"], 1)
+            father_ui["log_ui"] = HH_UTILS:CreateByCustomText(father_ui, HH_LOG_I18N.Render(logConfig), 1)
             father_ui["log_ui"]:SetPosition(-350, 10, 1)
         end
     end

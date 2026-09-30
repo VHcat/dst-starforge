@@ -1697,13 +1697,19 @@ end
 ----
 ---增加日志
 ---
-function HH_UTILS:AddLog(log_type, log_msg)
+function HH_UTILS:AddLog(log_type, log_msg, log_key, log_data)
     local inst = TheWorld
     if not HH_UTILS:HasComponents(inst, "hh_world_log") then
         return
     end
     local logComp = inst["components"]["hh_world_log"]
-    logComp:AddLog(log_type, log_msg)
+    logComp:AddLog(log_type, log_msg, log_key, log_data)
+end
+
+function HH_UTILS:AddLocalizedLog(log_type, log_key, log_data)
+    if type(log_key) ~= "string" or type(log_data) ~= "table" then return end
+    local template = self:GetLanguageByKey("log", log_key)
+    self:AddLog(log_type, self:Template(template, log_data), log_key, log_data)
 end
 
 function HH_UTILS:HHSayV2(inst, say_str)

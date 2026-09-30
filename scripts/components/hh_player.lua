@@ -1409,12 +1409,12 @@ function HH_COMPONENTS:AddReplaceStone()
             local hh_str = HH_EQUIP_BUFF_LIST[random_effect] and HH_EQUIP_BUFF_LIST[random_effect]["name"] or "???"
             TheNet:Announce(string["format"]("%s好运当头，合成出:超超超稀有的%s", tostring(inst_name), tostring(hh_str)))
             --增加世界日志
-            HH_UTILS:AddLog("stone", HH_UTILS:Template(getLogLanguage("compound_stone_rare"),
-                    {
+            HH_UTILS:AddLocalizedLog("stone", "compound_stone_rare", {
                         ["data_player"] = inst_name,
                         ["data_effect"] = hh_str,
+                        ["data_effect_id"] = random_effect,
                         ["data_essence"] = base_expend_essence_num + current_expend_essence,
-                    }))
+                    })
             has_good = true
         end
     elseif random_num <= 5 then
@@ -1425,12 +1425,12 @@ function HH_COMPONENTS:AddReplaceStone()
             local hh_str = HH_EQUIP_BUFF_LIST[random_effect] and HH_EQUIP_BUFF_LIST[random_effect]["name"] or "???"
             TheNet:Announce(string["format"]("%s运气爆棚，合成出-%s", tostring(inst_name), tostring(hh_str)))
             --增加世界日志
-            HH_UTILS:AddLog("stone", HH_UTILS:Template(getLogLanguage("compound_stone_best"),
-                    {
+            HH_UTILS:AddLocalizedLog("stone", "compound_stone_best", {
                         ["data_player"] = inst_name,
                         ["data_effect"] = hh_str,
+                        ["data_effect_id"] = random_effect,
                         ["data_essence"] = base_expend_essence_num + current_expend_essence,
-                    }))
+                    })
             --has_good=true
         end
     else
