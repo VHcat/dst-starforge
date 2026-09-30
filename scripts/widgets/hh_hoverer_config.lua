@@ -2,6 +2,7 @@
 ---面板配置
 ---
 local HH_UTILS = require("utils/hh_utils")
+local HH_I18N = require("utils/hh_i18n")
 local Widget = require("widgets/widget")
 local Image = require("widgets/image")
 local TextButton = require("widgets/textbutton")
@@ -67,6 +68,13 @@ local function replaceColor(hh_color, hh_new, hh_index)
     then
         hh_color[hh_index] = hh_new
     end
+end
+local function getColorLabel(color)
+    if HH_I18N.GetLocale() == "en" and color and type(color["color"]) == "table" then
+        local rgb = color["color"]
+        return string.format("#%02X%02X%02X", rgb[1], rgb[2], rgb[3])
+    end
+    return color and color["name"] or ""
 end
 local function hookFocusFn(hh_ui, focus_str)
     local oldOnGainFocusBack = hh_ui["OnGainFocus"]
@@ -163,8 +171,8 @@ local HH_UI = Class(Widget, function(self, owner)
     --local sim_w, sim_h = TheSim:GetScreenSize()
     --self["hh_open_button"] = HH_UTILS:HHCreateImageButton(self["root"], "images/global.xml", "square.tex", Vector3(100 - sim_w / 2, 100 - sim_h / 2, 1), 1, 1)
     self["hh_open_button"] = HH_UTILS:HHCreateImageButton(self["root"], "images/crafting_menu_icons.xml", "filter_modded.tex", Vector3(-460, -300, 1), 0.15, 0.15)
-    HH_UTILS:UiAddFocusStr(self["hh_open_button"], "信息面板配置\n右键拖拽位置", 20)
-    self["hh_open_button"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_open_button"], Vector3(0, -20, 0), "面版配置", nil, 15)
+    HH_UTILS:UiAddFocusStr(self["hh_open_button"], HH_UTILS:GetLanguageByKey("hover_config", "open_hint"), 20)
+    self["hh_open_button"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_open_button"], Vector3(0, -20, 0), HH_UTILS:GetLanguageByKey("hover_config", "open_label"), nil, 15)
     self["hh_open_button"]:SetOnClick(function()
         self:CreateMainUi()
     end)
@@ -220,7 +228,7 @@ function HH_UI:CreateMainUi()
     --创建测试面板ui
     self:CreateHovererUi()
     ------------------------------------------------------------------------------------背景-------------------------------------------------------------------------------------------
-    self["hh_main_ui"]["hh_back_ground_title"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"], Vector3(0, 0, 1), "面板配置\n背景颜色", { 1, 1, 1, 1 }, 30, true)
+    self["hh_main_ui"]["hh_back_ground_title"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("hover_config", "background"), { 1, 1, 1, 1 }, 30, true)
     local hh_back_ground_title_size_x, hh_back_ground_title_size_y = self["hh_main_ui"]["hh_back_ground_title"]:GetRegionSize()
     self["hh_main_ui"]["hh_back_ground_title"]:SetPosition(-main_size_x / 2 + hh_offset + hh_back_ground_title_size_x / 2, main_size_y / 2 - hh_offset - hh_back_ground_title_size_y / 2, 1)
     hh_start_y = main_size_y / 2 - hh_offset - hh_back_ground_title_size_y
@@ -238,7 +246,7 @@ function HH_UI:CreateMainUi()
             self:HandleBlackGround(new_color[1], new_color[2], new_color[3], self["hh_config"]["back_ground_config"][2] / 10)
             self["hh_main_ui"]["hh_back_ground_ok"] = HH_UTILS:HHCreateImageUi(self["hh_main_ui"], "images/ui.xml", "checkmark.tex", Vector3(pos_x, pos_y, 1), small_icon_size, small_icon_size)
         end
-        hookFocusFn(self["hh_main_ui"]["hh_back_ground_color_" .. i], tostring(v["name"]))
+        hookFocusFn(self["hh_main_ui"]["hh_back_ground_color_" .. i], getColorLabel(v))
         self["hh_main_ui"]["hh_back_ground_color_" .. i]:SetOnClick(function()
             HH_UTILS:HHKillChild(self["hh_main_ui"], "hh_back_ground_ok")
             self["hh_config"]["back_ground_config"][1] = i
@@ -253,17 +261,17 @@ function HH_UI:CreateMainUi()
     end
     hh_start_y = hh_start_y - hh_num_y * small_icon_size
     --创建透明度选项
-    self["hh_main_ui"]["hh_back_ground_rgb_a_title"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"], Vector3(0, 0, 1), "透明度", { 1, 1, 1, 1 }, 30, true)
+    self["hh_main_ui"]["hh_back_ground_rgb_a_title"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("hover_config", "opacity"), { 1, 1, 1, 1 }, 30, true)
     local hh_back_ground_rgb_a_title_size_x, hh_back_ground_rgb_a_title_size_y = self["hh_main_ui"]["hh_back_ground_rgb_a_title"]:GetRegionSize()
     self["hh_main_ui"]["hh_back_ground_rgb_a_title"]:SetPosition(hh_start_x + hh_back_ground_rgb_a_title_size_x / 2, hh_start_y - hh_back_ground_rgb_a_title_size_y / 2, 1)
-    addTextButton(self["hh_main_ui"], "hh_back_ground_rgb_a_reduce", "减", Vector3(hh_start_x + 100, hh_start_y - hh_back_ground_rgb_a_title_size_y / 2, 1), function()
+    addTextButton(self["hh_main_ui"], "hh_back_ground_rgb_a_reduce", HH_UTILS:GetLanguageByKey("hover_config", "decrease"), Vector3(hh_start_x + 100, hh_start_y - hh_back_ground_rgb_a_title_size_y / 2, 1), function()
         handleRGBA(self, "reduce", "back_ground_config")
         if self["hh_main_ui"] and self["hh_main_ui"]["hh_back_ground_rgb_a_title"] and self["hh_main_ui"]["hh_back_ground_rgb_a_title"]["hh_a_str"] then
             self["hh_main_ui"]["hh_back_ground_rgb_a_title"]["hh_a_str"]:SetString(tostring(self["hh_config"]["back_ground_config"][2]))
         end
         self:HandleBlackGround(nil, nil, nil, self["hh_config"]["back_ground_config"][2] / 10)
     end)
-    addTextButton(self["hh_main_ui"], "hh_back_ground_rgb_a_add", "加", Vector3(hh_start_x + 200, hh_start_y - hh_back_ground_rgb_a_title_size_y / 2, 1), function()
+    addTextButton(self["hh_main_ui"], "hh_back_ground_rgb_a_add", HH_UTILS:GetLanguageByKey("hover_config", "increase"), Vector3(hh_start_x + 200, hh_start_y - hh_back_ground_rgb_a_title_size_y / 2, 1), function()
         handleRGBA(self, "add", "back_ground_config")
         if self["hh_main_ui"] and self["hh_main_ui"]["hh_back_ground_rgb_a_title"] and self["hh_main_ui"]["hh_back_ground_rgb_a_title"]["hh_a_str"] then
             self["hh_main_ui"]["hh_back_ground_rgb_a_title"]["hh_a_str"]:SetString(tostring(self["hh_config"]["back_ground_config"][2]))
@@ -272,7 +280,7 @@ function HH_UI:CreateMainUi()
     end)
     self["hh_main_ui"]["hh_back_ground_rgb_a_title"]["hh_a_str"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"]["hh_back_ground_rgb_a_title"], Vector3(125, 0, 1), tostring(self["hh_config"]["back_ground_config"][2]), nil, 30, true)
     ----------------------------------------------------------------------------边框---------------------------------------------------------------------------------------------------
-    self["hh_main_ui"]["hh_frame_title"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"], Vector3(0, 0, 1), "边框颜色", { 1, 1, 1, 1 }, 30, true)
+    self["hh_main_ui"]["hh_frame_title"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("hover_config", "border"), { 1, 1, 1, 1 }, 30, true)
     local hh_frame_title_size_x, hh_frame_title_size_y = self["hh_main_ui"]["hh_frame_title"]:GetRegionSize()
     self["hh_main_ui"]["hh_frame_title"]:SetPosition(-main_size_x / 2 + hh_offset + hh_frame_title_size_x / 2, hh_start_y - hh_offset - hh_frame_title_size_y / 2, 1)
     hh_start_y = hh_start_y - hh_offset - hh_frame_title_size_y
@@ -287,7 +295,7 @@ function HH_UI:CreateMainUi()
             self:HandleHovererFrame(new_color[1], new_color[2], new_color[3], self["hh_config"]["frame_config"][2] / 10)
             self["hh_main_ui"]["hh_frame_ok"] = HH_UTILS:HHCreateImageUi(self["hh_main_ui"], "images/ui.xml", "checkmark.tex", Vector3(pos_x, pos_y, 1), small_icon_size, small_icon_size)
         end
-        hookFocusFn(self["hh_main_ui"]["hh_frame_color_" .. i], tostring(v["name"]))
+        hookFocusFn(self["hh_main_ui"]["hh_frame_color_" .. i], getColorLabel(v))
         self["hh_main_ui"]["hh_frame_color_" .. i]:SetOnClick(function()
             HH_UTILS:HHKillChild(self["hh_main_ui"], "hh_frame_ok")
             self["hh_config"]["frame_config"][1] = i
@@ -298,17 +306,17 @@ function HH_UI:CreateMainUi()
     end
     hh_start_y = hh_start_y - hh_num_y * small_icon_size
     --创建透明度选项
-    self["hh_main_ui"]["hh_frame_rgb_a_title"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"], Vector3(0, 0, 1), "透明度", { 1, 1, 1, 1 }, 30, true)
+    self["hh_main_ui"]["hh_frame_rgb_a_title"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("hover_config", "opacity"), { 1, 1, 1, 1 }, 30, true)
     local hh_frame_rgb_a_title_size_x, hh_frame_rgb_a_title_size_y = self["hh_main_ui"]["hh_frame_rgb_a_title"]:GetRegionSize()
     self["hh_main_ui"]["hh_frame_rgb_a_title"]:SetPosition(hh_start_x + hh_frame_rgb_a_title_size_x / 2, hh_start_y - hh_frame_rgb_a_title_size_y / 2, 1)
-    addTextButton(self["hh_main_ui"], "hh_frame_rgb_a_reduce", "减", Vector3(hh_start_x + 100, hh_start_y - hh_frame_rgb_a_title_size_y / 2, 1), function()
+    addTextButton(self["hh_main_ui"], "hh_frame_rgb_a_reduce", HH_UTILS:GetLanguageByKey("hover_config", "decrease"), Vector3(hh_start_x + 100, hh_start_y - hh_frame_rgb_a_title_size_y / 2, 1), function()
         handleRGBA(self, "reduce", "frame_config")
         if self["hh_main_ui"] and self["hh_main_ui"]["hh_frame_rgb_a_title"] and self["hh_main_ui"]["hh_frame_rgb_a_title"]["hh_a_str"] then
             self["hh_main_ui"]["hh_frame_rgb_a_title"]["hh_a_str"]:SetString(tostring(self["hh_config"]["frame_config"][2]))
         end
         self:HandleHovererFrame(nil, nil, nil, self["hh_config"]["frame_config"][2] / 10)
     end)
-    addTextButton(self["hh_main_ui"], "hh_frame_rgb_a_add", "加", Vector3(hh_start_x + 200, hh_start_y - hh_frame_rgb_a_title_size_y / 2, 1), function()
+    addTextButton(self["hh_main_ui"], "hh_frame_rgb_a_add", HH_UTILS:GetLanguageByKey("hover_config", "increase"), Vector3(hh_start_x + 200, hh_start_y - hh_frame_rgb_a_title_size_y / 2, 1), function()
         handleRGBA(self, "add", "frame_config")
         if self["hh_main_ui"] and self["hh_main_ui"]["hh_frame_rgb_a_title"] and self["hh_main_ui"]["hh_frame_rgb_a_title"]["hh_a_str"] then
             self["hh_main_ui"]["hh_frame_rgb_a_title"]["hh_a_str"]:SetString(tostring(self["hh_config"]["frame_config"][2]))
@@ -318,7 +326,7 @@ function HH_UI:CreateMainUi()
     self["hh_main_ui"]["hh_frame_rgb_a_title"]["hh_a_str"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"]["hh_frame_rgb_a_title"], Vector3(125, 0, 1), tostring(self["hh_config"]["frame_config"][2]), nil, 30, true)
     -------------------------------------------------------------边角图标------------------------------------------------------------------------------------------------------------------
     hh_start_y = hh_start_y - hh_frame_rgb_a_title_size_y
-    self["hh_main_ui"]["hh_icon_config_ui_title"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"], Vector3(0, 0, 1), "四\n角\n图\n标", { 1, 1, 1, 1 }, 30, true)
+    self["hh_main_ui"]["hh_icon_config_ui_title"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("hover_config", "corners"), { 1, 1, 1, 1 }, 30, true)
     local hh_icon_config_ui_title_size_x, hh_icon_config_ui_title_size_y = self["hh_main_ui"]["hh_icon_config_ui_title"]:GetRegionSize()
     self["hh_main_ui"]["hh_icon_config_ui_title"]:SetPosition(hh_start_x + hh_icon_config_ui_title_size_x / 2, hh_start_y - hh_icon_config_ui_title_size_y / 2 - hh_offset, 1)
     hh_start_x = hh_start_x + hh_icon_config_ui_title_size_x
@@ -332,23 +340,23 @@ function HH_UI:CreateMainUi()
         if HH_UTILS:IsHHType(v, "table") then
             if v["no_icon"] then
                 --默认无图标
-                sub_root["icon_" .. i]["hh_icon"] = HH_UTILS:HHCreateTextUi(sub_root["icon_" .. i], Vector3(icon_start_x, icon_start_y, 1), "无", { 1, 1, 1, 1 }, image_size)
+                sub_root["icon_" .. i]["hh_icon"] = HH_UTILS:HHCreateTextUi(sub_root["icon_" .. i], Vector3(icon_start_x, icon_start_y, 1), HH_UTILS:GetLanguageByKey("hover_config", "none"), { 1, 1, 1, 1 }, image_size)
             elseif v["xml"] and v["tex"] then
                 sub_root["icon_" .. i]["hh_icon"] = HH_UTILS:HHCreateImageUi(sub_root["icon_" .. i], v["xml"], v["tex"], Vector3(icon_start_x, icon_start_y, 1), image_size, image_size)
             end
-            addTextButton(sub_root["icon_" .. i], "hh_button_01", "左上", Vector3(icon_start_x + image_size * 3 / 2, 0, 1), function()
+            addTextButton(sub_root["icon_" .. i], "hh_button_01", HH_UTILS:GetLanguageByKey("hover_config", "top_left"), Vector3(icon_start_x + image_size * 3 / 2, 0, 1), function()
                 self:UpdateIconImg(1, i)
             end)
-            addTextButton(sub_root["icon_" .. i], "hh_button_04", "左下", Vector3(icon_start_x + image_size * 5 / 2, 0, 1), function()
+            addTextButton(sub_root["icon_" .. i], "hh_button_04", HH_UTILS:GetLanguageByKey("hover_config", "bottom_left"), Vector3(icon_start_x + image_size * 5 / 2, 0, 1), function()
                 self:UpdateIconImg(4, i)
             end)
-            addTextButton(sub_root["icon_" .. i], "hh_button_02", "右上", Vector3(icon_start_x + image_size * 7 / 2, 0, 1), function()
+            addTextButton(sub_root["icon_" .. i], "hh_button_02", HH_UTILS:GetLanguageByKey("hover_config", "top_right"), Vector3(icon_start_x + image_size * 7 / 2, 0, 1), function()
                 self:UpdateIconImg(2, i)
             end)
-            addTextButton(sub_root["icon_" .. i], "hh_button_03", "右下", Vector3(icon_start_x + image_size * 9 / 2, 0, 1), function()
+            addTextButton(sub_root["icon_" .. i], "hh_button_03", HH_UTILS:GetLanguageByKey("hover_config", "bottom_right"), Vector3(icon_start_x + image_size * 9 / 2, 0, 1), function()
                 self:UpdateIconImg(3, i)
             end)
-            addTextButton(sub_root["icon_" .. i], "hh_button_all", "全部", Vector3(icon_start_x + image_size * 11 / 2, 0, 1), function()
+            addTextButton(sub_root["icon_" .. i], "hh_button_all", HH_UTILS:GetLanguageByKey("hover_config", "all"), Vector3(icon_start_x + image_size * 11 / 2, 0, 1), function()
                 self:UpdateIconImg(1, i, true)
             end)
         end
@@ -414,7 +422,7 @@ function HH_UI:CreateMainUi()
         handleConfigTable(self["owner"], self["hh_config"], false)
         --SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_update_hoverer_config"], HH_UTILS:TableToStr(self["hh_config"]))
     end)
-    self["hh_main_ui"]["hh_sure_button"]["hh_str"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"]["hh_sure_button"], Vector3(0, 0, 1), "应用边框", nil, 25)
+    self["hh_main_ui"]["hh_sure_button"]["hh_str"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"]["hh_sure_button"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("hover_config", "apply"), nil, 25)
     --removeFocusFn(self["hh_main_ui"]["hh_sure_button"])
     -------------------------------是否展示面版ui-------------------------------
     self["hh_main_ui"]["close_show_hoverer"] = HH_UTILS:HHCreateImageButton(self["hh_main_ui"], "images/hh_icon/hh_white.xml", "hh_white.tex",
@@ -425,7 +433,7 @@ function HH_UI:CreateMainUi()
         local client_config = getSimConfig(self["hh_config"])
         handleConfigTable(self["owner"], client_config, true)
     end)
-    self["hh_main_ui"]["close_show_hoverer"]["hh_str"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"]["close_show_hoverer"], Vector3(0, 0, 1), "关闭显示", nil, 25)
+    self["hh_main_ui"]["close_show_hoverer"]["hh_str"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"]["close_show_hoverer"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("hover_config", "hide"), nil, 25)
     --removeFocusFn(self["hh_main_ui"]["close_show_hoverer"])
     self["hh_main_ui"]["open_show_hoverer"] = HH_UTILS:HHCreateImageButton(self["hh_main_ui"], "images/hh_icon/hh_white.xml", "hh_white.tex",
             Vector3(main_size_x / 2 - sure_button_size + 30, -main_size_y / 2 + sure_button_size / 2 + 13, 1), sure_button_size / 10, sure_button_size / 24,
@@ -435,7 +443,7 @@ function HH_UI:CreateMainUi()
         local client_config = getSimConfig(self["hh_config"])
         handleConfigTable(self["owner"], client_config, false)
     end)
-    self["hh_main_ui"]["open_show_hoverer"]["hh_str"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"]["open_show_hoverer"], Vector3(0, 0, 1), "打开显示", nil, 25)
+    self["hh_main_ui"]["open_show_hoverer"]["hh_str"] = HH_UTILS:HHCreateTextUi(self["hh_main_ui"]["open_show_hoverer"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("hover_config", "show"), nil, 25)
     --removeFocusFn(self["hh_main_ui"]["open_show_hoverer"])
     -------------------------------是否展示面版ui-------------------------------
 end

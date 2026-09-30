@@ -5,6 +5,7 @@ local Image = require("widgets/image")
 local ImageButton = require("widgets/imagebutton")
 local TextButton = require("widgets/textbutton")
 local HH_UTILS = require("utils/hh_utils")
+local HH_I18N = require("utils/hh_i18n")
 local main_xml, main_tex = "images/global.xml", "square.tex"
 local TrueScrollArea = require("widgets/truescrollarea")
 local HH_CONFIG = require("enums/hh_enchant")
@@ -114,9 +115,9 @@ local function GetAllEquipBuff()
             --套装属性不展示
             if not buff_config["is_suit"] then
                 local buff_id = v["key"]
-                local buff_name = HH_UTILS:GetAffixText(buff_id, "name", buff_config["name"] or "词条未定义")
-                local buff_small_name = HH_UTILS:GetAffixText(buff_id, "short", buff_config["client_text"] or "空")
-                local buff_desc_format = HH_UTILS:GetAffixText(buff_id, "desc", buff_config["desc"] or "描述未定义")
+                local buff_name = HH_UTILS:GetAffixText(buff_id, "name", buff_config["name"] or HH_UTILS:GetLanguageByKey("help_ui", "undefined_affix"))
+                local buff_small_name = HH_UTILS:GetAffixText(buff_id, "short", buff_config["client_text"] or HH_UTILS:GetLanguageByKey("help_ui", "empty"))
+                local buff_desc_format = HH_UTILS:GetAffixText(buff_id, "desc", buff_config["desc"] or HH_UTILS:GetLanguageByKey("help_ui", "undefined_desc"))
                 local buff_color = { 128 / 255, 138 / 255, 135 / 255, 1 }
                 if buff_config["client_color"] then
                     buff_color = buff_config["client_color"]
@@ -179,10 +180,10 @@ local function GetAllSuitBuff(player)
             end
             if has_limit then
                 local buff_config = SUIT_CONFIG_STR[v]
-                local buff_name = buff_config["name"] or "词条未定义"
-                local buff_desc = buff_config["effect_str"] or "描述未定义"
-                table["insert"](hh_table, { ["str"] = "套装(已移除):" .. buff_name, ["color"] = { 255 / 255, 242 / 255, 0 / 255, 1 }, ["scale"] = 30 })
-                table["insert"](hh_table, { ["str"] = "效果:" .. buff_desc, ["color"] = nil, ["scale"] = 30 })
+                local buff_name = buff_config["name"] or HH_UTILS:GetLanguageByKey("help_ui", "undefined_affix")
+                local buff_desc = buff_config["effect_str"] or HH_UTILS:GetLanguageByKey("help_ui", "undefined_desc")
+                table["insert"](hh_table, { ["str"] = HH_UTILS:GetLanguageByKey("help_ui", "removed_set") .. buff_name, ["color"] = { 255 / 255, 242 / 255, 0 / 255, 1 }, ["scale"] = 30 })
+                table["insert"](hh_table, { ["str"] = HH_UTILS:GetLanguageByKey("help_ui", "effect") .. buff_desc, ["color"] = nil, ["scale"] = 30 })
                 table["insert"](hh_table, { ["str"] = " ", ["color"] = nil, ["scale"] = 10 })
             end
         end
@@ -198,8 +199,8 @@ local HH_HELP = Class(Widget, function(self, owner)
     self["root"]:SetScaleMode(SCALEMODE_PROPORTIONAL)
     self["hh_open_button"] = HH_UTILS:HHCreateImageButton(self["root"], "images/button_icons.xml", "newsletter.tex",
             Vector3(-520, -300, 1), 0.15, 0.15)
-    HH_UTILS:UiAddFocusStr(self["hh_open_button"], "mod帮助\n右键拖拽位置", 20)
-    self["hh_open_button"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_open_button"], Vector3(0, -20, 0), "帮助", nil, 15)
+    HH_UTILS:UiAddFocusStr(self["hh_open_button"], HH_UTILS:GetLanguageByKey("help_ui", "open_hint"), 20)
+    self["hh_open_button"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_open_button"], Vector3(0, -20, 0), HH_UTILS:GetLanguageByKey("help_ui", "open_label"), nil, 15)
     self["hh_open_button"]:SetOnClick(function()
         if self["hh_main"] then
             HH_UTILS:HHKillChild(self, "hh_main")
@@ -245,7 +246,7 @@ function HH_HELP:CreateMainUi(tab_index)
     local current_ui = nil
     for i = 1, tab_num do
         local child_config = tab_config[i] or {}
-        local child_name = child_config["name"] or "未定义标题"
+        local child_name = child_config["name"] or HH_UTILS:GetLanguageByKey("help_ui", "undefined_title")
         local child_btn_id = child_config["btn_type"] or "main"
         local child_ui_name = "hh_tab_" .. i
         local tab_pos_x = tab_start_x + i * 120 - 20
@@ -329,7 +330,8 @@ function HH_HELP:CreateModInfo()
     father_ui["hh_help_url"] = father_ui:AddChild(TextButton())
     father_ui["hh_help_url"]:SetFont(NUMBERFONT)
     father_ui["hh_help_url"]:SetTextSize(20)
-    father_ui["hh_help_url"]:SetText(removeWhiteText(ui_text_config["qq_str"]))
+    father_ui["hh_help_url"]:SetText(HH_I18N.GetLocale() == "en"
+            and getLanguage("original_guide") or removeWhiteText(ui_text_config["qq_str"]))
     father_ui["hh_help_url"]:SetPosition(180, 220, 1)
     father_ui["hh_help_url"]:SetTextColour({ 0, 1, 1, 1 })
     father_ui["hh_help_url"]:SetTextFocusColour({ 1, 1, 1, 1 })
@@ -344,6 +346,11 @@ function HH_HELP:CreateLogUi()
     self:CreateTitle(HH_UTILS:GetLanguageByKey("ui", "help_title_changes"))
     local father_ui = self["hh_main"]["main_ui"]
     local log_str_config = _G_HH_UI_TEXT["UPDATE_VISION"]
+    if HH_I18N.GetLocale() == "en" then
+        log_str_config = {
+            { title = getLanguage("changelog_title"), desc = getLanguage("changelog_desc") },
+        }
+    end
     local log_list = {}
     for i, v in ipairs(log_str_config) do
         table["insert"](log_list, {
@@ -479,7 +486,7 @@ function HH_HELP:CreateGemUi()
     --------------------------------------------------------------------------------------------
     local sub_suit_root = Widget()
     sub_suit_root["hh_ui"] = HH_UTILS:CreateMoreTextUi(sub_suit_root, {
-        { ["str"] = "概率表", ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, ["scale"] = 30 },
+        { ["str"] = HH_UTILS:GetLanguageByKey("help_ui", "probability"), ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, ["scale"] = 30 },
         { ["str"] = _G_HH_UI_TEXT["CHANCE_TEXT"], ["color"] = nil, ["scale"] = 20 },
     }, 3)
     local sub_suit_ui_x, sub_suit_ui_y = sub_suit_root["hh_ui"]["max_x"], sub_suit_root["hh_ui"]["max_y"]
