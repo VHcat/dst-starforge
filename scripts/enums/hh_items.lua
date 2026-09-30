@@ -240,4 +240,12 @@ local HH_ITEMS = {
     --},
 }
 
+-- Item IDs remain unchanged; only the display name depends on the client's locale.
+for id, item in pairs(HH_ITEMS) do
+    local translated = HH_UTILS:GetLanguageByKey("items", id)
+    if translated ~= "未定义" then
+        item.name = translated
+    end
+end
+
 return HH_ITEMS
