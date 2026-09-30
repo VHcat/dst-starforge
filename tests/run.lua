@@ -1,5 +1,6 @@
 -- Run from the repository root: lua tests/run.lua [suite ...]
 local suites = {
+    "stars",
     "skins",
     "logs",
     "bulk_clear",

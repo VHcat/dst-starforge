@@ -312,9 +312,9 @@ function HH_COM:AddStarByRpc(player, container_inst)
     end
     local is_add = false
     -- 升星成功/失败(拿星级装备可以当强化符文用 星级越高 概率提升越多)
-    local current_chacne = self:GetStarUpChance(container_inst)
+    local current_chance = math.max(0, math.min(100, self:GetStarUpChance(container_inst)))
     local math_random = math["random"](1, 100)
-    if math_random < current_chacne then
+    if math_random <= current_chance then
         is_add = true
     end
     local next_star_level = _current_star_num + 1
