@@ -167,6 +167,12 @@ return {
     food_types = food_types,
     food_tags = food_tags,
     tool_types = tool_types,
+    special_tags = {
+        pig = "Pig", fish = "Fish", monkey = "Monkey", plant = "Plant",
+        gear = "Clockwork", spider = "Spider", dog = "Hound", frog = "Frog",
+        insect = "Insect", shadow = "Shadow", common_monster = "Common",
+        elite_monster = "Elite", boss_monster = "Boss",
+    },
     monster_formats = monster_formats,
     player_formats = player_formats,
     gems = gems,

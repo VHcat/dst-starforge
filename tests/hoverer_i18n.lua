@@ -69,4 +69,13 @@ t.test("all active set bonuses have English descriptions", function()
     assert(count == 4)
 end)
 
+t.test("special creature tags have English labels", function()
+    local count = 0
+    for _, label in pairs(english.special_tags) do
+        assert(type(label) == "string" and not label:find("[\128-\255]"))
+        count = count + 1
+    end
+    assert(count == 13)
+end)
+
 return t.count

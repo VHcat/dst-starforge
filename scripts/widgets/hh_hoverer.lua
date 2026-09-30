@@ -296,6 +296,15 @@ function HH_HOVERER_UI:UpdateHoverer()
                         end
                         child_name = table.concat(parts, " ")
                     end
+                elseif v == "hh_31_hh_tag" then
+                    local ids = target_infos[v]["tag_ids"]
+                    if type(ids) == "table" then
+                        local labels = {}
+                        for _, id in ipairs(ids) do
+                            table.insert(labels, hh_hoverer_en.special_tags[id] or id)
+                        end
+                        child_name = table.concat(labels, " ")
+                    end
                 elseif v == "hh_10_stackable" and type(args) == "table" and args[2] == "无上限" then
                     child_name = tostring(args[1]) .. "/Unlimited"
                 elseif v == "hh_01_text" and type(GetDescription) == "function" then

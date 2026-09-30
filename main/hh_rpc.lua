@@ -567,6 +567,7 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
                 tag_str = tag_str .. tag_name .. " "
             end
             handleFormatStr(hh_copy_list, "hh_31_hh_tag", tag_str)
+            hh_copy_list["hh_31_hh_tag"]["tag_ids"] = tag_sort
         end
     end
     ----====>物品描述<====----
