@@ -1,4 +1,5 @@
 local HH_UTILS = require("utils/hh_utils")
+local HH_I18N = require("utils/hh_i18n")
 local HH_CONFIG = require("enums/hh_enchant")
 local HH_EQUIP_BUFF_LIST = HH_CONFIG["HH_EQUIP_BUFF_LIST"]
 
@@ -328,7 +329,8 @@ end
 local function updateClientStr(hh_inst)
     local str = hh_inst["hh_client_str"]:value()
     local hh_label = hh_inst["Label"]
-    hh_label:SetText(str)
+    local display = HH_I18N.GetLocale() == "en" and HH_I18N.GetTable("fx_text")[str] or str
+    hh_label:SetText(display)
     hh_label:Enable(true)
     hh_label:SetColour(unpack(getFxTextColor(str)))
     --放大字体
