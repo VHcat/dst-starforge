@@ -1259,29 +1259,21 @@ function HH_COMPONENTS:RemoveMoreEquipEffect(index_list)
     if HH_UTILS:HasComponents(hh_equip, "stackable") then
         return false, "禁止叠加装备进行附魔操作!!!"
     end
-    local need_num = 0
-    for i, v in ipairs(index_list) do
-        if v == true then
-            need_num = need_num + 1
-        end
+    local component = hh_equip.components.hh_equip
+    local selected, need_num, error_message = component:GetEquipBuffSelection(index_list)
+    if not selected then
+        return false, error_message
     end
-    if need_num <= 0 then
-        return false, "未选中清除的词条"
-    end
-    local has_num = self:GetItemsByKey("z_clean_stone")
-    if has_num < need_num then
+    if not self:RemoveItemsByKey("z_clean_stone", need_num) then
         return false, "净化符数量不足"
     end
-    local success, success_num, result = hh_equip["components"]["hh_equip"]:ReduceMoreEquipBuff(index_list)
-    if success then
-        --print(success_num)
-        self:RemoveItemsByKey("z_clean_stone", success_num)
-        --同步客机
-        self:UpdateForgeEquipInfo()
-        return true, result
-    else
+    local success, _, result = component:ReduceMoreEquipBuff(selected)
+    if not success then
+        self:AddItemsByKey("z_clean_stone", need_num)
         return false, result
     end
+    self:UpdateForgeEquipInfo()
+    return true, result
 end
 ----
 ---合成套装属性

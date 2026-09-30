@@ -467,14 +467,45 @@ end
 ----
 ---批量清除词条
 ---
+-- Validate once so billing and removal use the same selection rules.
+function HH_COMPONENTS:GetEquipBuffSelection(index_list)
+    if type(index_list) ~= "table" then
+        return nil, 0, "定向清除词条入参错误"
+    end
+    if not self.equip_buff_list or #self.equip_buff_list == 0 then
+        return nil, 0, "装备不存在词条 无法清除!!!"
+    end
+    local selected, count = {}, 0
+    for index, value in pairs(index_list) do
+        if type(index) ~= "number" or index < 1 or index >= math.huge
+                or index % 1 ~= 0 or type(value) ~= "boolean" then
+            return nil, 0, "定向清除词条入参错误"
+        end
+        -- The UI includes unselected placeholders beyond the current affixes.
+        if value then
+            local effect = self.equip_buff_list[index]
+            if type(effect) ~= "table" or type(effect.name) ~= "string" then
+                return nil, 0, "选中的词条不存在"
+            end
+            selected[index] = true
+            count = count + 1
+        end
+    end
+    if count == 0 then
+        return nil, 0, "未选中清除的词条"
+    end
+    return selected, count
+end
+
 function HH_COMPONENTS:ReduceMoreEquipBuff(index_list)
-    if not self["equip_buff_list"] or #self["equip_buff_list"] < 1 or not HH_UTILS:IsHHType(index_list, "table") then
-        return false, 0, "装备不存在词条 无法清除!!!"
+    local selected, _, error_message = self:GetEquipBuffSelection(index_list)
+    if not selected then
+        return false, 0, error_message
     end
     local new_table = {}
     local success_num = 0
     for i, v in ipairs(self["equip_buff_list"]) do
-        if index_list[i] and v and v["name"] then
+        if selected[i] then
             local hh_effect_name = v["name"]
             local hh_effect_value = v["value"] or 0
             if HH_EQUIP_BUFF_LIST[hh_effect_name] and HH_EQUIP_BUFF_LIST[hh_effect_name]["end_fn"] then

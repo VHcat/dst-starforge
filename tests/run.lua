@@ -1,5 +1,6 @@
 -- Run from the repository root: lua tests/run.lua [suite ...]
 local suites = {
+    "bulk_clear",
     "permissions",
 }
 if arg and #arg > 0 then suites = arg end
