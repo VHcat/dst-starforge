@@ -766,6 +766,18 @@ return {
         type_stone = "Enchanting",
         type_treasure = "Treasure",
         type_egg = "Eggs",
+        compound_stone_best = "#{{data_player}}:yellow:25# crafted:white:25@suit_build::25:25# to obtain:white:25@effect_stone::25:25#[{{data_effect}}]:orange:25#[Cost:green:25@essence::25:25#-{{data_essence}}]:green:25",
+        compound_stone_rare = "#{{data_player}}:yellow:25# crafted:white:25@suit_build::25:25# to obtain:white:25@effect_stone::25:25#[{{data_effect}}]:red:25#[Cost:green:25@essence::25:25#-{{data_essence}}]:green:25",
+        compound_black_egg = "#[Lucky!]:yellow:25#{{data_player}}:yellow:25# obtained:white:25@egg_black::25:25# through:white:25@suit_build::25:25#[Cost:green:25@essence::25:25#-{{data_essence}}]:green:25",
+        dig_treasure_monster = "#{{data_player}}:yellow:25# dug up:white:25@{{data_image}}::25:25#[{{data_monster}}]:yellow:25# at:white:25@treasure_build::25:25",
+        kill_treasure_kps = "#{{data_player}}:yellow:25# defeated the Krampus King and received three special gems.:white:25",
+        kill_treasure_cat_you = "#{{data_player}}:yellow:25# defeated the Super Cat King and received three rare enchantment stones.:white:25",
+        kill_treasure_boss = "#{{data_player}}:yellow:25# defeated:white:25#[{{data_monster}}]:red:25# and received a special gem:white:25#[{{data_gem}}]:orange:25",
+    },
+    gem = {
+        treasure_atk = "Treasure Attack",
+        treasure_bj = "Treasure Critical",
+        treasure_armor = "Treasure Durability Regen",
     },
     ui = {
         action_use = "Use",

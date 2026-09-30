@@ -43,9 +43,28 @@ t.test("main UI dictionaries keep Chinese and English keys aligned", function()
     local zh = dofile("scripts/enums/hh_language.lua")
     TUNING = nil
     local en = dofile("scripts/enums/hh_language_en.lua")
-    for _, section in ipairs({"ui","forge","equip_ui","hover_config","help_ui"}) do
+    for _, section in ipairs({"ui","forge","equip_ui","hover_config","help_ui","log","gem"}) do
         for key, value in pairs(zh[section]) do
             assert(type(value) == "string" and type(en[section][key]) == "string")
+        end
+    end
+end)
+t.test("world log templates preserve all placeholder names", function()
+    local zero = setmetatable({}, {__index=function() return 0 end})
+    TUNING = {HH_CHANCE_CONFIG={DROP_EQUIP_CHANCE=zero,GIF_CHANCE=zero}}
+    local zh = dofile("scripts/enums/hh_language.lua").log
+    TUNING = nil
+    local en = dofile("scripts/enums/hh_language_en.lua").log
+    for key, original in pairs(zh) do
+        if key:find("^type_") == nil then
+            local names = {}
+            for name in original:gmatch("{{([%w_]+)}}") do names[name] = true end
+            local translated = en[key]
+            for name in translated:gmatch("{{([%w_]+)}}") do
+                assert(names[name], key .. ": " .. name)
+                names[name] = nil
+            end
+            assert(next(names) == nil, key)
         end
     end
 end)
