@@ -7,7 +7,9 @@ t.test("localized affixes preserve original config and format placeholders", fun
     local original = {name="原名",client_text="中文",desc="增加%s点",check_desc="无"}
     LOC = {GetLocaleCode=function() return "en" end}
     local variable = 0
+    local translated = 0
     for id, translation in pairs(english.affixes) do
+        translated = translated + 1
         assert(type(id) == "string" and type(translation.name) == "string")
         assert(type(translation.short) == "string" and type(translation.desc) == "string")
         assert(type(translation.check) == "string")
@@ -23,6 +25,7 @@ t.test("localized affixes preserve original config and format placeholders", fun
             variable = variable + 1
         end
     end
+    assert(translated == 89, "all equipment affixes need English text")
     assert(variable >= 10)
     assert(original.name == "原名" and original.client_text == "中文")
     assert(i18n.GetAffixText("missing","name",original.name) == original.name)

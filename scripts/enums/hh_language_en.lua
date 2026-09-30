@@ -91,6 +91,361 @@ return {
             desc = "Reflects %s damage to attackers when hit.",
             check = "Non-weapon equipment",
         },
+        add_hit_damage_pig = {
+            name = "Pig Slayer", short = "Pig\nDMG",
+            desc = "Deals %s more damage to pigs.",
+            check = "None",
+        },
+        add_hit_damage_fish = {
+            name = "Merm Slayer", short = "Merm\nDMG",
+            desc = "Deals %s more damage to fish and merms.",
+            check = "None",
+        },
+        add_hit_damage_monkey = {
+            name = "Monkey Slayer", short = "Monkey\nDMG",
+            desc = "Deals %s more damage to monkeys.",
+            check = "None",
+        },
+        add_hit_damage_gear = {
+            name = "Clockwork Slayer", short = "Gear\nDMG",
+            desc = "Deals %s more damage to clockwork creatures.",
+            check = "None",
+        },
+        add_hit_damage_spider = {
+            name = "Spider Slayer", short = "Spider\nDMG",
+            desc = "Deals %s more damage to spiders.",
+            check = "None",
+        },
+        add_hit_damage_dog = {
+            name = "Hound Slayer", short = "Hound\nDMG",
+            desc = "Deals %s more damage to hounds.",
+            check = "None",
+        },
+        add_hit_damage_frog = {
+            name = "Frog Slayer", short = "Frog\nDMG",
+            desc = "Deals %s more damage to frogs.",
+            check = "None",
+        },
+        add_hit_damage_insect = {
+            name = "Insect Slayer", short = "Bug\nDMG",
+            desc = "Deals %s more damage to insects.",
+            check = "None",
+        },
+        add_hit_damage_shadow = {
+            name = "Shadow Slayer", short = "Shadow\nDMG",
+            desc = "Deals %s more damage to shadow creatures.",
+            check = "None",
+        },
+        add_hit_damage_boss = {
+            name = "Giant Slayer", short = "Boss\nDMG",
+            desc = "Deals %s more damage to giants.",
+            check = "None",
+        },
+        add_hit_damage_plant = {
+            name = "Plant Slayer", short = "Plant\nDMG",
+            desc = "Deals %s more damage to plants.",
+            check = "None",
+        },
+        add_extra_damage_percent = {
+            name = "Damage Bonus", short = "Damage\nBonus",
+            desc = "Increases damage dealt by %s percent.",
+            check = "None",
+        },
+        add_critical_hit_rate = {
+            name = "Critical Chance", short = "Crit\nChance",
+            desc = "Grants %s percent critical-hit chance.",
+            check = "None",
+        },
+        add_critical_hit_effect = {
+            name = "Critical Damage", short = "Crit\nDMG",
+            desc = "Increases critical-hit damage by %s percent.",
+            check = "None",
+        },
+        atk_blood_01 = {
+            name = "Minor Lifesteal", short = "Minor\nLeech",
+            desc = "Restores health equal to %s percent of damage dealt.",
+            check = "Combat equipment only",
+        },
+        atk_blood_suck_02 = {
+            name = "Major Lifesteal", short = "Major\nLeech",
+            desc = "Restores health equal to %s percent of damage dealt.",
+            check = "Combat equipment only",
+        },
+        atk_blood_suck_03 = {
+            name = "Supreme Lifesteal", short = "Rare\nLeech",
+            desc = "Restores health equal to %s percent of damage dealt.",
+            check = "Combat equipment only",
+        },
+        atk_add_good_damage = {
+            name = "Supreme Damage", short = "Rare\nDMG",
+            desc = "Increases damage dealt by %s.",
+            check = "None",
+        },
+        reduce_good_damage = {
+            name = "Supreme Defense", short = "Rare\nGuard",
+            desc = "Reduces incoming damage by %s.",
+            check = "Non-weapon equipment",
+        },
+        atk_add_san = {
+            name = "Sanity Siphon", short = "Sanity\nLeech",
+            desc = "Restores sanity equal to %s percent of damage dealt.",
+            check = "Combat equipment only",
+        },
+        add_speed_percent = {
+            name = "Swiftness", short = "Move\nSpeed",
+            desc = "Increases movement speed by %s percent.",
+            check = "None",
+        },
+        add_max_health_01 = {
+            name = "Minor Health", short = "Minor\nHealth",
+            desc = "Increases maximum health by %s.",
+            check = "None",
+        },
+        add_max_health_02 = {
+            name = "Medium Health", short = "Med\nHealth",
+            desc = "Increases maximum health by %s.",
+            check = "None",
+        },
+        add_max_health_03 = {
+            name = "Major Health", short = "Major\nHealth",
+            desc = "Increases maximum health by %s.",
+            check = "None",
+        },
+        add_max_health_04 = {
+            name = "Supreme Health", short = "Rare\nHealth",
+            desc = "Increases maximum health by %s.",
+            check = "None",
+        },
+        atk_10s_health = {
+            name = "Healing Trigger", short = "Heal\nTrigger",
+            desc = "Attacks may grant 10 seconds of health regeneration (+1).",
+            check = "None",
+        },
+        add_critical_hit_rate_damage = {
+            name = "Endless Critical", short = "Rare\nCrit",
+            desc = "Grants %s percent critical chance and 100 percent critical damage.",
+            check = "Unique",
+        },
+        add_immune_cold = {
+            name = "Cold Immunity", short = "Cold\nImmune",
+            desc = "Prevents freezing from cold.",
+            check = "None",
+        },
+        add_immune_hot = {
+            name = "Heat Immunity", short = "Heat\nImmune",
+            desc = "Prevents overheating.",
+            check = "None",
+        },
+        add_immune_poison = {
+            name = "Poison Immunity", short = "Poison\nImmune",
+            desc = "Prevents poison damage.",
+            check = "None",
+        },
+        add_immune_freeze = {
+            name = "Freeze Immunity", short = "Freeze\nImmune",
+            desc = "Prevents freezing.",
+            check = "None",
+        },
+        immune_debuff = {
+            name = "Elemental Defense", short = "Element\nGuard",
+            desc = "Protects against cold, heat, freezing and poison.",
+            check = "None",
+        },
+        immune_bramble = {
+            name = "Reflection Immunity", short = "Reflect\nImmune",
+            desc = "Prevents reflected damage.",
+            check = "None",
+        },
+        san_replace_damage = {
+            name = "Shadow Shield", short = "Shadow\nShield",
+            desc = "Has a %s percent chance to spend sanity instead of taking damage.",
+            check = "None",
+        },
+        atk_add_poison = {
+            name = "Poison Strike", short = "Poison\nStrike",
+            desc = "Has a %s percent chance to poison a monster, dealing 5 damage every 2 seconds for 60 seconds.",
+            check = "None",
+        },
+        reduce_bramble_percent = {
+            name = "Thorns Resistance", short = "Thorns\nResist",
+            desc = "Reduces reflected damage taken by %s percent.",
+            check = "None",
+        },
+        follow_add_damage = {
+            name = "Follower Damage", short = "Follower\nDMG",
+            desc = "Increases follower damage by %s.",
+            check = "None",
+        },
+        follow_reduce_damage = {
+            name = "Follower Defense", short = "Follower\nGuard",
+            desc = "Reduces damage taken by followers by %s.",
+            check = "None",
+        },
+        health_suppress_num = {
+            name = "Judgement", short = "Judgement",
+            desc = "Has a %s percent chance to apply Judgement for 10 seconds.",
+            check = "None",
+        },
+        more_damage_20_200 = {
+            name = "Double Damage", short = "Double\nDMG",
+            desc = "20 percent chance to deal %s percent damage; can critically hit.",
+            check = "Unique",
+        },
+        more_damage_15_300 = {
+            name = "Triple Damage", short = "Triple\nDMG",
+            desc = "15 percent chance to deal %s percent damage; can critically hit.",
+            check = "Unique",
+        },
+        more_damage_8_500 = {
+            name = "Quintuple Damage", short = "Fivefold\nDMG",
+            desc = "8 percent chance to deal %s percent damage; can critically hit.",
+            check = "Unique",
+        },
+        true_damage_small = {
+            name = "Minor True Damage", short = "Minor\nPierce",
+            desc = "Adds %s true damage on hit.",
+            check = "Combat equipment only",
+        },
+        true_damage_big = {
+            name = "Major True Damage", short = "Major\nPierce",
+            desc = "Adds %s true damage on hit.",
+            check = "Combat equipment only",
+        },
+        target_percent_damage = {
+            name = "Rending Strike", short = "Rend",
+            desc = "Adds %s percent of the target's current health to damage.",
+            check = "Combat equipment only",
+        },
+        shadow_camp = {
+            name = "Shadow Disguise", short = "Shadow\nDisguise",
+            desc = "Shadow creatures do not become hostile to the player.",
+            check = "None",
+        },
+        moon_camp = {
+            name = "Lunar Disguise", short = "Lunar\nDisguise",
+            desc = "Lunar creatures do not initiate hostility.",
+            check = "None",
+        },
+        immunity_moisture = {
+            name = "Wetness Immunity", short = "Dry",
+            desc = "Prevents wetness.",
+            check = "None",
+        },
+        add_light = {
+            name = "Light Source", short = "Light",
+            desc = "Emits light.",
+            check = "None",
+        },
+        fast_act = {
+            name = "Quick Actions", short = "Quick\nActions",
+            desc = "Greatly speeds up gathering, building, cooking and trading.",
+            check = "None",
+        },
+        work_speed = {
+            name = "Double Work", short = "Double\nWork",
+            desc = "Doubles work speed.",
+            check = "None",
+        },
+        armor_reduce_amount_small = {
+            name = "Minor Armor Conservation", short = "Minor\nArmor",
+            desc = "Reduces armor durability loss on hit by %s percent.",
+            check = "Armor with durability",
+        },
+        armor_reduce_amount = {
+            name = "Major Armor Conservation", short = "Major\nArmor",
+            desc = "Reduces armor durability loss on hit by %s percent.",
+            check = "Armor with durability",
+        },
+        porter = {
+            name = "Porter", short = "Porter",
+            desc = "Carrying a statue does not slow you down.",
+            check = "Head slot only",
+        },
+        atk_speed_small = {
+            name = "Minor Attack Speed", short = "Minor\nSpeed",
+            desc = "Increases attack speed by %s percent (subject to mod setting).",
+            check = "Hand slot only",
+        },
+        atk_speed_big = {
+            name = "Major Attack Speed", short = "Major\nSpeed",
+            desc = "Increases attack speed by %s percent (subject to mod setting).",
+            check = "Hand slot only",
+        },
+        immune_sleep = {
+            name = "Sleep Immunity", short = "Sleep\nImmune",
+            desc = "Prevents sleep effects.",
+            check = "Hand slot only",
+        },
+        absorb_small = {
+            name = "Minor Damage Absorption", short = "Minor\nGuard",
+            desc = "Reduces incoming damage by %s percent.",
+            check = "None",
+        },
+        absorb_middle = {
+            name = "Medium Damage Absorption", short = "Med\nGuard",
+            desc = "Reduces incoming damage by %s percent.",
+            check = "None",
+        },
+        absorb_big = {
+            name = "Major Damage Absorption", short = "Major\nGuard",
+            desc = "Reduces incoming damage by %s percent.",
+            check = "None",
+        },
+        autumn_god = {
+            name = "Autumn Warrior", short = "Autumn\nWarrior",
+            desc = "In autumn, grants 50 bonus damage and 10 percent critical chance.",
+            check = "None",
+        },
+        black_monkey = {
+            name = "Curse Trinket Power", short = "Curse\nPower",
+            desc = "Each cursed trinket in inventory increases damage by %s percent, up to 100 percent.",
+            check = "None",
+        },
+        tga_robot = {
+            name = "Cosmic Robot", short = "Robot\nPower",
+            desc = "Robots gain %s bonus damage.",
+            check = "None",
+        },
+        money_player = {
+            name = "Gold Spender", short = "Gold\nPower",
+            desc = "Spends gold for 100 bonus damage; without gold, damage falls by 200.",
+            check = "One effective copy only",
+        },
+        immunity_stick = {
+            name = "Slime Immunity", short = "Slime\nImmune",
+            desc = "Prevents slime effects.",
+            check = "None",
+        },
+        armor_immune_amount = {
+            name = "Rare: Armor Lock", short = "Rare\nArmor",
+            desc = "Armor does not lose durability when hit.",
+            check = "Armor with durability; absorption below 100 percent",
+        },
+        special_bhtg = {
+            name = "Rare: White Tiger", short = "White\nTiger",
+            desc = "Grants 3 percent sanity steal, 3 percent lifesteal, 50 bonus damage, 10 percent damage bonus and Judgement.",
+            check = "Weapons only",
+        },
+        special_zqrf = {
+            name = "Rare: Vermilion Bird", short = "Vermilion\nBird",
+            desc = "Immune to Judgement, slow, cold, heat, freezing, poison and wetness.",
+            check = "None",
+        },
+        special_true_damage = {
+            name = "Rare: True Damage", short = "Rare\nPierce",
+            desc = "Adds %s true damage on hit.",
+            check = "None",
+        },
+        special_sgsy = {
+            name = "Rare: Tortoise Guard", short = "Tortoise\nGuard",
+            desc = "Reduces flat damage by 35 and remaining damage by 45 percent; immune to reflected damage.",
+            check = "None",
+        },
+        special_immune_control = {
+            name = "Rare: Control Immunity", short = "Control\nImmune",
+            desc = "Immune to knockback, ewecus and slurper slime, sleep and freezing.",
+            check = "None",
+        },
     },
     affix_ui = {
         no_range = "No variable value",
