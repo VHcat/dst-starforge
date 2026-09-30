@@ -43,6 +43,8 @@ t.test("main UI dictionaries keep Chinese and English keys aligned", function()
     local zh = dofile("scripts/enums/hh_language.lua")
     TUNING = nil
     local en = dofile("scripts/enums/hh_language_en.lua")
+    assert(zh.help_ui.open_hint == "mod帮助\n右键拖拽位置")
+    assert(zh.help_ui.log_ps == "PS:默认只展示前100条日志(当前世界)")
     for _, section in ipairs({"ui","forge","equip_ui","hover_config","help_ui","log","gem"}) do
         for key, value in pairs(zh[section]) do
             assert(type(value) == "string" and type(en[section][key]) == "string")

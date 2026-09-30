@@ -201,7 +201,7 @@ function HH_UI:CreateTemplates()
         if not gem_id or not HH_ITEMS_CONFIG[gem_id] then
             return
         end
-        local gem_name = HH_UTILS:GetLanguageByKey("items", gem_id)
+        local gem_name = HH_ITEMS_CONFIG[gem_id]["name"] or gem_id
         local gem_num = hh_gem_list["num"] or "0"
         widget["hh_background"]["hh_btn"]["gem_name"]:SetString(gem_name .. ":")
         local gem_name_size_x, gem_name_size_y = widget["hh_background"]["hh_btn"]["gem_name"]:GetRegionSize()

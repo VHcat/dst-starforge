@@ -9,6 +9,7 @@ local suites = {
     "notice_i18n",
     "prefab_strings_i18n",
     "items_i18n",
+    "forge_gem_i18n",
     "i18n",
     "gems",
     "stars",

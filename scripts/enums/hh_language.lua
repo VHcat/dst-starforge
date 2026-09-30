@@ -47,6 +47,7 @@ local HH_LANGUAGE = {
         removed_set = "套装(已移除):",
         effect = "效果:",
         probability = "概率表",
+        log_ps = "PS:默认只展示前100条日志(当前世界)",
     },
     forge = {
         undefined = "未定义",
@@ -271,9 +272,6 @@ local HH_LANGUAGE = {
         "#导致属性错乱(生命/攻击无限上限):white:25",
         "#解决方案：换个五格:white:25",
         "#推荐：Extra Equip Slots (Modified) 工坊id：2075943614:white:25",
-    },
-    ["help_ui"] = {
-        ["log_ps"] = "PS:默认只展示前100条日志(当前世界)",
     },
     ["log"] = {
         ["type_all"] = "全部",
