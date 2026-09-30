@@ -4,6 +4,68 @@ local ImageButton = require("widgets/imagebutton")
 local UIAnim = require("widgets/uianim")
 local Image = require("widgets/image")
 local HH_UTILS = require("utils/hh_utils")
+local HH_I18N = require("utils/hh_i18n")
+local HH_EQUIP_BUFF_LIST = require("enums/hh_enchant")["HH_EQUIP_BUFF_LIST"]
+local HH_HOVER_EN = require("enums/hh_hoverer_en")
+
+local function localized_affix(buff, row)
+    local id = type(buff) == "table" and buff["name"] or nil
+    local config = type(id) == "string" and HH_EQUIP_BUFF_LIST[id] or nil
+    if not config then return nil end
+    local name = HH_I18N.GetAffixText(id, "name", config["name"])
+    local description = HH_I18N.GetAffixText(id, "desc", config["desc"])
+    if buff["value"] then
+        local ok, formatted = pcall(string.format, description, buff["value"])
+        if ok then description = formatted end
+        local maximum = config["value_range"] and config["value_range"]["max"]
+        if maximum and buff["value"] == maximum then
+            description = description .. " (maxed)"
+        elseif maximum and buff["value"] > maximum then
+            description = description .. " (beyond limit)"
+        end
+    end
+    if config["is_suit"] and row and row["suit_progress"] then
+        description = row["suit_active"] and "Set active" or string.format("Set pieces (%s/3)", row["suit_progress"])
+    end
+    return name .. ": " .. description
+end
+
+local function localized_details(client_table)
+    local item_name = client_table["equip"] or ""
+    local effect = client_table["effect"] or ""
+    local gem = client_table["gem"]
+    if HH_I18N.GetLocale() ~= "en" then return item_name, effect, gem end
+
+    if client_table["share_kind"] == "stone" then
+        local affix = localized_affix({ name = client_table["effect_id"] })
+        local name = affix and affix:match("^(.-):") or "Unknown affix"
+        return "Enchantment Stone - " .. name, name, nil
+    elseif client_table["share_kind"] == "job" then
+        local job_name = client_table["job_id"] == "smith" and "Blacksmith" or "Unknown job"
+        return "Job Card - " .. job_name, job_name, nil
+    end
+
+    local prefab = client_table["item_prefab"]
+    if type(prefab) == "string" then
+        item_name = STRINGS.NAMES[string.upper(prefab)] or item_name
+    end
+    if type(client_table["effect_list"]) == "table" then
+        local lines = {}
+        for _, row in ipairs(client_table["effect_list"]) do
+            local translated = localized_affix(row["name"], row)
+            table.insert(lines, translated or row["desc"] or "")
+        end
+        effect = table.concat(lines, "\n")
+    end
+    if type(client_table["gem_list"]) == "table" then
+        local lines = {}
+        for _, row in ipairs(client_table["gem_list"]) do
+            table.insert(lines, HH_HOVER_EN.gems[row["name"]] or row["desc"] or "")
+        end
+        gem = #lines > 0 and table.concat(lines, "\n") or nil
+    end
+    return item_name, effect, gem
+end
 
 local show_num = 5
 local HH_ANNOUNCE = Class(Widget, function(self, owner)
@@ -57,17 +119,16 @@ function HH_ANNOUNCE:CreateEquipUi(father_ui, client_table, index, start_y)
         return start_y
     end
     local show_text_scale = 20
-    local item_name = "装备"
-    local player_name = "玩家?"
-    item_name = tostring(client_table["equip"])
-    player_name = tostring(client_table["player"])
+    local item_name, effect_text, gem_text = localized_details(client_table)
+    local player_name = tostring(client_table["player"] or "")
+    local english = HH_I18N.GetLocale() == "en"
     local hh_player_title = client_table["player_title"] or ""--前缀称号
     father_ui["hh_child_" .. index] = HH_UTILS:CreateMoreTextUi(father_ui, {
         { ["str"] = hh_player_title, ["color"] = { 255 / 255, 232 / 255, 0 / 255, 1 }, ["scale"] = show_text_scale },
         { ["str"] = player_name, ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, ["scale"] = show_text_scale },
-        { ["str"] = ":展示了【", ["scale"] = show_text_scale },
+        { ["str"] = english and " shared [" or ":展示了【", ["scale"] = show_text_scale },
         { ["str"] = item_name, ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, ["scale"] = show_text_scale },
-        { ["str"] = "】", ["scale"] = show_text_scale },
+        { ["str"] = english and "]" or "】", ["scale"] = show_text_scale },
     }, 1)
     local com_size_x, com_size_y = father_ui["hh_child_" .. index]["max_x"], father_ui["hh_child_" .. index]["max_y"]
     father_ui["hh_child_" .. index]:SetPosition(0, start_y, 1)
@@ -99,26 +160,25 @@ function HH_ANNOUNCE:CreateEquipUi(father_ui, client_table, index, start_y)
             local server_info = {
                 ["name"] = { ["str"] = item_name, ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, },
                 ["player"] = { ["str"] = player_name, ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, },
-                ["effect"] = { ["str"] = client_table["effect"], ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, },
+                ["effect"] = { ["str"] = effect_text, ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, },
             }
             --宝石增加校验
-            if client_table["gem"] then
-                server_info["gem"] = { ["str"] = client_table["gem"], ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, }
+            if gem_text then
+                server_info["gem"] = { ["str"] = gem_text, ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, }
             end
             --星级武器
             if client_table["star"] then
                 server_info["star"] = { ["str"] = client_table["star"], ["color"] = { 255 / 255, 0 / 255, 0 / 255, 1 }, }
             end
-            local base_name = "装备"
-            if HH_UTILS:StartWith(item_name, "附魔石") or HH_UTILS:StartWith(item_name, "职业卡") then
-                base_name = "道具"
-            end
+            local is_item = client_table["share_kind"] == "stone" or client_table["share_kind"] == "job"
+                or HH_UTILS:StartWith(item_name, "附魔石") or HH_UTILS:StartWith(item_name, "职业卡")
+            local base_name = english and (is_item and "Item" or "Equipment") or (is_item and "道具" or "装备")
             back_ui["info_ui"] = HH_UTILS:CreateInfoUi(back_ui, server_info, {
                 { ["id"] = "name", ["name"] = base_name .. ":", ["scale"] = 20, },
-                { ["id"] = "player", ["name"] = "玩家:", ["scale"] = 20, },
-                { ["id"] = "effect", ["name"] = "词条:", ["scale"] = 20, },
-                { ["id"] = "gem", ["name"] = "宝石:", ["scale"] = 20, },
-                { ["id"] = "star", ["name"] = "星级:", ["scale"] = 20, },
+                { ["id"] = "player", ["name"] = english and "Player:" or "玩家:", ["scale"] = 20, },
+                { ["id"] = "effect", ["name"] = english and "Affixes:" or "词条:", ["scale"] = 20, },
+                { ["id"] = "gem", ["name"] = english and "Gems:" or "宝石:", ["scale"] = 20, },
+                { ["id"] = "star", ["name"] = english and "Stars:" or "星级:", ["scale"] = 20, },
             })
             local size_info_x, size_info_y = back_ui["info_ui"]["max_x"], back_ui["info_ui"]["max_y"]
             --创建背景

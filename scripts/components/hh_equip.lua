@@ -957,6 +957,8 @@ function HH_COMPONENTS:GetBuffDebugList(player)
                         end
                     end
                 end
+                local suit_progress = nil
+                local suit_active = nil
                 if hh_is_suit then
                     if HH_UTILS:HasComponents(self["inst"], "equippable") then
                         if self["inst"]["components"]["equippable"]:IsEquipped() and HH_UTILS:IsHHType(buff_config["suit_str"], "string")
@@ -971,7 +973,9 @@ function HH_COMPONENTS:GetBuffDebugList(player)
                                     has_num = has_num + 1
                                 end
                             end
+                            suit_progress = has_num
                             if has_num >= 3 then
+                                suit_active = true
                                 buff_desc = "套装属性已激活"
                                 if buff_config["suit_str"] and HH_UTILS:IsHHType(TUNING["HH_FORMAT_CONFIG"]["SUIT_CONFIG"][buff_config["suit_str"]], "table") then
                                     buff_desc = tostring(TUNING["HH_FORMAT_CONFIG"]["SUIT_CONFIG"][buff_config["suit_str"]]["desc"])
@@ -980,6 +984,7 @@ function HH_COMPONENTS:GetBuffDebugList(player)
                                 buff_desc = string["format"]("部件(%s/%s)", has_num, 3)
                             end
                         else
+                            suit_progress = 1
                             buff_desc = string["format"]("部件(%s/%s)", 1, 3)
                         end
                     end
@@ -993,6 +998,8 @@ function HH_COMPONENTS:GetBuffDebugList(player)
                 end
                 table["insert"](debug_table, {
                     ["name"] = v,
+                    ["suit_progress"] = suit_progress,
+                    ["suit_active"] = suit_active,
                     ["desc"] = string["format"]("%s:%s", buff_name, buff_desc),
                     ["desc_color"] = rpc_color,
                 })

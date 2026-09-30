@@ -1206,7 +1206,11 @@ local function getEquipTable(inst, player)
     local tab_config = {
         ["type"] = "equip",
         ["effect"] = effect_str,
+        ["effect_list"] = effect_list,
         ["gem"] = gem_str,
+        ["gem_list"] = gem_list,
+        ["item_prefab"] = hh_prefab,
+        ["share_kind"] = "equipment",
         ["player"] = tostring(player_name),
         ["equip"] = tostring(inst_name),
         ["player_title"] = player_title,
@@ -1229,6 +1233,8 @@ local function getStoneTable(inst, player)
         ["gem"] = nil,
         ["player"] = tostring(player_name),
         ["equip"] = "附魔石-" .. tostring(effect_name),
+        ["share_kind"] = "stone",
+        ["effect_id"] = effect_id,
         ["player_title"] = player_title,
     }
     return tab_config
@@ -1249,6 +1255,8 @@ local function getJobTAble(inst, player)
         ["gem"] = nil,
         ["player"] = tostring(player_name),
         ["equip"] = "职业卡-" .. tostring(job_name),
+        ["share_kind"] = "job",
+        ["job_id"] = job_index,
         ["player_title"] = player_title,
     }
     return tab_config

@@ -506,6 +506,9 @@ function HH_HOVERER_UI:UpdateHoverer()
                                                 desc = desc .. " (beyond limit)"
                                             end
                                         end
+                                        if config["is_suit"] and cv["suit_progress"] then
+                                            desc = cv["suit_active"] and "Set active" or string.format("Set pieces (%s/3)", cv["suit_progress"])
+                                        end
                                         description = name .. ":" .. desc
                                     end
                                 end
