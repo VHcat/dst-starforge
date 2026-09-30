@@ -263,6 +263,59 @@ function HH_HOVERER_UI:UpdateHoverer()
                         child_name = localized
                     end
                 end
+                if v == "hh_04_edible" then
+                    local id = target_infos[v]["food_type_id"]
+                    if type(args) == "table" and hh_hoverer_en.food_types[id] then
+                        child_name = string.format(translated.format, hh_hoverer_en.food_types[id], args[2], args[3], args[4])
+                    end
+                elseif v == "hh_05_food_tag" then
+                    local tags = target_infos[v]["tag_data"]
+                    if type(tags) == "table" then
+                        local parts = {}
+                        for _, tag in ipairs(tags) do
+                            local label = hh_hoverer_en.food_tags[tag.id]
+                            if label then table.insert(parts, label .. tostring(tag.amount)) end
+                        end
+                        child_name = table.concat(parts, " ")
+                    end
+                elseif v == "hh_09_tool" then
+                    local tools = target_infos[v]["tool_data"]
+                    if type(tools) == "table" then
+                        local parts = {}
+                        for _, tool in ipairs(tools) do
+                            local label = hh_hoverer_en.tool_types[tool.id]
+                            if label then table.insert(parts, label .. " " .. tostring(tool.amount)) end
+                        end
+                        child_name = table.concat(parts, " ")
+                    end
+                elseif v == "hh_10_stackable" and type(args) == "table" and args[2] == "无上限" then
+                    child_name = tostring(args[1]) .. "/Unlimited"
+                elseif v == "hh_18_insulator" then
+                    local kind = target_infos[v]["insulation_kind"]
+                    if kind == "warm" then father_name = "Warmth:" end
+                    if kind == "cool" then father_name = "Cooling:" end
+                elseif v == "hh_27_domesticatable" then
+                    local parts = {}
+                    if target_infos[v]["has_obedience"] then
+                        table.insert(parts, string.format("Obedience: %s%%", target_infos[v]["obedience"] or 0))
+                    end
+                    if target_infos[v]["has_domestication"] then
+                        table.insert(parts, string.format("Domestication: %s%%", target_infos[v]["domestication"] or 0))
+                    end
+                    if #parts > 0 then child_name = table.concat(parts, " ") end
+                elseif v == "hh_28_dryer" then
+                    local days = target_infos[v]["days"]
+                    if days and target_infos[v]["dry_state"] == "drying" then
+                        child_name = tostring(days) .. " days until dry"
+                    elseif days and target_infos[v]["dry_state"] == "spoiling" then
+                        child_name = tostring(days) .. " days until spoiled"
+                    end
+                elseif v == "hh_33_hh_follow" then
+                    local values = target_infos[v]["follow_values"]
+                    if type(values) == "table" then
+                        child_name = string.format("Damage (%s) reduction (%s) critical (%s%%)", unpack(values))
+                    end
+                end
                 if v == "hh_32_hh_gem" then
                     local id = target_infos[v]["affix_id"]
                     local config = type(id) == "string" and HH_EQUIP_BUFF_LIST[id] or nil

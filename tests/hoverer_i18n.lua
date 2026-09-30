@@ -47,4 +47,16 @@ t.test("monster and player stats have format-safe English text", function()
     assert(monsters == 50 and players == 7)
 end)
 
+t.test("food and tool category IDs have English labels", function()
+    for _, pair in ipairs({ {english.food_types, 16}, {english.food_tags, 32}, {english.tool_types, 8} }) do
+        local count = 0
+        for id, label in pairs(pair[1]) do
+            assert(type(id) == "string" and type(label) == "string")
+            assert(not label:find("[\128-\255]"))
+            count = count + 1
+        end
+        assert(count == pair[2])
+    end
+end)
+
 return t.count

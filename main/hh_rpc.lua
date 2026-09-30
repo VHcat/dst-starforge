@@ -247,17 +247,21 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
                 sanity = sanity * sn_mult
                 health = health * hp_mult
                 handleFormatStr(hh_copy_list, "hh_04_edible", food_type, hunger, sanity, health)
+                hh_copy_list["hh_04_edible"]["food_type_id"] = tostring(item_com["edible"]["foodtype"])
             end
         end
         ----====>食物标签<====----
         if hh_cook_tags and hh_cook_tags[item_prefab] and HH_UTILS:IsHHType(hh_cook_tags[item_prefab]["tags"], "table") then
             local tag_str = ""
+            local tag_data = {}
             for id, tag in pairs(hh_cook_tags[item_prefab]["tags"]) do
                 if HH_FOOD_TAGS[id] then
                     tag_str = tag_str .. (HH_FOOD_TAGS[id] or "") .. tostring(tag)
+                    table.insert(tag_data, { id = id, amount = tag })
                 end
             end
             handleFormatStr(hh_copy_list, "hh_05_food_tag", tag_str)
+            hh_copy_list["hh_05_food_tag"]["tag_data"] = tag_data
         end
         ----====>护甲<====----
         if item_com["armor"] then
@@ -287,12 +291,15 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
         if item_com["tool"] and item_com["tool"]["actions"] then
             local actions = item_com["tool"]["actions"]
             local tool_string = ""
+            local tool_data = {}
             for k, v in pairs(actions) do
                 if k and k["id"] and HH_TOOL_TYPE[k["id"]] and HH_UTILS:IsHHType(v, "number") then
                     tool_string = tool_string .. HH_TOOL_TYPE[k["id"]] .. nice_number(v, 1) .. " "
+                    table.insert(tool_data, { id = k["id"], amount = nice_number(v, 1) })
                 end
             end
             handleFormatStr(hh_copy_list, "hh_09_tool", tool_string)
+            hh_copy_list["hh_09_tool"]["tool_data"] = tool_data
         end
         ----====>堆叠<====----
         if item_com["stackable"] then
@@ -402,8 +409,10 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
             handleFormatStr(hh_copy_list, "hh_18_insulator", insulator_str)
             if item_com["insulator"]["type"] == SEASONS["WINTER"] then
                 hh_copy_list["hh_18_insulator"]["name"] = "保暖"
+                hh_copy_list["hh_18_insulator"]["insulation_kind"] = "warm"
             elseif item_com["insulator"]["type"] == SEASONS["SUMMER"] then
                 hh_copy_list["hh_18_insulator"]["name"] = "隔热"
+                hh_copy_list["hh_18_insulator"]["insulation_kind"] = "cool"
             end
         end
         ----====>可钓<====----
@@ -462,26 +471,37 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
             local domest = 0
             local domesticatable_str = ""
             local domesticatable_bool = false
+            local has_obedience, has_domestication = false, false
             if item_com["domesticatable"]["GetObedience"] and type(item_com["domesticatable"]:GetDomestication()) == "number" then
                 domesticatable_bool = true
                 obedience = tonumber(item_com["domesticatable"]:GetObedience()) * 100
+                has_obedience = true
                 domesticatable_str = domesticatable_str .. "顺从:" .. string["format"]("%.0f", obedience) .. "%"
             end
             if item_com["domesticatable"]["GetDomestication"] and type(item_com["domesticatable"]:GetDomestication()) == "number" then
                 domesticatable_bool = true
                 domest = tonumber(item_com["domesticatable"]:GetDomestication()) * 100
+                has_domestication = true
                 domesticatable_str = domesticatable_str .. "驯化:" .. string["format"]("%.0f", domest) .. "%"
             end
             if domesticatable_bool then
                 handleFormatStr(hh_copy_list, "hh_27_domesticatable", domesticatable_str)
+                hh_copy_list["hh_27_domesticatable"]["obedience"] = obedience
+                hh_copy_list["hh_27_domesticatable"]["domestication"] = domest
+                hh_copy_list["hh_27_domesticatable"]["has_obedience"] = has_obedience
+                hh_copy_list["hh_27_domesticatable"]["has_domestication"] = has_domestication
             end
         end
         ----====>晾干<====----
         if item_com["dryer"] and item_com["dryer"]["IsDrying"] then
             if item_com["dryer"]:IsDrying() and item_com["dryer"]["GetTimeToDry"] then
                 handleFormatStr(hh_copy_list, "hh_28_dryer", string["format"]("%.1f", item_com["dryer"]:GetTimeToDry() / TUNING["TOTAL_DAY_TIME"]) .. "天后晾干")
+                hh_copy_list["hh_28_dryer"]["dry_state"] = "drying"
+                hh_copy_list["hh_28_dryer"]["days"] = string["format"]("%.1f", item_com["dryer"]:GetTimeToDry() / TUNING["TOTAL_DAY_TIME"])
             elseif item_com["dryer"]["IsDone"] and item_com["dryer"]:IsDone() and item_com["dryer"]["GetTimeToSpoil"] then
                 handleFormatStr(hh_copy_list, "hh_28_dryer", string["format"]("%.1f", item_com["dryer"]:GetTimeToSpoil() / TUNING["TOTAL_DAY_TIME"]) .. "天后腐烂")
+                hh_copy_list["hh_28_dryer"]["dry_state"] = "spoiling"
+                hh_copy_list["hh_28_dryer"]["days"] = string["format"]("%.1f", item_com["dryer"]:GetTimeToSpoil() / TUNING["TOTAL_DAY_TIME"])
             end
         end
         ----====>作物<====----
@@ -639,6 +659,7 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
             local hh_addFollowCritical = hh_leader["components"]["hh_player"]:GetEffectValueByKey("addFollowCritical")
             local follow_str = string["format"]("伤害(%s) 减伤(%s) 暴击(%s%%)", hh_damage, hh_armor, hh_addFollowCritical)
             handleFormatStr(hh_copy_list, "hh_33_hh_follow", follow_str)
+            hh_copy_list["hh_33_hh_follow"]["follow_values"] = { hh_damage, hh_armor, hh_addFollowCritical }
         end
     end
     ----====>随从强化<====----
