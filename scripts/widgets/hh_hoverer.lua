@@ -243,6 +243,7 @@ function HH_HOVERER_UI:UpdateHoverer()
         target_infos["hh_01_name"]["str"] = tostring(self["hh_target_name"])
     end
     local is_change = HH_UTILS:HHCompareTable(self["inst_more_info"], target_infos)
+    self["last_hovered_target"] = target
     if is_change then
         return
     end
@@ -653,6 +654,7 @@ function HH_HOVERER_UI:OnUpdate(dt)
             or self["hh_target_name"] ~= self["hh_hoverer_text"]) then
         return
     end
+    local target_changed = target ~= save_target
     save_target = target
     self["hh_target_name"] = self["hh_hoverer_text"]
     last_check_time = GetTime()
@@ -663,6 +665,10 @@ function HH_HOVERER_UI:OnUpdate(dt)
             self["hh_main"]:Hide()
             return
         end
+    end
+    -- Restore a hidden panel from cached data when returning to the same item.
+    if target_changed and self["last_hovered_target"] == target and not self["hh_main"]["shown"] then
+        self:UpdateHoverer()
     end
     --print("rpc")
     SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_hoverer_server"], save_target, self["hh_target_name"])

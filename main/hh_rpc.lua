@@ -836,13 +836,13 @@ AddModRPCHandler("hh_rpc", "hh_hoverer_server", function(player, item, hh_target
     local compare_table = HH_UTILS:HHCompareTable(player["HH_LAST_HOVERER_LIST"], hh_copy_list)
     --print(item["GUID"], "比较结果", compare_table)
     --HH_UTILS:HHPrint(hh_copy_list)
-    if compare_table then
-        SendModRPCToClient(CLIENT_MOD_RPC["hh_rpc"]["hh_rpc_client"], player["userid"], "hh_hoverer_list", "刷新")
+    if compare_table and player["HH_LAST_HOVERER_GUID"] == item["GUID"] then
         return
-    else
-        SendModRPCToClient(CLIENT_MOD_RPC["hh_rpc"]["hh_rpc_client"], player["userid"], "hh_hoverer_list", HH_UTILS:TableToStr(hh_copy_list))
-        player["HH_LAST_HOVERER_LIST"] = HH_UTILS:HHCopyTable(hh_copy_list)
     end
+    SendModRPCToClient(CLIENT_MOD_RPC["hh_rpc"]["hh_rpc_client"], player["userid"], "hh_hoverer_list", HH_UTILS:TableToStr(hh_copy_list))
+    -- Nested color/config tables can be shared with live components.
+    player["HH_LAST_HOVERER_LIST"] = HH_UTILS:HHCopyTable(hh_copy_list)
+    player["HH_LAST_HOVERER_GUID"] = item["GUID"]
 end)
 AddClientModRPCHandler("hh_rpc", "hh_rpc_client", function(key, data)
     if ThePlayer and key and type(key) == "string" then

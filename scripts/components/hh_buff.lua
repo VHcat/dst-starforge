@@ -3,6 +3,26 @@
 ---
 local HH_UTILS = require("utils/hh_utils")
 local HH_BUFF_CONFIG = require("enums/hh_buff")
+
+local function syncPlayerBuffs(self)
+    if self["inst"]:HasTag("player") then
+        HH_UTILS:HHClientRpc(self["inst"], "hh_client_buff", HH_UTILS:TableToStr(self["hh_buffs"]))
+    end
+end
+
+local function updateSyncTask(self)
+    if not self["inst"]:HasTag("player") then return end
+    if next(self["hh_buffs"]) then
+        if not self["inst"]["hh_buff_tips"] then
+            self["inst"]["hh_buff_tips"] = self["inst"]:DoPeriodicTask(1, function()
+                syncPlayerBuffs(self)
+            end)
+        end
+    else
+        HH_UTILS:HHKillTask(self["inst"], "hh_buff_tips")
+    end
+end
+
 local function Death(inst)
     if HH_UTILS:HasComponents(inst, "hh_buff") then
         inst["components"]["hh_buff"]:StopAllBuff()
@@ -13,10 +33,6 @@ local HH_COM = Class(function(self, inst)
     self["hh_buffs"] = {}
     self["start_update"] = false
     self["inst"]:ListenForEvent("death", Death)
-    --同步客机
-    self["inst"]["hh_buff_tips"] = self["inst"]:DoPeriodicTask(1, function()
-        HH_UTILS:HHClientRpc(self["inst"], "hh_client_buff", HH_UTILS:TableToStr(self["hh_buffs"]))
-    end)
 end)
 function HH_COM:HasBuff(buff_name)
     if not HH_UTILS:IsHHType(buff_name, "string") then
@@ -58,6 +74,8 @@ function HH_COM:AddBuff(buff_name, buff_time)
         HH_BUFF_CONFIG[buff_name]["start_fn"](self["inst"])
     end
     self["hh_buffs"][buff_name] = { ["name"] = buff_name, ["time"] = hh_buff_time, }
+    updateSyncTask(self)
+    syncPlayerBuffs(self)
     if not self["start_update"] then
         self["inst"]:StartUpdatingComponent(self)
         self["start_update"] = true
@@ -72,11 +90,13 @@ function HH_COM:RemoveBuff(buff_name)
         HH_BUFF_CONFIG[buff_name]["stop_fn"](self["inst"])
     end
     self["hh_buffs"][buff_name] = nil
-    if not self["start_update"] and next(self["hh_buffs"]) then
-        --不在更新状态 且有buff就开始更新
-        self["inst"]:StartUpdatingComponent(self)
-        self["start_update"] = true
+    if self["start_update"] and not next(self["hh_buffs"]) then
+        self["inst"]:StopUpdatingComponent(self)
+        self["start_update"] = false
     end
+    updateSyncTask(self)
+    syncPlayerBuffs(self)
+    return true
 end
 ----
 ---清除所有buff
@@ -90,6 +110,8 @@ function HH_COM:StopAllBuff()
     self["hh_buffs"] = {}
     self["inst"]:StopUpdatingComponent(self)
     self["start_update"] = false
+    updateSyncTask(self)
+    syncPlayerBuffs(self)
 end
 function HH_COM:OnUpdate(dt)
     ----如果服务器是暂停状态不会更新时间
@@ -116,6 +138,8 @@ function HH_COM:OnUpdate(dt)
         --在更新状态 但是没有buff就停止更新
         self["inst"]:StopUpdatingComponent(self)
         self["start_update"] = false
+        updateSyncTask(self)
+        syncPlayerBuffs(self)
     end
 end
 

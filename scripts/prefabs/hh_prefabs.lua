@@ -243,6 +243,9 @@ local function UpdatePing(inst, t0, duration)
         label:SetFontSize(s)
         --label:SetWorldOffset(0, y, 0)
     end
+    if t >= duration then
+        HH_UTILS:HHKillTask(inst, "hh_text_anim_task")
+    end
 end
 local function SetTextValue(inst)
     local str = inst["hh_tips"]:value()
@@ -251,7 +254,8 @@ local function SetTextValue(inst)
     label:SetText(str)
     label:Enable(true)
     label:SetColour(unpack(text_color))
-    inst:DoPeriodicTask(0, UpdatePing, nil, GetTime(), 0.8)
+    HH_UTILS:HHKillTask(inst, "hh_text_anim_task")
+    inst["hh_text_anim_task"] = inst:DoPeriodicTask(0, UpdatePing, nil, GetTime(), 0.8)
 end
 --文字提示
 local function hh_tips()
@@ -325,6 +329,9 @@ local function UpdateTextFx(inst, t0, duration)
         label:SetFontSize(s)
         --label:SetWorldOffset(0, y, 0)
     end
+    if t >= duration then
+        HH_UTILS:HHKillTask(inst, "hh_text_anim_task")
+    end
 end
 local function updateClientStr(hh_inst)
     local str = hh_inst["hh_client_str"]:value()
@@ -334,7 +341,8 @@ local function updateClientStr(hh_inst)
     hh_label:Enable(true)
     hh_label:SetColour(unpack(getFxTextColor(str)))
     --放大字体
-    hh_inst:DoPeriodicTask(0, UpdateTextFx, nil, GetTime(), 0.8)
+    HH_UTILS:HHKillTask(hh_inst, "hh_text_anim_task")
+    hh_inst["hh_text_anim_task"] = hh_inst:DoPeriodicTask(0, UpdateTextFx, nil, GetTime(), 0.8)
 end
 local function hh_fx_text()
     local inst = CreateEntity()

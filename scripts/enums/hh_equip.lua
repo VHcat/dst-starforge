@@ -674,10 +674,9 @@ local HH_EQUIP = {
             local oldLaunchProjectile = inst["components"]["weapon"]["LaunchProjectile"]
             inst["components"]["weapon"]["LaunchProjectile"] = function(self, attacker, target, ...)
                 if attacker and target then
-                    if self["inst"]["atk_task"] then
+                    if self["inst"]["hh_atk_task"] then
                         return
                     end
-                    HH_UTILS:HHKillTask(self["inst"], "hh_atk_task")
                     ----查询抛射物皮肤
                     local fx_index = self["inst"]["proj_fx_index"] or 1
                     local current_fxs = {}

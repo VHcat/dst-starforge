@@ -16,6 +16,7 @@ local suites = {
     "skin_names_i18n",
     "logs",
     "log_i18n",
+    "runtime_optimization",
     "bulk_clear",
     "permissions",
 }

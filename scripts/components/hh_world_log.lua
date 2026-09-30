@@ -12,12 +12,13 @@ local HH_COM = Class(function(self, inst)
 end)
 
 function HH_COM:AddLog(log_type, log_message, log_key, log_data)
-    --加上时间
+    -- Structured logs are rendered per client; legacy messages retain their text.
     local log_date = HH_UTILS:GetCurrentDateTime()
-    local log_str = HH_UTILS:Template("#{{data_date}}:white:25{{data_message}}", {
+    local has_structured_data = type(log_key) == "string" and type(log_data) == "table"
+    local log_str = not has_structured_data and HH_UTILS:Template("#{{data_date}}:white:25{{data_message}}", {
         ["data_date"] = log_date,
         ["data_message"] = log_message,
-    })
+    }) or nil
     local save_type = {}
     if HH_UTILS:IsHHType(log_type, "table") then
         save_type = log_type

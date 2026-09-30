@@ -513,7 +513,8 @@ local function log_child_fn(father_ui, hh_ui_index)
     local log_list = playerLogList
     if HH_UTILS:IsHHType(log_list[hh_ui_index], "table") then
         local logConfig = log_list[hh_ui_index]
-        if HH_UTILS:IsHHType(logConfig["ui_config"], "string") then
+        if HH_UTILS:IsHHType(logConfig["ui_config"], "string")
+                or (type(logConfig["log_key"]) == "string" and type(logConfig["log_data"]) == "table") then
             father_ui["log_ui"] = HH_UTILS:CreateByCustomText(father_ui, HH_LOG_I18N.Render(logConfig), 1)
             father_ui["log_ui"]:SetPosition(-350, 10, 1)
         end

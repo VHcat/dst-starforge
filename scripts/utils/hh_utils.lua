@@ -396,17 +396,18 @@ function HH_UTILS:HHCompareTable(table1, table2)
     if #table1 ~= #table2 then
         return false
     end
+    local count1 = 0
     for key, value in pairs(table1) do
+        count1 = count1 + 1
         if not HH_UTILS:HHCompareTable(value, table2[key]) then
             return false
         end
     end
-    for key, value in pairs(table2) do
-        if not HH_UTILS:HHCompareTable(value, table1[key]) then
-            return false
-        end
+    local count2 = 0
+    for _ in pairs(table2) do
+        count2 = count2 + 1
     end
-    return true
+    return count1 == count2
 end
 function HH_UTILS:IsHHType(data, hh_type)
     if data and type(data) == hh_type then

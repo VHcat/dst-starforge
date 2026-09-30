@@ -11,6 +11,7 @@ t.test("new world logs retain event data for local rendering", function()
     local entry = logs:GetLogs()[1]
     assert(entry.log_key == "dig_treasure_monster")
     assert(entry.log_data.data_monster == "大猪知非")
+    assert(entry.ui_config == nil)
     entry.log_time = "2026年09月30日 12时30分00秒"
     local result = render(entry)
     assert(result:find("2026-09-30 12:30:00", 1, true))
@@ -20,6 +21,9 @@ end)
 
 t.test("legacy world logs remain readable", function()
     assert(render({ ui_config = "old server text" }) == "old server text")
+    local logs = Logs(t.entity())
+    logs:AddLog("legacy", "original text")
+    assert(type(logs:GetLogs()[1].ui_config) == "string")
 end)
 
 return t.count
