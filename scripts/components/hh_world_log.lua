@@ -1,4 +1,5 @@
 local HH_UTILS = require("utils/hh_utils")
+local MAX_LOGS = 2000
 local function getLanguage(str_index)
     return HH_UTILS:GetLanguageByKey("log", str_index)
 end
@@ -33,6 +34,9 @@ function HH_COM:AddLog(log_type, log_message, log_key, log_data)
         ["log_data"] = log_data,
     }
     table["insert"](self["logs"], log_table)
+    if #self["logs"] > MAX_LOGS then
+        table["remove"](self["logs"], 1)
+    end
     --推实际及时更新 如果打开相关日志页面的话
     --self["inst"]:PushEvent("ovo_log_change")
 end
@@ -90,6 +94,11 @@ function HH_COM:OnLoad(data)
     if not data then
         return
     end
-    self["logs"] = data["logs"] or {}
+    local saved_logs = type(data["logs"]) == "table" and data["logs"] or {}
+    local first = math.max(1, #saved_logs - MAX_LOGS + 1)
+    self["logs"] = {}
+    for i = first, #saved_logs do
+        self["logs"][#self["logs"] + 1] = saved_logs[i]
+    end
 end
 return HH_COM

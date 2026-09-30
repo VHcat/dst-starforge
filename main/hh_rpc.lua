@@ -853,7 +853,9 @@ AddClientModRPCHandler("hh_rpc", "hh_rpc_client", function(key, data)
         else
             ThePlayer[key] = HH_UTILS:StrToTable(data)
         end
-        ThePlayer:PushEvent("hh_update_hoverer")
+        if key == "hh_hoverer_list" then
+            ThePlayer:PushEvent("hh_update_hoverer")
+        end
     end
 end)
 

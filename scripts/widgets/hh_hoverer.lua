@@ -94,6 +94,7 @@ local HH_HOVERER_UI = Class(Widget, function(self, owner)
         self["hh_config"] = getClientConfig()
     end, self["owner"])
     self["inst"]:ListenForEvent("hh_update_hoverer", function()
+        self["last_hoverer_change_time"] = GetTime()
         self:UpdateHoverer()
     end, self["owner"])
 
@@ -649,15 +650,18 @@ function HH_HOVERER_UI:OnUpdate(dt)
     if self["hh_main"]["shown"] then
         hh_update_ui_pos(self["hh_main"], self["hh_config"])
     end
-    --处理原官方文本
-    if not (target ~= save_target or last_check_time + 1 < GetTime()
+    -- Back off while unchanged; changes and target switches still refresh promptly.
+    local now = GetTime()
+    local unchanged_for = self["last_hoverer_change_time"] and now - self["last_hoverer_change_time"] or 0
+    local refresh_interval = unchanged_for >= 20 and 3 or unchanged_for >= 5 and 2 or 1
+    if not (target ~= save_target or last_check_time + refresh_interval < now
             or self["hh_target_name"] ~= self["hh_hoverer_text"]) then
         return
     end
     local target_changed = target ~= save_target
     save_target = target
     self["hh_target_name"] = self["hh_hoverer_text"]
-    last_check_time = GetTime()
+    last_check_time = now
     --鼠标指向玩家时 如果鼠标上没有物品则不显示面板 防止出显示bug
     if TheInput:GetWorldEntityUnderMouse() == self["owner"] and HH_UTILS:HasComponents(self["owner"], "playercontroller") then
         local lmb = self["owner"]["components"]["playercontroller"]:GetLeftMouseAction()
