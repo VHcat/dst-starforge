@@ -2,6 +2,7 @@
 local suites = {
     "affixes_i18n",
     "hoverer_i18n",
+    "prefab_strings_i18n",
     "items_i18n",
     "i18n",
     "gems",

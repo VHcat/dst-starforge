@@ -38,7 +38,35 @@ addString("hh_treasure_tally_a", "寻宝卷轴", "寻宝卷轴", "寻宝卷轴")
 addString("hh_treasure_tally_b", "寻宝卷轴", "寻宝卷轴", "寻宝卷轴")
 addString("hh_treasure_tally_a_blueprint", "寻宝卷轴蓝图", "寻宝卷轴", "寻宝卷轴")
 addString("hh_treasure_tally_b_blueprint", "寻宝卷轴蓝图", "寻宝卷轴", "寻宝卷轴")
+local HH_I18N = require("utils/hh_i18n")
+local HH_STRING_EN = {
+    hh_effect_stone = { name = "Enchantment Stone", desc = "Contains a special affix.", recipe_str = "Contains a special affix." },
+    hh_effect_tally = { name = "Enchantment Scroll", desc = "Adds a random affix.", recipe_str = "Adds a random affix." },
+    hh_remove_stone = { name = "Cleansing Stone", desc = "Removes an equipment affix.", recipe_str = "Removes an equipment affix." },
+    hh_true_damage = { name = "True Damage", desc = "True damage.", recipe_str = "True damage." },
+    hh_suit_build = { name = "Enchantment Forge", desc = "Right-click to use.", recipe_str = "Right-click to use." },
+    hh_staff_dis = { name = "Dismantling Staff", desc = "Dismantles equipment.", recipe_str = "Dismantles equipment." },
+    hh_essence = { name = "Crystal Essence", desc = "A crystal crafting material.", recipe_str = "A crystal crafting material." },
+    hh_ui_container = { name = "Enchantment Container", desc = "Stores enchanting materials.", recipe_str = "Stores enchanting materials." },
+    hh_forge_container = { name = "Set Container", desc = "Stores set materials.", recipe_str = "Stores set materials." },
+    hh_staff_star = { name = "Star Staff", desc = "Reach for the stars.", recipe_str = "Reach for the stars." },
+    hh_ice_knife = { name = "Ice Blade", desc = "Attacks create trails of fire.", recipe_str = "The power of fire." },
+    hh_bramble_damage = { name = "Thorns Affix", desc = "Reflects damage.", recipe_str = "Reflects damage." },
+    hh_turret_poison = { name = "Poison Turret", desc = "A poison turret.", recipe_str = "A poison turret." },
+    hh_poison = { name = "Poison Affix", desc = "Poisons the target.", recipe_str = "Poisons the target." },
+    hh_monster_kj = { name = "Fear Affix", desc = "Causes fear.", recipe_str = "Causes fear." },
+    hh_turret = { name = "Turret", desc = "A turret.", recipe_str = "A turret." },
+    hh_turret_ice = { name = "Ice Turret", desc = "A turret.", recipe_str = "A turret." },
+    hh_turret_fire = { name = "Fire Turret", desc = "A turret.", recipe_str = "A turret." },
+    hh_treasure_tally_a = { name = "Treasure Scroll", desc = "Reveals treasure.", recipe_str = "Reveals treasure." },
+    hh_treasure_tally_b = { name = "Treasure Scroll", desc = "Reveals treasure.", recipe_str = "Reveals treasure." },
+    hh_treasure_tally_a_blueprint = { name = "Treasure Scroll Blueprint", desc = "Makes a Treasure Scroll.", recipe_str = "Makes a Treasure Scroll." },
+    hh_treasure_tally_b_blueprint = { name = "Treasure Scroll Blueprint", desc = "Makes a Treasure Scroll.", recipe_str = "Makes a Treasure Scroll." },
+}
 for i, v in pairs(HH_STRING) do
+    if HH_I18N.GetLocale() == "en" and HH_STRING_EN[i] then
+        v = HH_STRING_EN[i]
+    end
     STRINGS["NAMES"][string["upper"](i)] = v["name"] or "未定义"
     STRINGS["RECIPE_DESC"][string["upper"](i)] = v["recipe_str"] or "未定义"
     STRINGS["CHARACTERS"]["GENERIC"]["DESCRIBE"][string["upper"](i)] = v["desc"] or "未定义"
