@@ -258,7 +258,7 @@ function HH_UI:UpdateEquipEffectUi()
         if HH_UTILS:IsHHType(v, "table") and v["name"] and HH_UTILS:IsHHType(HH_EQUIP_BUFF_LIST[v["name"]], "table") then
             --"images/ui.xml", "in-window_button_tile_idle.tex",选择框
             local effect_config = HH_EQUIP_BUFF_LIST[v["name"]]
-            local effect_name = HH_UTILS:GetAffixText(v["name"], "name", effect_config["name"] or "未定义")
+            local effect_name = HH_UTILS:GetAffixText(v["name"], "name", effect_config["name"] or HH_UTILS:GetLanguageByKey("forge", "undefined"))
             father_ui["hh_text_" .. i] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(0, 0, 1), tostring(effect_name), nil, text_scale)
             local child_text_size_x, child_text_size_y = father_ui["hh_text_" .. i]:GetRegionSize()
             father_ui["hh_text_" .. i]:SetPosition(start_x + child_text_size_x / 2, start_y - child_text_size_y / 2, 1)
@@ -307,9 +307,9 @@ function HH_UI:CreateSureRefuseUi()
             { ["size"] = 2.5, ["color"] = { 0, 0, 0, 1 }, })
     local ui_str = ""
     if change_num <= 0 then
-        ui_str = "未选择清除词条"
+        ui_str = HH_UTILS:GetLanguageByKey("forge", "none_selected")
     else
-        ui_str = string["format"]("消耗%s个净化符\n清除选中的词条", change_num)
+        ui_str = string["format"](HH_UTILS:GetLanguageByKey("forge", "remove_selected"), change_num)
     end
     father_ui["sure_refuse_ui"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["sure_refuse_ui"], Vector3(0, 0, 1), ui_str, nil, 25)
     local child_text_size_x, child_text_size_y = father_ui["sure_refuse_ui"]["hh_str"]:GetRegionSize()
@@ -322,13 +322,13 @@ function HH_UI:CreateSureRefuseUi()
             SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_handle_equip"], "CleanEffect", HH_UTILS:TableToStr(self["choose_index"]))
         end
     end)
-    father_ui["sure_refuse_ui"]["hh_sure"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["sure_refuse_ui"]["hh_sure"], Vector3(0, 2, 1), "确认", nil, 25)
+    father_ui["sure_refuse_ui"]["hh_sure"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["sure_refuse_ui"]["hh_sure"], Vector3(0, 2, 1), HH_UTILS:GetLanguageByKey("forge", "confirm"), nil, 25)
     --取消
     father_ui["sure_refuse_ui"]["hh_refuse"] = HH_UTILS:HHCreateBtnUi(father_ui["sure_refuse_ui"], "images/ui.xml", "button_large.tex", Vector3(50, -40, 1), 0.3, 0.3)
     father_ui["sure_refuse_ui"]["hh_refuse"]:SetOnClick(function()
         HH_UTILS:HHKillChild(father_ui, "sure_refuse_ui")
     end)
-    father_ui["sure_refuse_ui"]["hh_refuse"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["sure_refuse_ui"]["hh_refuse"], Vector3(0, 2, 1), "取消", nil, 25)
+    father_ui["sure_refuse_ui"]["hh_refuse"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["sure_refuse_ui"]["hh_refuse"], Vector3(0, 2, 1), HH_UTILS:GetLanguageByKey("forge", "cancel"), nil, 25)
 end
 ----
 ---创建切换ui-处理2-5格的效果
@@ -379,8 +379,8 @@ function HH_UI:CreateSuitConfigUi()
     local image_size = 40
     for i, v in ipairs(suit_config) do
         if v and v["id"] and HH_UTILS:IsHHType(v["recipe"], "table") then
-            local effect_name = v["name"] or "未定义"
-            local effect_small_name = v["small_name"] or "未定义"
+            local effect_name = v["name"] or HH_UTILS:GetLanguageByKey("forge", "undefined")
+            local effect_small_name = v["small_name"] or HH_UTILS:GetLanguageByKey("forge", "undefined")
             local effect_id = v["id"]
             local effect_recipe = v["recipe"] or {}
             sub_root["hh_image_" .. i] = HH_UTILS:HHCreateImageUi(sub_root, "images/hh_icon/hh_status.xml", "hh_status.tex", Vector3(0, 0, 1), image_size, image_size, { 0, 0, 0, 0.5 })
@@ -393,7 +393,7 @@ function HH_UI:CreateSuitConfigUi()
                 for kk, vv in ipairs(effect_recipe) do
                     if vv and vv["xml"] and vv["tex"] then
                         local item_id = vv["id"]
-                        local item_name = vv["name"] or STRINGS["NAMES"][string["upper"](item_id)] or "未定义"
+                        local item_name = vv["name"] or STRINGS["NAMES"][string["upper"](item_id)] or HH_UTILS:GetLanguageByKey("forge", "undefined")
                         local item_size = image_size
                         local item_pos_x = image_size / 2 + (kk - 1 / 2) * item_size + 3
                         father_image["hh_image_" .. kk] = HH_UTILS:HHCreateImageUi(father_image, vv["xml"], vv["tex"], Vector3(item_pos_x, 0, 1), item_size, item_size)
@@ -435,7 +435,7 @@ function HH_UI:CreateSuitConfigUi()
     self["hh_main"]["suit_config_ui"] = self["hh_main"]:AddChild(TrueScrollArea(context, scissor_data, scrollbar))
     self["hh_main"]["suit_config_ui"]:SetPosition(20, hh_main_size_y / 2 - sub_h - 30, 1)
     --增加标题
-    self["hh_main"]["suit_config_ui"]["hh_title"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["suit_config_ui"], Vector3(sub_w / 2, sub_h + 10, 1), "词条配方", nil, 20)
+    self["hh_main"]["suit_config_ui"]["hh_title"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["suit_config_ui"], Vector3(sub_w / 2, sub_h + 10, 1), HH_UTILS:GetLanguageByKey("forge", "recipe"), nil, 20)
 
     local hh_sub = self["hh_main"]["suit_config_ui"]
     hh_sub["up_button"]:SetTextures("images/quagmire_recipebook.xml", "quagmire_recipe_scroll_arrow_hover.tex")
@@ -456,30 +456,30 @@ function HH_UI:CreateEquipInheritUi()
     HH_UTILS:HHKillChild(self["hh_main"], "suit_config_ui")
     self["hh_main"]["suit_config_ui"] = self["hh_main"]:AddChild(Widget())
     local father_ui = self["hh_main"]["suit_config_ui"]
-    father_ui["hh_old_equip_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-220, -45, 1), "原装备", nil, 20)
-    father_ui["hh_new_equip_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-100, -45, 1), "装备(无词条)", nil, 20)
+    father_ui["hh_old_equip_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-220, -45, 1), HH_UTILS:GetLanguageByKey("forge", "old_equipment"), nil, 20)
+    father_ui["hh_new_equip_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-100, -45, 1), HH_UTILS:GetLanguageByKey("forge", "empty_equipment"), nil, 20)
     father_ui["hh_test_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-165, -10, 1), "===>", nil, 20)
     father_ui["hh_btn_sure"] = HH_UTILS:HHCreateBtnUi(father_ui, "images/ui.xml", "button_large.tex", Vector3(-165, -140, 1), 0.3, 0.3)
     father_ui["hh_btn_sure"]:SetOnClick(function()
         SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_handle_equip"], "EquipInherit")
     end)
-    father_ui["hh_btn_sure"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_btn_sure"], Vector3(0, 0, 1), "继承", nil, 20)
-    father_ui["hh_need_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-80, -140, 1), "消耗:", nil, 20)
+    father_ui["hh_btn_sure"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_btn_sure"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("forge", "inherit_button"), nil, 20)
+    father_ui["hh_need_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-80, -140, 1), HH_UTILS:GetLanguageByKey("forge", "cost"), nil, 20)
     local item_size = 40
     father_ui["hh_cl_a"] = HH_UTILS:HHCreateImageUi(father_ui, "images/hh_icon/hh_items.xml", "hh_essence.tex", Vector3(-45, -140, 1), item_size, item_size)
-    hookFocusFn(father_ui["hh_cl_a"], "水晶小人")
+    hookFocusFn(father_ui["hh_cl_a"], HH_UTILS:GetLanguageByKey("forge", "crystal_figure"))
     father_ui["hh_cl_a"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_cl_a"], Vector3(item_size / 4, -item_size / 4, 1), 20, nil, 20)
     father_ui["hh_cl_b"] = HH_UTILS:HHCreateImageUi(father_ui, "images/inventoryimages.xml", "nightmarefuel.tex", Vector3(-5, -140, 1), item_size, item_size)
-    hookFocusFn(father_ui["hh_cl_b"], "噩梦燃料")
+    hookFocusFn(father_ui["hh_cl_b"], HH_UTILS:GetLanguageByKey("forge", "nightmare_fuel"))
     father_ui["hh_cl_b"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_cl_b"], Vector3(item_size / 4, -item_size / 4, 1), 20, nil, 20)
     father_ui["hh_help"] = HH_UTILS:CreateMoreTextUi(father_ui, {
-        { ["str"] = "<装备继承>", ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, ["scale"] = 20 },
-        { ["str"] = "将一件装备上的词条转移给另一个装备上", ["scale"] = 20 },
-        { ["str"] = "下方格子放消耗材料", ["scale"] = 20 },
-        { ["str"] = "继承成功后 原装备会消失", ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, ["scale"] = 20 },
-        { ["str"] = "装备a的某些词条 装备b不满足词条的前置条件", ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, ["scale"] = 20 },
-        { ["str"] = "该词条不会被继承", ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, ["scale"] = 20 },
-        { ["str"] = "装备a必须存在词条，装备b必须是无词条状态", ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, ["scale"] = 20 },
+        { ["str"] = HH_UTILS:GetLanguageByKey("forge", "inherit_header"), ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, ["scale"] = 20 },
+        { ["str"] = HH_UTILS:GetLanguageByKey("forge", "inherit_1"), ["scale"] = 20 },
+        { ["str"] = HH_UTILS:GetLanguageByKey("forge", "inherit_2"), ["scale"] = 20 },
+        { ["str"] = HH_UTILS:GetLanguageByKey("forge", "inherit_3"), ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, ["scale"] = 20 },
+        { ["str"] = HH_UTILS:GetLanguageByKey("forge", "inherit_4"), ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, ["scale"] = 20 },
+        { ["str"] = HH_UTILS:GetLanguageByKey("forge", "inherit_5"), ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, ["scale"] = 20 },
+        { ["str"] = HH_UTILS:GetLanguageByKey("forge", "inherit_6"), ["color"] = { 255 / 255, 11 / 255, 0 / 255, 1 }, ["scale"] = 20 },
     }, 3)
     father_ui["hh_help"]:SetPosition(30, 30, 1)
 end
@@ -491,11 +491,11 @@ function HH_UI:CreateEffectComposeUi()
     father_ui["hh_btn_sure"]:SetOnClick(function()
         --SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_handle_equip"], "EffectCompose")
     end)
-    father_ui["hh_btn_sure"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_btn_sure"], Vector3(0, 0, 1), "合成", nil, 20)
+    father_ui["hh_btn_sure"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_btn_sure"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("forge", "combine_button"), nil, 20)
     father_ui["hh_help"] = HH_UTILS:CreateMoreTextUi(father_ui, {
-        { ["str"] = "<词条三合一>", ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, ["scale"] = 20 },
-        { ["str"] = "将三个附魔石合成", ["scale"] = 20 },
-        { ["str"] = "百分之一概率合成出极品附魔石", ["scale"] = 20 },
+        { ["str"] = HH_UTILS:GetLanguageByKey("forge", "combine_header"), ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, ["scale"] = 20 },
+        { ["str"] = HH_UTILS:GetLanguageByKey("forge", "combine_1"), ["scale"] = 20 },
+        { ["str"] = HH_UTILS:GetLanguageByKey("forge", "combine_2"), ["scale"] = 20 },
     }, 3)
     father_ui["hh_help"]:SetPosition(-100, -50, 1)
 end
@@ -507,12 +507,12 @@ function HH_UI:CreateReplaceStoneUi()
     father_ui["hh_btn_sure"]:SetOnClick(function()
         SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_handle_equip"], "ReplaceStone")
     end)
-    father_ui["hh_btn_sure"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_btn_sure"], Vector3(0, 0, 1), "转换", nil, 20)
+    father_ui["hh_btn_sure"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_btn_sure"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("forge", "convert_button"), nil, 20)
     father_ui["hh_help"] = HH_UTILS:CreateMoreTextUi(father_ui, {
-        { ["str"] = "<附魔石转换>", ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, ["scale"] = 20 },
-        { ["str"] = string["format"]("材料:附魔石+水晶小人*%s", 5), ["scale"] = 20 },
-        { ["str"] = string["format"]("可以将附魔石随机一次属性,%s%%概率产生稀有词条", 5), ["scale"] = 20 },
-        { ["str"] = string["format"]("%s%%概率产生超级稀有词条", 1), ["scale"] = 30, ["color"] = { 255 / 255, 0 / 255, 0 / 255, 1 }, },
+        { ["str"] = HH_UTILS:GetLanguageByKey("forge", "convert_header"), ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, ["scale"] = 20 },
+        { ["str"] = string["format"](HH_UTILS:GetLanguageByKey("forge", "convert_material"), 5), ["scale"] = 20 },
+        { ["str"] = string["format"](HH_UTILS:GetLanguageByKey("forge", "convert_chance"), 5), ["scale"] = 20 },
+        { ["str"] = string["format"](HH_UTILS:GetLanguageByKey("forge", "convert_rare"), 1), ["scale"] = 30, ["color"] = { 255 / 255, 0 / 255, 0 / 255, 1 }, },
     }, 3)
     father_ui["hh_help"]:SetPosition(-100, 35, 1)
 end
@@ -568,8 +568,8 @@ function HH_UI:CreateSuitStone()
         if v and HH_EQUIP_BUFF_LIST[i] then
             local effect_id = i
             local effect_config = HH_EQUIP_BUFF_LIST[i]
-            local effect_name = HH_UTILS:GetAffixText(effect_id, "name", effect_config["name"] or "读取失败")
-            local effect_small_name = HH_UTILS:GetAffixText(effect_id, "short", effect_config["client_text"] or "空")
+            local effect_name = HH_UTILS:GetAffixText(effect_id, "name", effect_config["name"] or HH_UTILS:GetLanguageByKey("forge", "read_failed"))
+            local effect_small_name = HH_UTILS:GetAffixText(effect_id, "short", effect_config["client_text"] or HH_UTILS:GetLanguageByKey("forge", "empty"))
             sub_root["hh_image_" .. i] = HH_UTILS:HHCreateImageUi(sub_root, "images/hh_icon/hh_status.xml", "hh_status.tex", Vector3(0, 0, 1), image_size, image_size, { 0, 0, 0, 0.5 })
             sub_root["hh_image_" .. i]["stone_image"] = HH_UTILS:HHCreateImageUi(sub_root["hh_image_" .. i], "images/hh_icon/hh_items.xml", "hh_effect_stone.tex", Vector3(0, 0, 1), image_size * 0.9, image_size * 0.9)
             sub_root["hh_image_" .. i]["hh_client_text"] = HH_UTILS:HHCreateTextUi(sub_root["hh_image_" .. i], Vector3(0, 0, 1), tostring(effect_small_name), nil, image_size / 2, true)
@@ -578,7 +578,7 @@ function HH_UI:CreateSuitStone()
             sub_root["hh_image_" .. i]["hh_btn"]:SetOnClick(function()
                 SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_handle_equip"], "CompoundSuitEffect", effect_id)
             end)
-            sub_root["hh_image_" .. i]["hh_btn"]["hh_str"] = HH_UTILS:HHCreateTextUi(sub_root["hh_image_" .. i]["hh_btn"], Vector3(0, 0, 1), "合成", nil, 20)
+            sub_root["hh_image_" .. i]["hh_btn"]["hh_str"] = HH_UTILS:HHCreateTextUi(sub_root["hh_image_" .. i]["hh_btn"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("forge", "combine_button"), nil, 20)
             sub_root["hh_image_" .. i]:SetPosition(start_x + image_size / 2, start_y - image_size / 2, 1)
             start_y = start_y - image_size - 10
         end
@@ -610,7 +610,7 @@ function HH_UI:CreateSuitStone()
     father_ui["suit_recipe_ui"] = father_ui:AddChild(TrueScrollArea(context, scissor_data, scrollbar))
     father_ui["suit_recipe_ui"]:SetPosition(-220, 0, 1)
     --增加标题
-    father_ui["suit_recipe_ui"]["hh_title"] = HH_UTILS:HHCreateTextUi(father_ui["suit_recipe_ui"], Vector3(sub_w / 2, sub_h + 10, 1), "可合成的词条", nil, 20)
+    father_ui["suit_recipe_ui"]["hh_title"] = HH_UTILS:HHCreateTextUi(father_ui["suit_recipe_ui"], Vector3(sub_w / 2, sub_h + 10, 1), HH_UTILS:GetLanguageByKey("forge", "craftable_affixes"), nil, 20)
 
     local hh_sub = father_ui["suit_recipe_ui"]
     hh_sub["up_button"]:SetTextures("images/quagmire_recipebook.xml", "quagmire_recipe_scroll_arrow_hover.tex")
@@ -633,28 +633,28 @@ function HH_UI:CreateEquipUpgradingUi()
     local offset_size = 50
     local equip_info_size_x, equip_info_size_y = hh_main_size_x / 2 - offset_size, hh_main_size_y - offset_size
     local line_offset_x, line_offset_y = 30, 65
-    father_ui["hh_equip_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-220, -5, 1), "装备==>", nil, 20)
-    father_ui["hh_material_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-260, -60, 1), "材\n料", { 255 / 255, 116 / 255, 0 / 255, 1 }, 20)
-    father_ui["hh_material_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-10, -160, 1), "星级装备\n提升概率", { 255 / 255, 116 / 255, 0 / 255, 1 }, 15)
+    father_ui["hh_equip_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-220, -5, 1), HH_UTILS:GetLanguageByKey("forge", "equipment_arrow"), nil, 20)
+    father_ui["hh_material_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-260, -60, 1), HH_UTILS:GetLanguageByKey("forge", "materials"), { 255 / 255, 116 / 255, 0 / 255, 1 }, 20)
+    father_ui["hh_material_text"] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(-10, -160, 1), HH_UTILS:GetLanguageByKey("forge", "star_chance"), { 255 / 255, 116 / 255, 0 / 255, 1 }, 15)
     --强化
     local btn_xml, btn_tex = "images/ui.xml", "button_large.tex"
     father_ui["hh_btn_upgrading"] = HH_UTILS:HHCreateBtnUi(father_ui, btn_xml, btn_tex, Vector3(-hh_main_size_x / 4 - line_offset_x * 2.5, -hh_main_size_y / 4 - line_offset_y, 1), 0.3, 0.3)
     father_ui["hh_btn_upgrading"]:SetOnClick(function()
         SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_handle_equip"], "EquipUpgrading")
     end)
-    father_ui["hh_btn_upgrading"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_btn_upgrading"], Vector3(0, 0, 1), "强化", nil, 20)
+    father_ui["hh_btn_upgrading"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_btn_upgrading"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("forge", "upgrade_button"), nil, 20)
     --升星
     father_ui["hh_btn_add_star"] = HH_UTILS:HHCreateBtnUi(father_ui, btn_xml, btn_tex, Vector3(-hh_main_size_x / 4, -hh_main_size_y / 4 - line_offset_y, 1), 0.3, 0.3)
     father_ui["hh_btn_add_star"]:SetOnClick(function()
         SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_handle_equip"], "EquipAddStar")
     end)
-    father_ui["hh_btn_add_star"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_btn_add_star"], Vector3(0, 0, 1), "升星", nil, 20)
+    father_ui["hh_btn_add_star"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_btn_add_star"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("forge", "star_up_button"), nil, 20)
     --前缀
     father_ui["hh_btn_prefix"] = HH_UTILS:HHCreateBtnUi(father_ui, btn_xml, btn_tex, Vector3(-hh_main_size_x / 4 + line_offset_x * 2.5, -hh_main_size_y / 4 - line_offset_y, 1), 0.3, 0.3)
     father_ui["hh_btn_prefix"]:SetOnClick(function()
         SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_handle_equip"], "FixStarEquip")
     end)
-    father_ui["hh_btn_prefix"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_btn_prefix"], Vector3(0, 0, 1), "修复", nil, 20)
+    father_ui["hh_btn_prefix"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_btn_prefix"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("forge", "repair_button"), nil, 20)
 
     --装备信息
     father_ui["equip_info_ui"] = HH_UTILS:HHCreateImageUi(father_ui, white_xml, white_tex, Vector3(hh_main_size_x / 4, 0, 1), equip_info_size_x, equip_info_size_y, { 0, 0, 0, 0.5 })
@@ -680,12 +680,12 @@ function HH_UI:CreateOrUpdateEquipInfoUi(server_table)
     equip_info_ui["info_ui"] = HH_UTILS:CreateInfoUi(equip_info_ui,
             server_table,
             {
-                { ["id"] = "name", ["name"] = "名字:", ["scale"] = 20, },
-                { ["id"] = "bind_name", ["name"] = "绑定:", ["scale"] = 20, },
-                { ["id"] = "star_str", ["name"] = "星级:", ["scale"] = 20, },
-                { ["id"] = "current_chance", ["name"] = "升星概率:", ["scale"] = 20, },
-                --{ ["id"] = "next_star_config", ["name"] = "升星材料:", ["scale"] = 20, },
-                --{ ["id"] = "fix_equip_config", ["name"] = "修复材料:", ["scale"] = 20, },
+                { ["id"] = "name", ["name"] = HH_UTILS:GetLanguageByKey("forge", "name_label"), ["scale"] = 20, },
+                { ["id"] = "bind_name", ["name"] = HH_UTILS:GetLanguageByKey("forge", "bind_label"), ["scale"] = 20, },
+                { ["id"] = "star_str", ["name"] = HH_UTILS:GetLanguageByKey("forge", "star_label"), ["scale"] = 20, },
+                { ["id"] = "current_chance", ["name"] = HH_UTILS:GetLanguageByKey("forge", "star_probability"), ["scale"] = 20, },
+                --{ ["id"] = "next_star_config", ["name"] = HH_UTILS:GetLanguageByKey("forge", "star_materials"), ["scale"] = 20, },
+                --{ ["id"] = "fix_equip_config", ["name"] = HH_UTILS:GetLanguageByKey("forge", "repair_materials"), ["scale"] = 20, },
             })
     local extra_info_pos_x, extra_info_pos_y = -120, 170
     equip_info_ui["info_ui"]:SetPosition(extra_info_pos_x, extra_info_pos_y, 1)
@@ -719,7 +719,7 @@ function HH_UI:CreateOrUpdateEquipInfoUi(server_table)
         end
         equip_info_ui["star_config_ui"] = HH_UTILS:CreateImageAndText(equip_info_ui, star_config_ui_table, 1)
         equip_info_ui["star_config_ui"]["label_str"] = HH_UTILS:HHCreateTextUi(equip_info_ui["star_config_ui"], Vector3(0, 0, 1),
-                "升星材料:", { 255 / 255, 117 / 255, 0 / 255, 1 }, 20)
+                HH_UTILS:GetLanguageByKey("forge", "star_materials"), { 255 / 255, 117 / 255, 0 / 255, 1 }, 20)
         local label_size_x, label_size_y = equip_info_ui["star_config_ui"]["label_str"]:GetRegionSize()
         equip_info_ui["star_config_ui"]["label_str"]:SetPosition(-label_size_x / 2, -label_size_y / 2, 1)
         equip_info_ui["star_config_ui"]:SetPosition(extra_info_pos_x + label_size_x, extra_info_pos_y, 1)
@@ -755,7 +755,7 @@ function HH_UI:CreateOrUpdateEquipInfoUi(server_table)
         end
         equip_info_ui["fix_config_ui"] = HH_UTILS:CreateImageAndText(equip_info_ui, fix_config_ui_table, 1)
         equip_info_ui["fix_config_ui"]["label_str"] = HH_UTILS:HHCreateTextUi(equip_info_ui["fix_config_ui"], Vector3(0, 0, 1),
-                "修复材料:", { 255 / 255, 117 / 255, 0 / 255, 1 }, 20)
+                HH_UTILS:GetLanguageByKey("forge", "repair_materials"), { 255 / 255, 117 / 255, 0 / 255, 1 }, 20)
         local label_size_x, label_size_y = equip_info_ui["fix_config_ui"]["label_str"]:GetRegionSize()
         equip_info_ui["fix_config_ui"]["label_str"]:SetPosition(-label_size_x / 2, -label_size_y / 2, 1)
         equip_info_ui["fix_config_ui"]:SetPosition(extra_info_pos_x + label_size_x, extra_info_pos_y, 1)
