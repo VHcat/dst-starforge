@@ -48,7 +48,26 @@ local visual_effects = {
     ["蓝色猪猪"] = "Blue Pig", ["橙色猪猪"] = "Orange Pig",
 }
 
-local Special = { titles = titles, descriptions = descriptions, upgrades = upgrades, visual_effects = visual_effects }
+local treasure_titles = {
+    ["超级坎普斯大王\n星级:∞\n受到一千以上伤害掉落附魔石"] = "Super Krampus King\nStars: infinite\nDrops enchantment stones when hit for over 1000 damage",
+    ["超级猫悠大王\n星级:∞\n受到一千以上伤害掉落附魔的宝石"] = "Super Cat King\nStars: infinite\nDrops enchanted gems when hit for over 1000 damage",
+    ["★★坦克猪猪★★\n超强的防御"] = "★★ Tank Pig ★★\nExceptional defense",
+    ["★★暴力猪猪★★\n强化伤害"] = "★★ Berserker Pig ★★\nIncreased damage",
+    ["★★打工猪猪★★\n我要爆炸了"] = "★★ Worker Pig ★★\nAbout to explode",
+    ["★★沃时柱★★\n你是好人,我跟着你"] = "★★ Friendly Pig ★★\nYou're nice. I'll follow you.",
+    ["★★★猪猪擂主★★★\n我要打十个"] = "★★★ Pig Champion ★★★\nI can take on ten!",
+    ["★★★★★超级ADC★★★★★\n死亡掉落极品增伤(0.5)/无尽(0.5)"] = "★★★★★ Super Marksman ★★★★★\nDrops superior damage (0.5) / infinity (0.5) on death",
+    ["★★★★★★巨鹿大王★★★★★★\n死亡掉落朱雀附魔石(免疫远程武器伤害)"] = "★★★★★★ Deerclops King ★★★★★★\nDrops a Vermilion Bird stone (immune to ranged weapon damage)",
+    ["★★★★★★超级熊大★★★★★★\n死亡掉落白虎附魔石(免疫远程武器伤害)"] = "★★★★★★ Super Bearger ★★★★★★\nDrops a White Tiger stone (immune to ranged weapon damage)",
+    ["★★★★★★超级鲨鱼★★★★★★\n死亡掉落护甲锁定附魔石(免疫远程武器伤害)"] = "★★★★★★ Super Shark ★★★★★★\nDrops an armor-lock stone (immune to ranged weapon damage)",
+    ["★★★★★★附身狼王★★★★★★\n死亡掉落神龟守御附魔石(免疫远程武器伤害)"] = "★★★★★★ Possessed Varg ★★★★★★\nDrops a Divine Turtle stone (immune to ranged weapon damage)",
+    ["★★★★★★大猪知非★★★★★★\n死亡掉落免疫控制附魔石(免疫远程武器伤害)"] = "★★★★★★ Zhifei the Pig ★★★★★★\nDrops a control-immunity stone (immune to ranged weapon damage)",
+    ["★★★★★★笨比林猪★★★★★★\n死亡掉落真伤附魔石(免疫远程武器伤害)"] = "★★★★★★ Lin Pig ★★★★★★\nDrops a true-damage stone (immune to ranged weapon damage)",
+    ["★★树精★★\n低概率掉落免疫过热"] = "★★ Treeguard ★★\nSmall chance to drop heat immunity",
+    ["★★树精★★\n低概率掉落免疫过冷"] = "★★ Treeguard ★★\nSmall chance to drop cold immunity",
+}
+
+local Special = { titles = titles, descriptions = descriptions, upgrades = upgrades, visual_effects = visual_effects, treasure_titles = treasure_titles }
 
 function Special.Translate(title, description, data)
     local original_title = type(title) == "string" and title:gsub(":$", "") or "特殊"

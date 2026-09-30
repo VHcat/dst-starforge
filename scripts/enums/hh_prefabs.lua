@@ -1,4 +1,6 @@
 local HH_UTILS = require("utils/hh_utils")
+local HH_I18N = require("utils/hh_i18n")
+local HH_SPECIAL_EN = require("enums/hh_special_en")
 local HH_TREASURE = require("enums/hh_treasure_monster")
 local HH_SPECIAL_CONFIG = require("enums/hh_upgraded_equip")
 local HH_EGG_FILE = require("enums/hh_egg")
@@ -1048,7 +1050,7 @@ local HH_PREFAB = {
                     local str_pos = config_table["pos"]
                     local str_scale = config_table["scale"] or 20
                     local hh_label = hh_inst["Label"]
-                    hh_label:SetText(tostring(str_name))
+                    hh_label:SetText(HH_I18N.GetLocale() == "en" and (HH_SPECIAL_EN.treasure_titles[str_name] or str_name) or str_name)
                     if HH_UTILS:IsHHType(str_scale, "number") and str_scale > 0 then
                         hh_label:SetFontSize(str_scale)
                     end

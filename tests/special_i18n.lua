@@ -18,4 +18,14 @@ t.test("dynamic custom hover details keep their values", function()
     assert(title == "Incubation:" and description == "Egg (40 seconds)")
 end)
 
+t.test("all treasure monster labels have English variants", function()
+    local count = 0
+    for _, label in pairs(special.treasure_titles) do
+        assert(type(label) == "string" and #label > 0)
+        count = count + 1
+    end
+    assert(count == 16, count)
+    assert(special.treasure_titles["★★坦克猪猪★★\n超强的防御"]:find("Tank Pig", 1, true))
+end)
+
 return t.count
