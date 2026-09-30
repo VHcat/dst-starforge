@@ -1,10 +1,15 @@
-name = "【附魔-强化】"  ---mod名字
+name = "星砧 · 附魔强化"  ---mod名字
 description = [[
-装备附魔/生物强化
-| 煎蛋牛牛牛牛牛牛牛牛牛牛牛牛牛牛牛牛煎蛋 |
+装备附魔 / 生物强化
+
+星砧（Starforge）基于原模组「【附魔-强化】」v3.21 二次开发。
+原作者：宇宙超级霹雳闪电大煎蛋
+原模组地址：https://steamcommunity.com/sharedfiles/filedetails/?id=3096210166
+
+兼容性说明：本模组与原模组不兼容，不能同时启用。使用星砧前，请先关闭原模组。
 ]]  --mod描述
-author = "宇宙超级霹雳闪电大煎蛋" --作者
-version = "3.21" -- mod版本 上传mod需要两次的版本不一样
+author = "宇宙超级霹雳闪电大煎蛋（原作者）" --作者
+version = "0.1.0" --星砧改版版本，基于原模组 v3.21
 
 forumthread = ""
 
@@ -22,6 +27,7 @@ icon = "modicon.tex"
 
 server_filter_tags = {  --服务器标签
     "hh_hh", "高冷恐龙爱上甜妹煎蛋", "史上无敌超级霹雳闪电暴风霸王龙",
+    "starforge", "星砧", "附魔强化","附魔"
 }
 local key_config = {
     { ["hover"] = "按键B打开强化容器", ["description"] = "B", ["data"] = 98, },
