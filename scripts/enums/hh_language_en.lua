@@ -768,6 +768,13 @@ return {
         type_egg = "Eggs",
     },
     ui = {
+        action_use = "Use",
+        action_treasure = "Search for treasure",
+        container_dismantle = "Dismantle",
+        container_convert = "Convert",
+        container_gold = "Convert to gold",
+        container_stone = "Convert to sand stone",
+        rename_placeholder = "Name",
         help_tab_intro = "About the mod",
         help_tab_changes = "Update notes",
         help_tab_effects = "Affix details",

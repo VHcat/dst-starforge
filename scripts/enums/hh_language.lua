@@ -123,6 +123,13 @@ local HH_LANGUAGE = {
         confirm = "确认", cancel = "取消",
     },
     ["ui"] = {
+        action_use = "进行操作",
+        action_treasure = "寻宝",
+        container_dismantle = "拆解",
+        container_convert = "转换",
+        container_gold = "转换金子",
+        container_stone = "转换沙石",
+        rename_placeholder = "名字",
         help_tab_intro = "mod介绍",
         help_tab_changes = "更新记录",
         help_tab_effects = "词条详情",

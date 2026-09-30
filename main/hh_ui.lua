@@ -1,4 +1,5 @@
 local HH_UTILS = require("utils/hh_utils")
+local HH_I18N = require("utils/hh_i18n")
 local hoverer_text_config = GetModConfigData("hoverer_text")
 local HH_CONFIG = require("enums/hh_enchant")
 local HH_EQUIP_BUFF_LIST = HH_CONFIG["HH_EQUIP_BUFF_LIST"]
@@ -271,7 +272,7 @@ params["hh_cat_box"] = {
         ["pos"] = Vector3(-200, 100, 0),
         ["side_align_tip"] = 160,
         ["buttoninfo"] = {
-            ["text"] = "拆解",
+            ["text"] = HH_I18N.GetText("ui", "container_dismantle"),
             ["position"] = Vector3(0, -350, 0),
             ["fn"] = PressButton,
             ["validfn"] = slotsSortValidFn,
@@ -311,14 +312,14 @@ params["hh_duck_box"] = {
         ["pos"] = Vector3(0, -100, 0),
         ["side_align_tip"] = 160,
         ["buttoninfo"] = {
-            ["text"] = "转换",
+            ["text"] = HH_I18N.GetText("ui", "container_convert"),
             ["position"] = Vector3(0, -40, 0),
             ["fn"] = PressButton,
             ["validfn"] = slotsSortValidFn,
         },
         ["hh_extra_btn"] = {
             {
-                ["text"] = "转换金子",
+                ["text"] = HH_I18N.GetText("ui", "container_gold"),
                 ["pos"] = Vector3(-200, -100, 0),
                 ["fn_index"] = "test_01",
                 --按钮贴图
@@ -330,7 +331,7 @@ params["hh_duck_box"] = {
                 end,
             },
             {
-                ["text"] = "转换沙石",
+                ["text"] = HH_I18N.GetText("ui", "container_stone"),
                 ["pos"] = Vector3(-100, -100, 0),
                 ["fn_index"] = "test_02",
                 ["check_fn"] = function()
@@ -483,7 +484,7 @@ local function hh_hoverer_fn(self)
         if self["hh_hoverer"] and self["hh_hoverer"]["SetTargetName"] then
             if self["text"] and self["text"]["Hide"] then
                 if self["text"]["shown"] then
-                    local target_name = "名字"
+                    local target_name = HH_I18N.GetText("ui", "rename_placeholder")
                     if self["hh_hoverer"]["hh_main"] and self["hh_hoverer"]["hh_main"]["shown"] and hoverer_text_config then
                         self["text"]:Hide()
                     end

@@ -1,9 +1,10 @@
 local HH_UTILS = require("utils/hh_utils")
+local HH_I18N = require("utils/hh_i18n")
 --封装动作函数
 local ACT_CONFIG = {
     ["hh_suit_act"] = {
         ["action"] = Action({ ["priority"] = 999, ["mount_valid"] = true }),
-        ["str"] = "进行操作",
+        ["str"] = HH_I18N.GetText("ui", "action_use"),
         ["act_sg"] = "give",
         ["fn"] = function(act)
             local player = act["doer"]
@@ -18,7 +19,7 @@ local ACT_CONFIG = {
     },
     ["hh_act_treasure_act"] = {
         ["action"] = Action({ ["priority"] = 5, ["mount_valid"] = false }),
-        ["str"] = "寻宝",
+        ["str"] = HH_I18N.GetText("ui", "action_treasure"),
         ["act_sg"] = "doshortaction",
         ["fn"] = function(act)
             local player = act["doer"]
