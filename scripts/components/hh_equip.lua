@@ -674,14 +674,17 @@ function HH_COMPONENTS:ReduceGemByIndex(player, gem_index)
         return false, "不存在镶嵌的宝石 拆除失败"
     end
 
-    --随机拆除
-    local hh_random_num = math["random"](1, #self["gems_list"])
-    if gem_index then
-        --指定位置拆除
-        if HH_UTILS:IsHHType(gem_index, "number") then
-            return false, "入参错误，指定宝石索引需要为数字!!!"
+    local hh_random_num
+    if gem_index ~= nil then
+        --指定位置必须是现有宝石的整数索引
+        if type(gem_index) ~= "number" or gem_index < 1
+                or gem_index > #self.gems_list or gem_index % 1 ~= 0 then
+            return false, "入参错误，指定宝石索引需要为有效整数!!!"
         end
         hh_random_num = gem_index
+    else
+        --未指定位置时随机拆除
+        hh_random_num = math.random(1, #self.gems_list)
     end
     if not self["gems_list"][hh_random_num] then
         return false, "拆除宝石-索引错误!!"
