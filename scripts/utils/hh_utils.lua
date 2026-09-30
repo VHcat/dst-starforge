@@ -1657,6 +1657,10 @@ function HH_UTILS:GetLanguageTableByKey(type_index)
     return HH_I18N.GetTable(type_index)
 end
 
+function HH_UTILS:GetAffixText(id, field, fallback)
+    return HH_I18N.GetAffixText(id, field, fallback)
+end
+
 ----
 ---获取格式化当前时间：YYYY-MM-DD HH:MM:SS
 ---自带异常保护，环境出错也返回空字符串，不报错

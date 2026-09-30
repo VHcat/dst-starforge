@@ -32,4 +32,16 @@ function I18N.GetTable(section)
     return type(chinese[section]) == "table" and chinese[section] or {}
 end
 
+-- Affix IDs are gameplay/save identifiers; translations are read only at display time.
+function I18N.GetAffixText(id, field, fallback)
+    if I18N.GetLocale() == "en" and type(id) == "string" and type(field) == "string" then
+        local affixes = english.affixes
+        local entry = type(affixes) == "table" and affixes[id] or nil
+        if type(entry) == "table" and type(entry[field]) == "string" then
+            return entry[field]
+        end
+    end
+    return fallback
+end
+
 return I18N

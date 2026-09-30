@@ -1,5 +1,110 @@
 -- English text is added section by section. Missing entries fall back to Chinese.
 return {
+    affixes = {
+        restore_use_10s_1use = {
+            name = "Durability Regen (10s)", short = "10s\nRegen",
+            desc = "Restores 1 durability every 10 seconds.",
+            check = "Armor, fuel, uses, freshness",
+        },
+        restore_use_5s_1use = {
+            name = "Durability Regen (5s)", short = "5s\nRegen",
+            desc = "Restores 1 durability every 5 seconds.",
+            check = "Armor, fuel, uses, freshness",
+        },
+        restore_use_3s_1use = {
+            name = "Durability Regen (3s)", short = "3s\nRegen",
+            desc = "Restores 1 durability every 3 seconds.",
+            check = "Armor, fuel, uses, freshness",
+        },
+        restore_use_1s_2_percent = {
+            name = "Greater Durability Regen", short = "Rare\nRegen",
+            desc = "Restores 2 percent durability every second.",
+            check = "Armor, fuel, uses, freshness",
+        },
+        add_max_use = {
+            name = "Increased Durability", short = "Durable",
+            desc = "Increases equipment durability by %s.",
+            check = "Armor, fuel, uses, freshness",
+        },
+        add_max_use_armor_01 = {
+            name = "Armor Durability (Small)", short = "Small\nArmor",
+            desc = "Increases armor durability by %s.",
+            check = "Armor",
+        },
+        add_max_use_armor_02 = {
+            name = "Armor Durability (Medium)", short = "Med\nArmor",
+            desc = "Increases armor durability by %s.",
+            check = "Armor",
+        },
+        add_max_use_armor_03 = {
+            name = "Armor Durability (Large)", short = "Large\nArmor",
+            desc = "Increases armor durability by %s.",
+            check = "Armor",
+        },
+        reduce_com_attacked_damage = {
+            name = "Flat Damage Reduction", short = "Damage\nResist",
+            desc = "Reduces incoming damage by %s.",
+            check = "Non-weapon equipment",
+        },
+        add_com_damage = {
+            name = "Bonus Damage", short = "Damage\nBoost",
+            desc = "Increases damage dealt by %s.",
+            check = "None",
+        },
+        add_night_damage = {
+            name = "Night Damage", short = "Night\nDamage",
+            desc = "Increases damage dealt at night by %s.",
+            check = "None",
+        },
+        add_day_damage = {
+            name = "Day Damage", short = "Day\nDamage",
+            desc = "Increases damage dealt during the day by %s.",
+            check = "None",
+        },
+        add_dusk_damage = {
+            name = "Dusk Damage", short = "Dusk\nDamage",
+            desc = "Increases damage dealt at dusk by %s.",
+            check = "None",
+        },
+        add_moisture_damage = {
+            name = "Wet Damage", short = "Wet\nDamage",
+            desc = "Increases damage dealt while wet by %s.",
+            check = "None",
+        },
+        blood_outburst = {
+            name = "Blood Outburst", short = "Low HP\nDamage",
+            desc = "Damage rises as health falls, up to 50 percent.",
+            check = "None",
+        },
+        spirit_fade = {
+            name = "Spirit Fade", short = "Low SAN\nDamage",
+            desc = "Damage rises as sanity falls, up to 50 percent.",
+            check = "None",
+        },
+        hunger_assault = {
+            name = "Hunger Assault", short = "Low Food\nDamage",
+            desc = "Damage rises as hunger falls, up to 50 percent.",
+            check = "None",
+        },
+        reflexive_injury = {
+            name = "Damage Reflection", short = "Reflect",
+            desc = "Reflects %s damage to attackers when hit.",
+            check = "Non-weapon equipment",
+        },
+    },
+    affix_ui = {
+        no_range = "No variable value",
+        only_one = "Only one allowed",
+        repeatable = "Can be repeated",
+        regular = "Available from regular enchanting",
+        rare = "Elite / boss drop",
+        crafting = "Only available through forging",
+        none = "None",
+        description = "Effect: ",
+        uniqueness = "Stacking: ",
+        source = "Source: ",
+        prerequisite = "Requirement: ",
+    },
     forge = {
         draw = "Draw", inherit = "Inherit", enhance = "Enhance",
         selective_clear = "<Select affixes to remove>",

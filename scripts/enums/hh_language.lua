@@ -2,6 +2,19 @@
 ---多语言文本
 ---
 local HH_LANGUAGE = {
+    affix_ui = {
+        no_range = "无取值范围",
+        only_one = "只允许存在一条",
+        repeatable = "可重复附魔",
+        regular = "可以通过普通附魔获取",
+        rare = "精英/boss掉落的专属附魔石/武器包裹",
+        crafting = "只能从合成台较低概率合成出来",
+        none = "无",
+        description = "描述:",
+        uniqueness = "唯一性:",
+        source = "来源:",
+        prerequisite = "前置条件:",
+    },
     forge = {
         draw = "抽奖", inherit = "继承", enhance = "强化",
         selective_clear = "<定向清除>",

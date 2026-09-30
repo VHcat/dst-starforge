@@ -94,7 +94,7 @@ local function sortById(a, b)
         return false
     end
 end
-local effect_rare_str = "只能从合成台较低概率合成出来"
+local effect_rare_str = HH_UTILS:GetLanguageByKey("affix_ui", "crafting")
 ----
 ---封装所有词条信息
 ---
@@ -113,32 +113,34 @@ local function GetAllEquipBuff()
             local buff_config = v["value"]
             --套装属性不展示
             if not buff_config["is_suit"] then
-                local buff_name = buff_config["name"] or "词条未定义"
-                local buff_small_name = buff_config["client_text"] or "空"
-                local buff_desc_format = buff_config["desc"] or "描述未定义"
+                local buff_id = v["key"]
+                local buff_name = HH_UTILS:GetAffixText(buff_id, "name", buff_config["name"] or "词条未定义")
+                local buff_small_name = HH_UTILS:GetAffixText(buff_id, "short", buff_config["client_text"] or "空")
+                local buff_desc_format = HH_UTILS:GetAffixText(buff_id, "desc", buff_config["desc"] or "描述未定义")
                 local buff_color = { 128 / 255, 138 / 255, 135 / 255, 1 }
                 if buff_config["client_color"] then
                     buff_color = buff_config["client_color"]
                 elseif not buff_config["can_add"] then
                     buff_color = { 255 / 255, 97 / 255, 0 / 255, 1 }
                 end
-                local range_value = buff_config["value_range"] and HH_UTILS:Template("{{min}}~{{max}}", buff_config["value_range"]) or "无取值范围"
+                local range_value = buff_config["value_range"] and HH_UTILS:Template("{{min}}~{{max}}", buff_config["value_range"])
+                    or HH_UTILS:GetLanguageByKey("affix_ui", "no_range")
                 local buff_desc = buff_desc_format
-                if range_value ~= "无取值范围" then
+                if buff_config["value_range"] then
                     buff_desc = string["format"](buff_desc_format, range_value)
                 end
-                local buff_is_one = buff_config["only_one"] and "只允许存在一条" or "可重复附魔"
-                local buff_can_get = buff_config["can_add"] and "可以通过普通附魔获取" or "精英/boss掉落的专属附魔石/武器包裹"
+                local buff_is_one = HH_UTILS:GetLanguageByKey("affix_ui",
+                    buff_config["only_one"] and "only_one" or "repeatable")
+                local buff_can_get = HH_UTILS:GetLanguageByKey("affix_ui",
+                    buff_config["can_add"] and "regular" or "rare")
                 if buff_config["only_compound"] then
                     buff_can_get = effect_rare_str
                 end
                 if buff_config["ui_from_desc"] then
                     buff_can_get = tostring(buff_config["ui_from_desc"])
                 end
-                local buff_check_desc = "无"
-                if buff_config["check_desc"] then
-                    buff_check_desc = tostring(buff_config["check_desc"])
-                end
+                local buff_check_desc = HH_UTILS:GetAffixText(buff_id, "check",
+                    buff_config["check_desc"] or HH_UTILS:GetLanguageByKey("affix_ui", "none"))
                 table["insert"](hh_table, {
                     ["name"] = buff_name,
                     ["small_name"] = buff_small_name,
@@ -401,10 +403,10 @@ function HH_HELP:CreateEffectUi()
         end
         sub_root["hh_image_" .. i]["hh_str_ui"] = HH_UTILS:CreateMoreTextUi(sub_root["hh_image_" .. i], {
             { ["str"] = v["name"], ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, ["scale"] = 25 },
-            { ["str"] = "描述:" .. v["desc"], ["color"] = nil, ["scale"] = 20 },
-            { ["str"] = "唯一性:" .. v["is_one"], ["color"] = nil, ["scale"] = 20 },
-            { ["str"] = "来源:" .. v["can_add"], ["color"] = can_add_color, ["scale"] = 20 },
-            { ["str"] = "前置条件:" .. v["check_desc"], ["color"] = nil, ["scale"] = 20 },
+            { ["str"] = HH_UTILS:GetLanguageByKey("affix_ui", "description") .. v["desc"], ["color"] = nil, ["scale"] = 20 },
+            { ["str"] = HH_UTILS:GetLanguageByKey("affix_ui", "uniqueness") .. v["is_one"], ["color"] = nil, ["scale"] = 20 },
+            { ["str"] = HH_UTILS:GetLanguageByKey("affix_ui", "source") .. v["can_add"], ["color"] = can_add_color, ["scale"] = 20 },
+            { ["str"] = HH_UTILS:GetLanguageByKey("affix_ui", "prerequisite") .. v["check_desc"], ["color"] = nil, ["scale"] = 20 },
             { ["str"] = " ", ["color"] = nil, ["scale"] = 20 },
         }, 3)
         local hh_str_ui_x, hh_str_ui_y = sub_root["hh_image_" .. i]["hh_str_ui"]["max_x"], sub_root["hh_image_" .. i]["hh_str_ui"]["max_y"]

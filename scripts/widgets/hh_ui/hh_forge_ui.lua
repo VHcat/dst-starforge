@@ -148,8 +148,8 @@ local function getSuitEffect(player)
                 if has_limit then
                     table["insert"](new_table, {
                         ["id"] = effect_id,
-                        ["name"] = effect_config["name"],
-                        ["small_name"] = effect_config["client_text"],
+                        ["name"] = HH_UTILS:GetAffixText(effect_id, "name", effect_config["name"]),
+                        ["small_name"] = HH_UTILS:GetAffixText(effect_id, "short", effect_config["client_text"]),
                         ["recipe"] = v["recipe"],
                     })
                 end
@@ -258,7 +258,7 @@ function HH_UI:UpdateEquipEffectUi()
         if HH_UTILS:IsHHType(v, "table") and v["name"] and HH_UTILS:IsHHType(HH_EQUIP_BUFF_LIST[v["name"]], "table") then
             --"images/ui.xml", "in-window_button_tile_idle.tex",选择框
             local effect_config = HH_EQUIP_BUFF_LIST[v["name"]]
-            local effect_name = effect_config["name"] or "未定义"
+            local effect_name = HH_UTILS:GetAffixText(v["name"], "name", effect_config["name"] or "未定义")
             father_ui["hh_text_" .. i] = HH_UTILS:HHCreateTextUi(father_ui, Vector3(0, 0, 1), tostring(effect_name), nil, text_scale)
             local child_text_size_x, child_text_size_y = father_ui["hh_text_" .. i]:GetRegionSize()
             father_ui["hh_text_" .. i]:SetPosition(start_x + child_text_size_x / 2, start_y - child_text_size_y / 2, 1)
@@ -568,8 +568,8 @@ function HH_UI:CreateSuitStone()
         if v and HH_EQUIP_BUFF_LIST[i] then
             local effect_id = i
             local effect_config = HH_EQUIP_BUFF_LIST[i]
-            local effect_name = effect_config["name"] or "读取失败"
-            local effect_small_name = effect_config["client_text"] or "空"
+            local effect_name = HH_UTILS:GetAffixText(effect_id, "name", effect_config["name"] or "读取失败")
+            local effect_small_name = HH_UTILS:GetAffixText(effect_id, "short", effect_config["client_text"] or "空")
             sub_root["hh_image_" .. i] = HH_UTILS:HHCreateImageUi(sub_root, "images/hh_icon/hh_status.xml", "hh_status.tex", Vector3(0, 0, 1), image_size, image_size, { 0, 0, 0, 0.5 })
             sub_root["hh_image_" .. i]["stone_image"] = HH_UTILS:HHCreateImageUi(sub_root["hh_image_" .. i], "images/hh_icon/hh_items.xml", "hh_effect_stone.tex", Vector3(0, 0, 1), image_size * 0.9, image_size * 0.9)
             sub_root["hh_image_" .. i]["hh_client_text"] = HH_UTILS:HHCreateTextUi(sub_root["hh_image_" .. i], Vector3(0, 0, 1), tostring(effect_small_name), nil, image_size / 2, true)
