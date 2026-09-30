@@ -26,7 +26,7 @@ local hh_tab_config = {
     --    end,
     --},
     {
-        ["name"] = "抽奖",
+        ["name"] = HH_UTILS:GetLanguageByKey("forge", "draw"),
         ["click_fn"] = function(self)
             if self["owner"] then
                 --推送事件 更新格子坐标
@@ -37,7 +37,7 @@ local hh_tab_config = {
         end,
     },
     {
-        ["name"] = "继承",
+        ["name"] = HH_UTILS:GetLanguageByKey("forge", "inherit"),
         ["click_fn"] = function(self)
             if self["owner"] then
                 --推送事件 更新格子坐标
@@ -48,7 +48,7 @@ local hh_tab_config = {
         end,
     },
     {
-        ["name"] = "强化",
+        ["name"] = HH_UTILS:GetLanguageByKey("forge", "enhance"),
         ["click_fn"] = function(self)
             if self["owner"] then
                 --推送事件 更新格子坐标
@@ -236,10 +236,10 @@ function HH_UI:UpdateEquipEffectUi()
     if not HH_UTILS:IsHHType(equip_table, "table") or #equip_table <= 0 then
         --增加帮助ui
         self["hh_main"]["hh_com_equip_ui"] = HH_UTILS:CreateMoreTextUi(self["hh_main"], {
-            { ["str"] = "<定向清除>", ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, ["scale"] = 20 },
-            { ["str"] = "可以自由选择清除指定位置的词条", ["scale"] = 20 },
-            { ["str"] = "消耗:净化符(宝石页面查看)", ["scale"] = 20 },
-            { ["str"] = "消耗数量等同于选择的词条数量", ["scale"] = 20 },
+            { ["str"] = HH_UTILS:GetLanguageByKey("forge", "selective_clear"), ["color"] = { 255 / 255, 102 / 255, 0 / 255, 1 }, ["scale"] = 20 },
+            { ["str"] = HH_UTILS:GetLanguageByKey("forge", "clear_help"), ["scale"] = 20 },
+            { ["str"] = HH_UTILS:GetLanguageByKey("forge", "clear_cost"), ["scale"] = 20 },
+            { ["str"] = HH_UTILS:GetLanguageByKey("forge", "clear_quantity"), ["scale"] = 20 },
         }, 3)
         local com_size_x, com_size_y = self["hh_main"]["hh_com_equip_ui"]["max_x"], self["hh_main"]["hh_com_equip_ui"]["max_y"]
         self["hh_main"]["hh_com_equip_ui"]:SetPosition(-hh_main_size_x / 2 + 90, hh_main_size_y / 2 - 20, 1)
@@ -253,7 +253,7 @@ function HH_UI:UpdateEquipEffectUi()
     father_ui["hh_reduce_button"]:SetOnClick(function()
         self:CreateSureRefuseUi()
     end)
-    father_ui["hh_reduce_button"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_reduce_button"], Vector3(0, 2, 1), "清除", nil, 25)
+    father_ui["hh_reduce_button"]["hh_str"] = HH_UTILS:HHCreateTextUi(father_ui["hh_reduce_button"], Vector3(0, 2, 1), HH_UTILS:GetLanguageByKey("forge", "clear"), nil, 25)
     for i, v in ipairs(equip_table) do
         if HH_UTILS:IsHHType(v, "table") and v["name"] and HH_UTILS:IsHHType(HH_EQUIP_BUFF_LIST[v["name"]], "table") then
             --"images/ui.xml", "in-window_button_tile_idle.tex",选择框

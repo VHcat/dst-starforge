@@ -1,5 +1,26 @@
 -- English text is added section by section. Missing entries fall back to Chinese.
 return {
+    forge = {
+        draw = "Draw", inherit = "Inherit", enhance = "Enhance",
+        selective_clear = "<Select affixes to remove>",
+        clear_help = "Choose the affixes you want to remove.",
+        clear_cost = "Cost: Cleansing Tokens (see Gems tab)",
+        clear_quantity = "One token per selected affix.",
+        clear = "Remove",
+    },
+    equip_ui = {
+        title = "Equipment Forge", put_in = "Add all", dismantle = "Dismantle all",
+        equip = "↑\nGear", enchant_item = "↑\nEnchant",
+        cleansing_item = "↑\nCleanse",
+        upgrade = "Upgrade", enchant = "Enchant", clear = "Remove",
+        enchant_hint = "[Stone / Scroll]\nAdd a random or selected affix",
+        reroll_hint = "[Reset Gem]\nReroll affix values",
+        clear_hint = "[Cleansing Stone]\nRemove one random affix",
+        gem_title = "Socket Gems",
+        inventory_hint = "↓ Your items ↓",
+        equipment_hint = "Equipment →", gem = "Gem",
+        confirm = "Confirm", cancel = "Cancel",
+    },
     items = {
         a_punchStone = "Socket Stone",
         a_stoneDecoder = "Gem Remover",

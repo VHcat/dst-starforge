@@ -37,6 +37,18 @@ t.test("English help text preserves the rich-text syntax", function()
         assert(not line:find(": ",1,true))
     end
 end)
+t.test("main UI dictionaries keep Chinese and English keys aligned", function()
+    local zero = setmetatable({}, {__index=function() return 0 end})
+    TUNING = {HH_CHANCE_CONFIG={DROP_EQUIP_CHANCE=zero,GIF_CHANCE=zero}}
+    local zh = dofile("scripts/enums/hh_language.lua")
+    TUNING = nil
+    local en = dofile("scripts/enums/hh_language_en.lua")
+    for _, section in ipairs({"ui","forge","equip_ui"}) do
+        for key, value in pairs(zh[section]) do
+            assert(type(value) == "string" and type(en[section][key]) == "string")
+        end
+    end
+end)
 t.test("modinfo follows the game's locale without changing option values", function()
     local function loadInfo(language)
         local env = {locale=language,ipairs=ipairs}

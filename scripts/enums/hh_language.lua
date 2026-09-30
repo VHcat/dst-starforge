@@ -2,6 +2,27 @@
 ---多语言文本
 ---
 local HH_LANGUAGE = {
+    forge = {
+        draw = "抽奖", inherit = "继承", enhance = "强化",
+        selective_clear = "<定向清除>",
+        clear_help = "可以自由选择清除指定位置的词条",
+        clear_cost = "消耗:净化符(宝石页面查看)",
+        clear_quantity = "消耗数量等同于选择的词条数量",
+        clear = "清除",
+    },
+    equip_ui = {
+        title = "装备强化", put_in = "一键放入", dismantle = "一键拆解",
+        equip = "↑\n装\n备", enchant_item = "↑\n附\n魔\n类",
+        cleansing_item = "↑\n洗\n蕴\n石",
+        upgrade = "升品", enchant = "附魔", clear = "清除",
+        enchant_hint = "[附魔石/卷轴]:给装\n备增加指定/随机词条",
+        reroll_hint = "[重置宝石]:将装备数值\n类词条进行随机赋值",
+        clear_hint = "[洗蕴石]:随机清除一个词\n条",
+        gem_title = "宝石镶嵌",
+        inventory_hint = "↓已有物品(空白就是啥都没有)↓",
+        equipment_hint = "装备→", gem = "宝石",
+        confirm = "确认", cancel = "取消",
+    },
     ["ui"] = {
         help_tab_intro = "mod介绍",
         help_tab_changes = "更新记录",

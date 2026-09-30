@@ -42,7 +42,7 @@ local HH_UI = Class(Widget, function(self, owner)
     local title_size_x, title_size_y = self["hh_main"]["hh_title"]:GetSize()
     local title_pos_x, title_pos_y = 0, main_size_y / 2 + title_size_y / 2
     self["hh_main"]["hh_title"]:SetPosition(title_pos_x, title_pos_y, 1)
-    self["hh_main"]["hh_title"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_title"], Vector3(0, 0, 1), "装备强化", nil, title_size)
+    self["hh_main"]["hh_title"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_title"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "title"), nil, title_size)
 
     ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     --拆解装备背景
@@ -56,13 +56,13 @@ local HH_UI = Class(Widget, function(self, owner)
     --一键将物品栏放入容器中去（一键拾取会导致抢装备的情况）
     local put_pos_x, put_pos_y = disassembly_pos_x - disassembly_size_x / 2 + put_in_size_x / 2 + hh_margins, disassembly_pos_y - disassembly_size_y / 2 - hh_margins - put_in_size_y / 2
     self["hh_main"]["hh_put_in"] = HH_UTILS:HHCreateImageButton(self["hh_main"], main_xml, main_tex, Vector3(put_pos_x, put_pos_y, 1), put_in_size_x / image_size, put_in_size_y / image_size, { 0, 0, 0, 0.5 })
-    self["hh_main"]["hh_put_in"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_put_in"], Vector3(0, 0, 1), "一键放入", nil, 20)
+    self["hh_main"]["hh_put_in"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_put_in"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "put_in"), nil, 20)
     self["hh_main"]["hh_put_in"]:SetOnClick(function()
         self:CreateSureUi("MoveEquips", "一键放入装备", nil, false)
     end)
     local disassembly_btn_pos_x, disassembly_btn_pos_y = disassembly_pos_x + disassembly_size_x / 2 - put_in_size_x / 2 - hh_margins, disassembly_pos_y - disassembly_size_y / 2 - hh_margins - put_in_size_y / 2
     self["hh_main"]["hh_disassembly_btn"] = HH_UTILS:HHCreateImageButton(self["hh_main"], main_xml, main_tex, Vector3(disassembly_btn_pos_x, disassembly_btn_pos_y, 1), put_in_size_x / image_size, put_in_size_y / image_size, { 0, 0, 0, 0.5 })
-    self["hh_main"]["hh_disassembly_btn"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_disassembly_btn"], Vector3(0, 0, 1), "一键拆解", nil, 20)
+    self["hh_main"]["hh_disassembly_btn"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_disassembly_btn"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "dismantle"), nil, 20)
     self["hh_main"]["hh_disassembly_btn"]:SetOnClick(function()
         self:CreateSureUi("RemoveEquips", "是否拆除装备", nil, true)
     end)
@@ -73,25 +73,25 @@ local HH_UI = Class(Widget, function(self, owner)
     local enchant_pos_x, enchant_pos_y = main_size_x / 2 - hh_margins - enchant_size_x / 2, main_size_y / 2 - enchant_size_y / 2 - hh_margins
     self["hh_main"]["hh_enchant"]:SetPosition(enchant_pos_x, enchant_pos_y, 1)
     --增加箭头描述
-    self["hh_main"]["hh_enchant"]["hh_text_weapon"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_enchant"], Vector3(-120, 5, 1), "↑\n装\n备", nil, 20)
-    self["hh_main"]["hh_enchant"]["hh_text_enchant_stone"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_enchant"], Vector3(-70, -5, 1), "↑\n附\n魔\n类", nil, 20)
-    self["hh_main"]["hh_enchant"]["hh_text_weapon"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_enchant"], Vector3(-20, -5, 1), "↑\n洗\n蕴\n石", nil, 20)
+    self["hh_main"]["hh_enchant"]["hh_text_weapon"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_enchant"], Vector3(-120, 5, 1), HH_UTILS:GetLanguageByKey("equip_ui", "equip"), nil, 20)
+    self["hh_main"]["hh_enchant"]["hh_text_enchant_stone"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_enchant"], Vector3(-70, -5, 1), HH_UTILS:GetLanguageByKey("equip_ui", "enchant_item"), nil, 20)
+    self["hh_main"]["hh_enchant"]["hh_text_weapon"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_enchant"], Vector3(-20, -5, 1), HH_UTILS:GetLanguageByKey("equip_ui", "cleansing_item"), nil, 20)
     --按钮
     local hh_enchant_btn_size_x, hh_enchant_btn_size_y = 35, 20
     self["hh_main"]["hh_enchant"]["hh_btn_add_effect"] = HH_UTILS:HHCreateImageButton(self["hh_main"]["hh_enchant"], main_xml, main_tex, Vector3(-120, -50, 1), hh_enchant_btn_size_x / image_size, hh_enchant_btn_size_y / image_size, { 1, 1, 1, 0.5 })
-    self["hh_main"]["hh_enchant"]["hh_btn_add_effect"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_enchant"]["hh_btn_add_effect"], Vector3(0, 0, 1), "升品", nil, 15)
+    self["hh_main"]["hh_enchant"]["hh_btn_add_effect"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_enchant"]["hh_btn_add_effect"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "upgrade"), nil, 15)
     self["hh_main"]["hh_enchant"]["hh_btn_add_effect"]:SetOnClick(function()
         self:CreateSureUi("UpdateEffectValue", "刷新装备所有词条的属性", nil, false)
     end)
 
     self["hh_main"]["hh_enchant"]["hh_btn_improve_value"] = HH_UTILS:HHCreateImageButton(self["hh_main"]["hh_enchant"], main_xml, main_tex, Vector3(-70, -50, 1), hh_enchant_btn_size_x / image_size, hh_enchant_btn_size_y / image_size, { 1, 1, 1, 0.5 })
-    self["hh_main"]["hh_enchant"]["hh_btn_improve_value"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_enchant"]["hh_btn_improve_value"], Vector3(0, 0, 1), "附魔", nil, 15)
+    self["hh_main"]["hh_enchant"]["hh_btn_improve_value"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_enchant"]["hh_btn_improve_value"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "enchant"), nil, 15)
     self["hh_main"]["hh_enchant"]["hh_btn_improve_value"]:SetOnClick(function()
         self:CreateSureUi("AddEquipEffect", "对装备进行附魔", nil, false)
     end)
 
     self["hh_main"]["hh_enchant"]["hh_btn_reduce_effect"] = HH_UTILS:HHCreateImageButton(self["hh_main"]["hh_enchant"], main_xml, main_tex, Vector3(-20, -50, 1), hh_enchant_btn_size_x / image_size, hh_enchant_btn_size_y / image_size, { 1, 1, 1, 0.5 })
-    self["hh_main"]["hh_enchant"]["hh_btn_reduce_effect"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_enchant"]["hh_btn_reduce_effect"], Vector3(0, 0, 1), "清除", nil, 15)
+    self["hh_main"]["hh_enchant"]["hh_btn_reduce_effect"]["hh_text"] = HH_UTILS:HHCreateTextUi(self["hh_main"]["hh_enchant"]["hh_btn_reduce_effect"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "clear"), nil, 15)
     self["hh_main"]["hh_enchant"]["hh_btn_reduce_effect"]:SetOnClick(function()
         self:CreateSureUi("RemoveEquipEffect", "随机清除一个词条", nil, false)
     end)
@@ -100,22 +100,22 @@ local HH_UI = Class(Widget, function(self, owner)
     self["hh_main"]["hh_enchant"]["hh_desc_ui"] = HH_UTILS:HHCreateImageUi(self["hh_main"]["hh_enchant"], main_xml, main_tex, Vector3(hh_enchant_size_x / 4, 0, 1), hh_desc_ui_size_x, hh_desc_ui_size_y, { 1, 1, 1, 0.5 })
     local enchant_desc_ui = self["hh_main"]["hh_enchant"]["hh_desc_ui"]
     --处理文本
-    enchant_desc_ui["hh_title"] = HH_UTILS:HHCreateTextUi(enchant_desc_ui, Vector3(0, 0, 1), "附魔", { 255 / 255, 242 / 255, 0 / 255, 1 }, 20)
+    enchant_desc_ui["hh_title"] = HH_UTILS:HHCreateTextUi(enchant_desc_ui, Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "enchant"), { 255 / 255, 242 / 255, 0 / 255, 1 }, 20)
     local enchant_title_size_x, enchant_title_size_y = enchant_desc_ui["hh_title"]:GetRegionSize()
     local enchant_title_pos_x, enchant_title_pos_y = -hh_desc_ui_size_x / 2 + hh_margins / 2 + enchant_title_size_x / 2, hh_desc_ui_size_y / 2 - hh_margins / 2 - enchant_title_size_y / 2
     enchant_desc_ui["hh_title"]:SetPosition(enchant_title_pos_x, enchant_title_pos_y, 1)
 
-    enchant_desc_ui["hh_text_enchant_stone"] = HH_UTILS:HHCreateTextUi(enchant_desc_ui, Vector3(0, 0, 1), "[附魔石/卷轴]:给装\n备增加指定/随机词条", { 1, 1, 1, 1 }, 20, true)
+    enchant_desc_ui["hh_text_enchant_stone"] = HH_UTILS:HHCreateTextUi(enchant_desc_ui, Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "enchant_hint"), { 1, 1, 1, 1 }, 20, true)
     local enchant_stone_size_x, enchant_stone_size_y = enchant_desc_ui["hh_text_enchant_stone"]:GetRegionSize()
     local enchant_stone_pos_x, enchant_stone_pos_y = -hh_desc_ui_size_x / 2 + hh_margins / 2 + enchant_stone_size_x / 2, enchant_title_pos_y - enchant_title_size_y / 2 - enchant_stone_size_y / 2
     enchant_desc_ui["hh_text_enchant_stone"]:SetPosition(enchant_stone_pos_x, enchant_stone_pos_y, 1)
 
-    enchant_desc_ui["hh_text_enchant_stone_value"] = HH_UTILS:HHCreateTextUi(enchant_desc_ui, Vector3(0, 0, 1), "[重置宝石]:将装备数值\n类词条进行随机赋值", { 1, 1, 1, 1 }, 20, true)
+    enchant_desc_ui["hh_text_enchant_stone_value"] = HH_UTILS:HHCreateTextUi(enchant_desc_ui, Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "reroll_hint"), { 1, 1, 1, 1 }, 20, true)
     local enchant_stone_value_size_x, enchant_stone_value_size_y = enchant_desc_ui["hh_text_enchant_stone_value"]:GetRegionSize()
     local enchant_stone_value_pos_x, enchant_stone_value_pos_y = -hh_desc_ui_size_x / 2 + hh_margins / 2 + enchant_stone_value_size_x / 2, enchant_stone_pos_y - enchant_stone_size_y / 2 - enchant_stone_value_size_y / 2
     enchant_desc_ui["hh_text_enchant_stone_value"]:SetPosition(enchant_stone_value_pos_x, enchant_stone_value_pos_y, 1)
 
-    enchant_desc_ui["hh_text_enchant_reduce_stone"] = HH_UTILS:HHCreateTextUi(enchant_desc_ui, Vector3(0, 0, 1), "[洗蕴石]:随机清除一个词\n条", { 1, 1, 1, 1 }, 20, true)
+    enchant_desc_ui["hh_text_enchant_reduce_stone"] = HH_UTILS:HHCreateTextUi(enchant_desc_ui, Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "clear_hint"), { 1, 1, 1, 1 }, 20, true)
     local enchant_reduce_stone_size_x, enchant_reduce_stone_size_y = enchant_desc_ui["hh_text_enchant_reduce_stone"]:GetRegionSize()
     local enchant_reduce_stone_pos_x, enchant_reduce_stone_pos_y = -hh_desc_ui_size_x / 2 + hh_margins / 2 + enchant_reduce_stone_size_x / 2, enchant_stone_value_pos_y - enchant_stone_value_size_y / 2 - enchant_reduce_stone_size_y / 2
     enchant_desc_ui["hh_text_enchant_reduce_stone"]:SetPosition(enchant_reduce_stone_pos_x, enchant_reduce_stone_pos_y, 1)
@@ -126,12 +126,12 @@ local HH_UI = Class(Widget, function(self, owner)
     local hh_gem_ui_pos_x, hh_gem_ui_pos_y = main_size_x / 2 - hh_margins - gem_ui_size_x / 2, -main_size_y / 2 + gem_ui_size_y / 2 + hh_margins
     self["hh_main"]["hh_gem_ui"]:SetPosition(hh_gem_ui_pos_x, hh_gem_ui_pos_y, 1)
     local gem_main_ui = self["hh_main"]["hh_gem_ui"]
-    gem_main_ui["hh_title"] = HH_UTILS:HHCreateTextUi(gem_main_ui, Vector3(0, 0, 1), "宝石镶嵌", { 255 / 255, 242 / 255, 0 / 255, 1 }, 30, true)
+    gem_main_ui["hh_title"] = HH_UTILS:HHCreateTextUi(gem_main_ui, Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "gem_title"), { 255 / 255, 242 / 255, 0 / 255, 1 }, 30, true)
     local gem_main_ui_title_size_x, gem_main_ui_title_size_y = gem_main_ui["hh_title"]:GetRegionSize()
     gem_main_ui["hh_title"]:SetPosition(0, gem_ui_size_y / 2 - 5 - gem_main_ui_title_size_y / 2, 1)
 
-    gem_main_ui["hh_back_text"] = HH_UTILS:HHCreateTextUi(gem_main_ui, Vector3(-50, 60, 1), "↓已有物品(空白就是啥都没有)↓", { 1, 1, 1, 1 }, 20, true)
-    gem_main_ui["hh_right_text"] = HH_UTILS:HHCreateTextUi(gem_main_ui, Vector3(75, 75, 1), "装备→", { 255 / 255, 11 / 255, 0 / 255, 1 }, 20, true)
+    gem_main_ui["hh_back_text"] = HH_UTILS:HHCreateTextUi(gem_main_ui, Vector3(-50, 60, 1), HH_UTILS:GetLanguageByKey("equip_ui", "inventory_hint"), { 1, 1, 1, 1 }, 20, true)
+    gem_main_ui["hh_right_text"] = HH_UTILS:HHCreateTextUi(gem_main_ui, Vector3(75, 75, 1), HH_UTILS:GetLanguageByKey("equip_ui", "equipment_hint"), { 255 / 255, 11 / 255, 0 / 255, 1 }, 20, true)
 
     --宝石滚动条
     self["hh_main"]["hh_gem_ui"]["gem_templates"] = self["hh_main"]["hh_gem_ui"]:AddChild(self:CreateTemplates())
@@ -184,8 +184,8 @@ function HH_UI:CreateTemplates()
         widget["hh_background"]["hh_btn"]:SetNormalScale(child_size_x / image_size, child_size_y / image_size, 1)
         widget["hh_background"]["hh_btn"]:SetPosition(0, 0, 1)
         widget["hh_background"]["hh_btn"]["focus_scale"] = { child_size_x / image_size, child_size_y / image_size, 1 }
-        widget["hh_background"]["hh_btn"]["gem_name"] = HH_UTILS:HHCreateTextUi(widget["hh_background"]["hh_btn"], Vector3(0, 0, 1), "宝石", nil, 20)
-        widget["hh_background"]["hh_btn"]["gem_name"]["gem_num"] = HH_UTILS:HHCreateTextUi(widget["hh_background"]["hh_btn"]["gem_name"], Vector3(0, 0, 1), "宝石", nil, 20)
+        widget["hh_background"]["hh_btn"]["gem_name"] = HH_UTILS:HHCreateTextUi(widget["hh_background"]["hh_btn"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "gem"), nil, 20)
+        widget["hh_background"]["hh_btn"]["gem_name"]["gem_num"] = HH_UTILS:HHCreateTextUi(widget["hh_background"]["hh_btn"]["gem_name"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "gem"), nil, 20)
         return widget
     end
 
@@ -284,7 +284,7 @@ function HH_UI:CreateSureUi(rpc_name, ui_desc, gem_index, need_sure_ui)
 
         local sure_pos_x, sure_pos_y = -size_x / 2 + sure_margins + btn_size_x / 2, -size_y / 2 + btn_size_y / 2 + sure_margins
         sure_ui["hh_sure"] = HH_UTILS:HHCreateImageButton(sure_ui, main_xml, main_tex, Vector3(sure_pos_x, sure_pos_y, 1), btn_size_x / image_size, btn_size_y / image_size, { 0, 0, 0, 0.5 })
-        sure_ui["hh_sure"]["hh_text"] = HH_UTILS:HHCreateTextUi(sure_ui["hh_sure"], Vector3(0, 0, 1), "确认", nil, 15)
+        sure_ui["hh_sure"]["hh_text"] = HH_UTILS:HHCreateTextUi(sure_ui["hh_sure"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "confirm"), nil, 15)
         sure_ui["hh_sure"]:SetOnClick(function()
             SendModRPCToServer(MOD_RPC["hh_rpc"]["hh_handle_equip"], rpc_name, gem_index)
             HH_UTILS:HHKillChild(self["hh_main"], "hh_sure_ui")
@@ -292,7 +292,7 @@ function HH_UI:CreateSureUi(rpc_name, ui_desc, gem_index, need_sure_ui)
 
         local close_pos_x, close_pos_y = size_x / 2 - sure_margins - btn_size_x / 2, -size_y / 2 + btn_size_y / 2 + sure_margins
         sure_ui["hh_close"] = HH_UTILS:HHCreateImageButton(sure_ui, main_xml, main_tex, Vector3(close_pos_x, close_pos_y, 1), btn_size_x / image_size, btn_size_y / image_size, { 0, 0, 0, 0.5 })
-        sure_ui["hh_close"]["hh_text"] = HH_UTILS:HHCreateTextUi(sure_ui["hh_close"], Vector3(0, 0, 1), "取消", nil, 15)
+        sure_ui["hh_close"]["hh_text"] = HH_UTILS:HHCreateTextUi(sure_ui["hh_close"], Vector3(0, 0, 1), HH_UTILS:GetLanguageByKey("equip_ui", "cancel"), nil, 15)
         sure_ui["hh_close"]:SetOnClick(function()
             HH_UTILS:HHKillChild(self["hh_main"], "hh_sure_ui")
         end)
