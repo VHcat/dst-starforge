@@ -59,4 +59,14 @@ t.test("food and tool category IDs have English labels", function()
     end
 end)
 
+t.test("all active set bonuses have English descriptions", function()
+    local count = 0
+    for id, description in pairs(english.suits) do
+        assert(type(id) == "string" and type(description) == "string")
+        assert(not description:find("[\128-\255]"))
+        count = count + 1
+    end
+    assert(count == 4)
+end)
+
 return t.count

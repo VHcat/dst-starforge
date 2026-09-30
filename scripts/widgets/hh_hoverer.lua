@@ -28,6 +28,14 @@ local tuning_pos_config = TUNING["HH_HOVERER_POS_CONFIG"]
 ----颜色配置表
 local COLOR_CONFIG = TUNING["HH_COLOR_CONFIG"] or {}
 local ICON_CONFIG = TUNING["HH_ICON_CONFIG"] or {}
+local function getLocalizedItemName(item)
+    if type(item) ~= "table" then return "Unknown item" end
+    if type(item.custom_name) == "string" and item.custom_name ~= "" then
+        return item.custom_name
+    end
+    local id = type(item.prefab) == "string" and string.upper(item.prefab) or ""
+    return (STRINGS and STRINGS.NAMES and STRINGS.NAMES[id]) or item.fallback or "Unknown item"
+end
 local function getInputItem()
     local target = TheInput:GetHUDEntityUnderMouse()
     target = (target and target["widget"] and target["widget"]["parent"] and target["widget"]["parent"]["item"])
@@ -290,6 +298,62 @@ function HH_HOVERER_UI:UpdateHoverer()
                     end
                 elseif v == "hh_10_stackable" and type(args) == "table" and args[2] == "无上限" then
                     child_name = tostring(args[1]) .. "/Unlimited"
+                elseif v == "hh_01_text" and type(GetDescription) == "function" then
+                    local ok, local_description = pcall(GetDescription, self["owner"], target)
+                    if ok and type(local_description) == "string" and local_description ~= "" then
+                        if HH_UTILS:GetStringWordNum(local_description) > 20 then
+                            local_description = HH_UTILS:SubStringUTF8(local_description, 1, 20) .. "..."
+                        end
+                        child_name = local_description
+                    end
+                elseif v == "hh_12_container" then
+                    local items = target_infos[v]["container_items"]
+                    if type(items) == "table" and type(args) == "table" then
+                        local names = {}
+                        for _, item in ipairs(items) do
+                            local name = getLocalizedItemName(item)
+                            if item.count then name = name .. "x" .. tostring(item.count) end
+                            table.insert(names, name)
+                        end
+                        local suffix = #names > 0 and ("\nItems: " .. table.concat(names, " ")) or ""
+                        if HH_UTILS:GetStringWordNum(suffix) > 40 then
+                            suffix = HH_UTILS:SubStringUTF8(suffix, 1, 40) .. "..."
+                        end
+                        child_name = tostring(args[1]) .. "/" .. tostring(args[2]) .. suffix
+                    end
+                elseif v == "hh_14_unwrappable" then
+                    local items = target_infos[v]["wrapped_items"]
+                    if type(items) == "table" then
+                        local lines = {}
+                        for _, item in ipairs(items) do
+                            local name = getLocalizedItemName(item)
+                            if item.days then name = name .. " (" .. tostring(item.days) .. " days)" end
+                            if item.count then name = name .. "x" .. tostring(item.count) end
+                            table.insert(lines, name)
+                        end
+                        child_name = table.concat(lines, "\n")
+                    end
+                elseif v == "hh_15_stewer" then
+                    local id = target_infos[v]["product_id"]
+                    if type(id) == "string" and type(args) == "table" then
+                        local name = STRINGS and STRINGS.NAMES and STRINGS.NAMES[string.upper(id)] or id
+                        child_name = string.format(translated.format, name, args[2])
+                    end
+                elseif v == "hh_16_growable" then
+                    local stage = target_infos[v]["stage_number"]
+                    if stage and type(args) == "table" then
+                        child_name = string.format(translated.format, tostring(stage), args[2])
+                    end
+                elseif v == "hh_30_cookable" then
+                    local id = target_infos[v]["product_id"]
+                    if type(id) == "string" then
+                        child_name = STRINGS and STRINGS.NAMES and STRINGS.NAMES[string.upper(id)] or id
+                    end
+                elseif v == "hh_32_hh_equip_suit" then
+                    local id = target_infos[v]["suit_id"]
+                    child_name = hh_hoverer_en.suits[id] or child_name
+                elseif v == "hh_34_boss_equip" and target_infos[v]["is_bound"] == false then
+                    child_name = "Unbound"
                 elseif v == "hh_18_insulator" then
                     local kind = target_infos[v]["insulation_kind"]
                     if kind == "warm" then father_name = "Warmth:" end

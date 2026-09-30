@@ -155,7 +155,15 @@ local tool_types = {
     REACH_HIGH = "Reach",
 }
 
+local suits = {
+    suit_yhby = "Immune to Judgement, wetness and poison. Reduces damage by 10. When attacked, nearby players gain healing (20-second cooldown).",
+    suit_bhtg = "Attacks rend for 2 percent current health; restores 3 percent sanity; adds 50 damage and 10 percent damage bonus. Takes 20 percent more damage and applies Judgement on hit.",
+    suit_zqrf = "Attacks add 50 true damage and restore 3 percent health. Immune to Judgement and slowing.",
+    suit_fyyy = "30 percent dodge chance, light, faster actions, slow immunity, 30 percent movement speed, 50 damage, 10 percent sanity steal and 10 percent lifesteal.",
+}
+
 return {
+    suits = suits,
     food_types = food_types,
     food_tags = food_tags,
     tool_types = tool_types,

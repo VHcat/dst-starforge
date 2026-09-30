@@ -319,9 +319,16 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
         if item_com["container"] then
             local num = 0
             local container_str = ""
+            local container_items = {}
             if HH_UTILS:IsHHType(item_com["container"]["slots"], "table") then
                 for i, v in pairs(item_com["container"]["slots"]) do
                     num = num + 1
+                    table.insert(container_items, {
+                        prefab = v["prefab"],
+                        fallback = v["name"],
+                        custom_name = v["components"]["named"] and v["components"]["named"]["name"] or nil,
+                        count = v["components"]["stackable"] and v["components"]["stackable"]["stacksize"] or nil,
+                    })
                     if v["components"]["stackable"] and v["components"]["stackable"]["stacksize"] then
                         container_str = container_str .. (v["name"] or "未定义") .. "x" .. v["components"]["stackable"]["stacksize"] .. " "
                     else
@@ -336,6 +343,7 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
                 container_str = "\n物品:" .. container_str
             end
             handleFormatStr(hh_copy_list, "hh_12_container", num, item_com["container"]["numslots"] or "0", container_str)
+            hh_copy_list["hh_12_container"]["container_items"] = container_items
         end
         ----====>新鲜度<====----
         if item_com["perishable"] then
@@ -346,11 +354,19 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
         ----====>包裹<====----
         if item_com["unwrappable"] and item_com["unwrappable"]["itemdata"] and type(item_com["unwrappable"]["itemdata"]) == "table" then
             local unwrappableStr = ""
+            local wrapped_items = {}
             for i, v in ipairs(item_com["unwrappable"]["itemdata"]) do
                 if v["prefab"] then
                     --v["data"]取自对应组件的save函数参数
                     local delta = v["data"] and v["data"]["perishable"] and v["data"]["perishable"]["time"]
                     local count = v["data"] and v["data"]["stackable"] and v["data"]["stackable"]["stack"]
+                    table.insert(wrapped_items, {
+                        prefab = v["prefab"],
+                        fallback = v["name"],
+                        custom_name = v["data"] and v["data"]["named"] and v["data"]["named"]["name"] or nil,
+                        days = delta and string["format"]("%.1f", delta / TUNING["TOTAL_DAY_TIME"]) or nil,
+                        count = count,
+                    })
                     local item_child_name = v["data"] and v["data"]["named"] and v["data"]["named"]["name"] or v["name"] or "未定义"
                     --官方物品无法读取 特殊处理
                     item_child_name = STRINGS["NAMES"][string["upper"](v["prefab"])] or "未定义名字的物品道具"
@@ -368,6 +384,7 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
             end
             --print("含有物品")
             handleFormatStr(hh_copy_list, "hh_14_unwrappable", unwrappableStr)
+            hh_copy_list["hh_14_unwrappable"]["wrapped_items"] = wrapped_items
         end
 
         ----====>烹饪锅<====----
@@ -380,6 +397,7 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
             end
             local product = item_com["stewer"]["product"]
             handleFormatStr(hh_copy_list, "hh_15_stewer", STRINGS["NAMES"][string["upper"](tostring(product))] or "未定义", string["format"]("%.0f", cook_time))
+            hh_copy_list["hh_15_stewer"]["product_id"] = tostring(product)
         end
         ----====>生长<====----
         if item_com["growable"] and item_com["growable"]["stage"] then
@@ -392,6 +410,7 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
                 local data = item_com["growable"]["stages"] and item_com["growable"]["stages"][stage];
                 handleFormatStr(hh_copy_list, "hh_16_growable", data and data["name"] or stage,
                         string["format"]("%.1f", grow_time / TUNING["TOTAL_DAY_TIME"]))
+                hh_copy_list["hh_16_growable"]["stage_number"] = stage
             end
         end
         ----====>成熟<====----
@@ -514,6 +533,7 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
             local cook_product = item_com["cookable"]["product"]
             if type(cook_product) == "string" then
                 handleFormatStr(hh_copy_list, "hh_30_cookable", STRINGS["NAMES"][string["upper"](tostring(cook_product))] or "未定义产物")
+                hh_copy_list["hh_30_cookable"]["product_id"] = tostring(cook_product)
             end
         end
         ----====>移速<====----
@@ -567,6 +587,7 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
             then
                 local suit_desc = TUNING["HH_FORMAT_CONFIG"]["SUIT_CONFIG"][hh_suit]["effect_str"]
                 handleFormatStr(hh_copy_list, "hh_32_hh_equip_suit", tostring(suit_desc))
+                hh_copy_list["hh_32_hh_equip_suit"]["suit_id"] = hh_suit
             end
             --星级移除
             --local star_num = item_com["hh_equip"]:GetEquipStars()
@@ -672,6 +693,7 @@ local function getAllItemInfo(hh_copy_list, player, item, item_com, item_prefab)
     if item_com["hh_hat_star"] then
         local hh_hat_star_str = item_com["hh_hat_star"]:GetBindStr()
         handleFormatStr(hh_copy_list, "hh_34_boss_equip", tostring(hh_hat_star_str))
+        hh_copy_list["hh_34_boss_equip"]["is_bound"] = type(item_com["hh_hat_star"]["bind_uid"]) == "string"
         local hh_hat_star_star_str = item_com["hh_hat_star"]:GetStarDisplay()
         handleFormatStr(hh_copy_list, "hh_02_boss_equip", tostring(hh_hat_star_star_str))
     end
